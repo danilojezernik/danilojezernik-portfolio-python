@@ -12,6 +12,10 @@ tags_metadata = [
         "description": "Blog se bo uporabljal za pisanje objav",
     },
     {
+        "name": "Experiences",
+        "description": "Experiences se bo uporabljal za pisanje izkušenj, ki jih imam ali sem jih pridobil, trenutne ali pretekle zaposlitve,...",
+    },
+    {
         "name": "Login",
         "description": "Logiranje uporabnika",
     },

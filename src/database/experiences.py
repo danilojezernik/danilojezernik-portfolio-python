@@ -1,16 +1,18 @@
-import datetime
-from typing import Optional
+import  datetime
 
-from bson import ObjectId
-from pydantic import BaseModel, Field
+from src.domain.experiences import Experiences
 
-
-class Experiences(BaseModel):
-    id: Optional[str] = Field(alias='_id', default_factory=lambda: str(ObjectId()))
-    naslov: str
-    stack: str
-    company: str
-    current: str
-    company_start: str
-    company_end: Optional[str]
-    datum_vnosa: datetime.datetime = Field(default_factory=datetime.datetime.now)
+experiences = [
+    Experiences(
+        title='Frontend developer za aplikacijo sledenja',
+        stack='Frontend developer',
+        framework='Angular',
+        programming_language='TypeScript',
+        company='USCOM d.o.o.',
+        employee=True,
+        tasks='Delal sem kot frontend razvijalec za aplikacijo sledenja Sledat',
+        company_start='3. Nov 2023',
+        company_end='',
+        datum_vnosa=datetime.datetime.now()
+    ).dict(by_alias=True)
+]
