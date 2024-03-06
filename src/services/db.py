@@ -15,14 +15,17 @@ def drop():
     process.experiences.drop()
     pass
 
+
 def drop_user():
     process.user.drop()
     pass
+
 
 def seed():
     process.blog.insert_many(blog)
     process.experiences.insert_many(experiences)
     pass
+
 
 def seed_user():
     process.user.insert_many(user)
