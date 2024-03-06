@@ -13,7 +13,12 @@ tags_metadata = [
     },
     {
         "name": "Experiences",
-        "description": "Experiences se bo uporabljal za pisanje izkušenj, ki jih imam ali sem jih pridobil, trenutne ali pretekle zaposlitve,...",
+        "description": "Experiences se bo uporabljal za pisanje izkušenj, ki jih imam ali sem jih pridobil, trenutne "
+                       "ali pretekle zaposlitve,...",
+    },
+    {
+        "name": "Links",
+        "description": "Dodajanje povezav do zanimivih strani",
     },
     {
         "name": "Login",
