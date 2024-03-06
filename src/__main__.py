@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src import env
 
 # Imported routes
-from src.routes import index, blog, email, login
+from src.routes import index, blog, email, login, user
 
 from src.services import db
 
@@ -24,6 +24,7 @@ app.add_middleware(
 )
 
 app.include_router(index.router, prefix='/index', tags=['Index'])
+app.include_router(user.router, prefix='/user', tags=['User'])
 app.include_router(blog.router, prefix='/blog', tags=['Blog'])
 app.include_router(email.router, prefix='/email', tags=['Email'])
 app.include_router(login.router, prefix='/login', tags=['Login'])
@@ -31,7 +32,7 @@ app.include_router(login.router, prefix='/login', tags=['Login'])
 if __name__ == '__main__':
 
     # Confirm if you want to drop and seed database
-    yes = input('Run drop and seed?')
+    yes = input('Type "d" if you want to run drop and seed?')
     true = 'd'
 
     if yes == true:
