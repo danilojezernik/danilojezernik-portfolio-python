@@ -85,9 +85,12 @@ async def get_limited_blogs(limit: int = 4) -> list[Blog]:
 
 """
 THIS ROUTES ARE PRIVATE
+
+User/Admin has to login!
 """
 
 
+# This route gets all the blogs from the database
 @router.get('/admin/', operation_id='get_all_blogs_private')
 async def get_all_blogs_private(current_user: str = Depends(get_current_user)) -> list[Blog]:
     """
@@ -104,3 +107,90 @@ async def get_all_blogs_private(current_user: str = Depends(get_current_user)) -
 
     # Return the list of Blog objects
     return blog_list
+
+
+# This route get one blog by its ID
+@router.get('/admin/{_id}', operation_id='get_blog_by_id_private')
+async def get_blog_by_id_private(_id: str, current_user: str = Depends(get_current_user)):
+    """
+    This route handles the retrieval of one blog by its ID from the database
+
+    :param current_user: Current user that is registered
+    :param _id: The ID of the blog to be retrieved
+    :return: If the blog is found, returns the blog data; otherwise, returns a 404 error
+    """
+
+    # Attempt to find a blog in the database based on the provided ID
+    cursor = db.process.blog.find_one({'_id': _id})
+
+    # If no blog is found, return a 404 error with a relevant detail message
+    if cursor is None:
+        raise HTTPException(status_code=404, detail=f'Blog by ID: ({_id}) does not exist')
+    else:
+        # If the blog is found, convert the cursor data into a Blog object and return it
+        return Blog(**cursor)
+
+
+# This route adds a new blog
+@router.post('/', operation_id='add_new_blog_private')
+async def add_new_blog(blog: Blog, current_user: str = Depends(get_current_user)) -> Blog | None:
+    """
+    Handles the addition of a new blog to the database.
+
+    :param blog: The Blog object representing the new blog to be added.
+    :param current_user: The current user, obtained from the authentication system.
+    :return: If the addition is successful, returns the newly added Blog object; otherwise, returns None.
+    """
+
+    # Convert the Blog object to a dictionary
+    blog_dict = blog.dict(by_alias=True)
+
+    # Insert the blog data into the database
+    insert_result = db.process.blog.insert_one(blog_dict)
+
+    # Check if the insertion was acknowledged by the database
+    if insert_result.acknowledged:
+        # Update the dictionary with the newly assigned _id
+        blog_dict['_id'] = str(insert_result.inserted_id)
+
+        # Return the newly added Blog object
+        return Blog(**blog_dict)
+    else:
+        # If the insertion was not acknowledged, return None
+        return None
+
+
+# This route is to edit blog by its ID
+@router.put('/{_id}', operation_id='edit_blog_by_id_private')
+async def edit_blog_by_id_private(_id: str, blog: Blog, current_user: str = Depends(get_current_user)) -> Blog | None:
+    # Delete id from a blog
+    blog = blog.dict(by_alias=True)
+    del blog['_id']
+
+    # Update a blog in a database
+    cursor = db.process.blog.update_one({'_id': _id}, {'$set': blog})
+
+    # Check if the blog was successfully updated
+    if cursor.modified_count > 0:
+        # Retrieve the updated blog from the databas
+        updated_document = db.process.blog.find_one({'_id': _id})
+
+        # Check if the updated blog exists
+        if updated_document:
+            updated_document['_id'] = str(updated_document['_id'])
+            return Blog(**updated_document)
+
+    # Return none if the blog was not updated
+    return None
+
+
+# Delete blog by its id from database
+@router.delete('/{_id}', operation_id='delete_blog_by_id_private')
+async def delete_blog_by_id_private(_id: str, current_user: str = Depends(get_current_user)):
+    # Attempt to delete blog from database
+    delete_result = db.process.blog.delete_one({'_id': _id})
+
+    if delete_result.deleted_count > 0:
+        return {'message': 'Blog deleted successfully!'}
+    else:
+        raise HTTPException(status_code=404, detail=f'Blog by ID: ({_id}) not found!')
