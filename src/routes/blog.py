@@ -156,6 +156,7 @@ async def add_new_blog(blog: Blog, current_user: str = Depends(get_current_user)
 
         # Return the newly added Blog object
         return Blog(**blog_dict)
+
     else:
 
         # If the insertion was not acknowledged, return None
@@ -174,8 +175,10 @@ async def edit_blog_by_id_private(_id: str, blog: Blog, current_user: str = Depe
     :return: If the blog is successfully edited, returns the updated Blog object; otherwise, returns None.
     """
 
-    # Delete the '_id' field from the blog dictionary to avoid updating the ID
+    # Convert the Blog object to a dictionary
     blog_dict = blog.dict(by_alias=True)
+
+    # Delete the '_id' field from the blog dictionary to avoid updating the ID
     del blog_dict['_id']
 
     # Update the blog in the database using the update_one method
