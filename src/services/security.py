@@ -193,7 +193,7 @@ def make_hash(password):
 
 
 # Register new user function
-def register_user(user_data: User):
+def register_user(user: User):
     """
     This function registers a new user by creating a User instance with hashed password.
 
@@ -203,16 +203,16 @@ def register_user(user_data: User):
     Returns:
     - User: The registered user with hashed password.
     """
-    hashed_password = make_hash(user_data.hashed_password)
-    user_datas = User(
-        username=user_data.username,
-        email=user_data.email,
-        full_name=user_data.full_name,
+    hashed_password = make_hash(user.hashed_password)
+    user_data = User(
+        username=user.username,
+        email=user.email,
+        full_name=user.full_name,
         hashed_password=hashed_password,
         disabled=False
     )
 
     # Save user to database
-    db.process.user.insert_one(user_datas.dict(by_alias=True))
+    db.process.user.insert_one(user_data.dict(by_alias=True))
 
-    return user_datas
+    return user_data

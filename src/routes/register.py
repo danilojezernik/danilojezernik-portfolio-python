@@ -14,6 +14,8 @@ async def register_new_user(user_data: User) -> User:
     :param user_data: Registration data containing username, email, full_name, and password.
     :return: The registered user data.
     """
+
     # Register the user and get the registered user data
     registered_user = register_user(user_data)
+
     return registered_user

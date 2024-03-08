@@ -111,7 +111,7 @@ async def get_all_blogs_private(current_user: str = Depends(get_current_user)) -
 
 # This route get one blog by its ID
 @router.get('/admin/{_id}', operation_id='get_blog_by_id_private')
-async def get_blog_by_id_private(_id: str, current_user: str = Depends(get_current_user)):
+async def get_blog_by_id_private(_id: str, current_user: str = Depends(get_current_user)) -> Blog:
     """
     This route handles the retrieval of one blog by its ID from the database
 
