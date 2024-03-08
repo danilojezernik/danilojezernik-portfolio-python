@@ -6,7 +6,7 @@ Routes:
 2. GET experiences by ID
 3. ADD a new experiences
 4. Edit (PUT) and existing experiences by ID
-5. DELETE a experiences by ID
+5. DELETE an experience by ID
 """
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -111,7 +111,8 @@ async def get_experiences_by_id_private(_id: str, current_user: str = Depends(ge
 
 # This route adds a new experiences
 @router.post('/', operation_id='add_new_experiences_private')
-async def add_new_experiences_private(experiences: Experiences, current_user: str = Depends(get_current_user)) -> Experiences | None:
+async def add_new_experiences_private(experiences: Experiences,
+                                      current_user: str = Depends(get_current_user)) -> Experiences | None:
     """
     Handles the addition of a new experiences to the database.
 
@@ -139,9 +140,11 @@ async def add_new_experiences_private(experiences: Experiences, current_user: st
         # If the insertion was not acknowledged, return None
         return None
 
+
 # Edit experiences by its ID
 @router.put('/{_id}', operation_id='edit_experiences_by_id_private')
-async def edit_experiences_by_id_private(_id: str, experiences: Experiences, current_user: str = Depends(get_current_user)):
+async def edit_experiences_by_id_private(_id: str, experiences: Experiences,
+                                         current_user: str = Depends(get_current_user)):
     """
     Handles the editing of experiences by its ID in the database.
 

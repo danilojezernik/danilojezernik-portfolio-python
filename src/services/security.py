@@ -187,5 +187,32 @@ async def get_current_active_user(current_user: Annotated[User, Depends(get_curr
     return current_user
 
 
+# Has a password
 def make_hash(password):
     return pwd_context.hash(password)
+
+
+# Register new user function
+def register_user(user_data: User):
+    """
+    This function registers a new user by creating a User instance with hashed password.
+
+    Parameters:
+    - user_data (User): Registration data containing username and password.
+
+    Returns:
+    - User: The registered user with hashed password.
+    """
+    hashed_password = make_hash(user_data.hashed_password)
+    user_datas = User(
+        username=user_data.username,
+        email=user_data.email,
+        full_name=user_data.full_name,
+        hashed_password=hashed_password,
+        disabled=False
+    )
+
+    # Save user to database
+    db.process.user.insert_one(user_datas.dict(by_alias=True))
+
+    return user_datas

@@ -25,6 +25,10 @@ tags_metadata = [
         "description": "Logiranje uporabnika",
     },
     {
+        "name": "Register",
+        "description": "Registriranje uporabnika",
+    },
+    {
         "name": "User",
         "description": "User je admin",
     },
