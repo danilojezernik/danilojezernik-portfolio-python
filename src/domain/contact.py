@@ -5,11 +5,10 @@ from bson import ObjectId
 from pydantic import BaseModel, Field
 
 
-class User(BaseModel):
+class Contact(BaseModel):
     id: Optional[str] = Field(alias='_id', default_factory=lambda: str(ObjectId()))
-    username: str
-    email: str | None = None
-    full_name: str | None = None
-    hashed_password: str
-    disabled: bool = True
+    name: str
+    surname: str
+    email: str
+    message: str
     datum_vnosa: datetime.datetime = Field(default_factory=datetime.datetime.now)

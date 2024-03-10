@@ -30,10 +30,14 @@ tags_metadata = [
     },
     {
         "name": "User",
-        "description": "User je admin",
+        "description": "User route je namenjen pregledu registriranih",
+    },
+    {
+        "name": "Contact",
+        "description": "Route je namenjen pošiljanju sporočil obiskovalcev",
     },
     {
         "name": "Email",
-        "description": "Route je namenjen pošiljanju emialov preko katerih drugi kontaktirajo mene",
+        "description": "Route je namenjen pregledu prejetih email sporočil",
     }
 ]
