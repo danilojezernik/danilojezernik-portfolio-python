@@ -60,7 +60,7 @@ THIS ROUTES ARE PRIVATE
 
 # Get all emails private
 @router.get('/', operation_id='get_all_emails_private')
-async def get_all_emails_private():
+async def get_all_emails_private(current_user: str = Depends(get_current_user)):
     """
     This route handles the retrieval of all the projects from the database
 
@@ -79,18 +79,17 @@ async def get_all_emails_private():
 
 # Delete email by ID
 @router.delete('/{_id}', operation_id='delete_email_by_id_private')
-async def delete_email_by_id_private(_id: str):
+async def delete_email_by_id_private(_id: str, current_user: str = Depends(get_current_user)):
     """
     Route for deleting an email by its unique ID.
-
-    Args:
-        _id (str): The unique ID of the email to be deleted.
 
     Returns:
         dict: A message indicating the success or failure of the email deletion.
 
     Raises:
         HTTPException: If the email with the specified ID is not found (404 status code).
+        :param _id: The unique ID of the email to be deleted
+        :param current_user: Authenticated user
     """
 
     # Attempt to delete the email by its unique ID from the 'contact' collection of the 'process' database

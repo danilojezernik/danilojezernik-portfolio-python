@@ -1,5 +1,5 @@
 from datetime import timedelta
-from fastapi import APIRouter, HTTPException, Depends, Request, status
+from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.responses import RedirectResponse
 
 from src import env
@@ -13,7 +13,7 @@ router = APIRouter()
 
 # GET ALL SUBSCRIBERS
 @router.get("/", operation_id="get_all_subscribers")
-async def get_all_subscribers() -> list[Subscriber]:
+async def get_all_subscribers(current_user: str = Depends(get_current_user)) -> list[Subscriber]:
     """
     This route handles the retrieval of all subscribers from the database.
 
@@ -28,7 +28,7 @@ async def get_all_subscribers() -> list[Subscriber]:
 
 # GET SUBSCRIBER BY ID
 @router.get("/{_id}", operation_id="get_subscriber_by_id")
-async def get_subscriber_id(_id: str):
+async def get_subscriber_id(_id: str, current_user: str = Depends(get_current_user)):
     """
     This route handles the retrieval of a subscriber by its ID from the database.
 
@@ -50,7 +50,7 @@ async def get_subscriber_id(_id: str):
 
 # ADD SUBSCRIBER
 @router.post("/", operation_id="add_subscriber")
-async def post_subscriber(subscriber: Subscriber) -> Subscriber | None:
+async def post_subscriber(subscriber: Subscriber, current_user: str = Depends(get_current_user)) -> Subscriber | None:
     """
     This route adds a new subscriber to the database.
 
@@ -77,7 +77,7 @@ async def post_subscriber(subscriber: Subscriber) -> Subscriber | None:
 
 # EDIT SUBSCRIBER BY ID
 @router.put("/{_id}")
-async def edit_subscriber(_id: str, subscriber: Subscriber) -> Subscriber | None:
+async def edit_subscriber(_id: str, subscriber: Subscriber, current_user: str = Depends(get_current_user)) -> Subscriber | None:
     """
     This route edits an existing subscriber by its ID in the database.
 
@@ -114,7 +114,7 @@ async def edit_subscriber(_id: str, subscriber: Subscriber) -> Subscriber | None
 
 # DELETE SUBSCRIBER BY ID
 @router.delete("/{_id}", operation_id="delete_subscriber")
-async def delete_subscriber(_id: str):
+async def delete_subscriber(_id: str, current_user: str = Depends(get_current_user)):
     """
     Route to delete a blog by its ID from the database.
 

@@ -10,7 +10,7 @@ router = APIRouter()
 
 # GET ALL NEWSLETTER
 @router.get("/", operation_id="get_all_newsletter")
-async def get_all_newsletter() -> list[Newsletter]:
+async def get_all_newsletter(current_user: str = Depends(get_current_user)) -> list[Newsletter]:
     """
     This route handles the retrieval of all newsletter from the database.
 
@@ -25,7 +25,7 @@ async def get_all_newsletter() -> list[Newsletter]:
 
 # GET NEWSLETTER BY ID
 @router.get('/{_id}', operation_id='get_newsletter_by_id')
-async def get_newsletter_by_id(_id: str):
+async def get_newsletter_by_id(_id: str, current_user: str = Depends(get_current_user)):
     """
     This route handles the retrieval of a newsletter by its ID from the database.
 
@@ -46,7 +46,7 @@ async def get_newsletter_by_id(_id: str):
 
 # DELETE NEWSLETTER BY ID
 @router.delete('/{_id}', operation_id='delete_newsletter_by_id')
-async def delete_newsletter_by_id(_id: str):
+async def delete_newsletter_by_id(_id: str, current_user: str = Depends(get_current_user)):
     """
     Route to delete a newsletter by its ID from the database.
 
@@ -74,7 +74,7 @@ async def delete_newsletter_by_id(_id: str):
 
 # SEND NEWSLETTER TO ALL
 @router.post("/", operation_id="send_newsletter_to_all")
-async def send_newsletter_to_all(newsletter: Newsletter):
+async def send_newsletter_to_all(newsletter: Newsletter, current_user: str = Depends(get_current_user)):
     """
     Route for sending a newsletter to all recipients.
 
