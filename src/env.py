@@ -16,5 +16,5 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 # User in database
 USERNAME = str(os.getenv('USERNAME'))
 EMAIL = str(os.getenv('EMAIL'))
-HASHED_PASSWORD = str(os.getenv('HASHED_PASSWORD'))
+PASSWORD = str(os.getenv('PASSWORD'))
 
