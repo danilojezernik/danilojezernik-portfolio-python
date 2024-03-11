@@ -9,6 +9,7 @@ user = [
         full_name='Danilo Jezernik',
         hashed_password='$2b$12$/4Ku22NMcxccpiFaIMDJheezk0Q0eDHGyvod3FaToy.BqfaDXM2km',
         disabled=False,
+        confirmed=False,
         datum_vnosa=datetime.datetime.now()
     ).dict(by_alias=True)
 ]

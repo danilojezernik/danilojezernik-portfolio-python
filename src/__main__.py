@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src import env
 
 # Imported routes
-from src.routes import index, blog, email, login, user, experiences, links, register, contact, projects
+from src.routes import index, blog, email, login, user, experiences, links, register, contact, projects, newsletter, subscriber
 
 from src.services import db
 
@@ -35,6 +35,8 @@ app.include_router(login.router, prefix='/login', tags=['Login'])
 app.include_router(register.router, prefix="/register", tags=["Register"])
 
 app.include_router(contact.router, prefix='/contact', tags=['Contact'])
+app.include_router(newsletter.router, prefix='/newsletter', tags=['Newsletter'])
+app.include_router(subscriber.router, prefix='/subscriber', tags=['Subscriber'])
 
 if __name__ == '__main__':
 
