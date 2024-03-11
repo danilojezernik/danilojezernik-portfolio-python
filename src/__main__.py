@@ -55,7 +55,7 @@ if __name__ == '__main__':
             print('User pass')
             pass
     else:
-        print('pass')
+        print('All pass')
         pass
 
     uvicorn.run(app, host="127.0.0.1", port=env.PORT)

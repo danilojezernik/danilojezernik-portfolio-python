@@ -57,8 +57,9 @@ async def get_blog_by_id_public(_id: str):
 
     # If no blog is found, return a 404 error with a relevant detail message
     if cursor is None:
-        return HTTPException(status_code=404, detail=f'Blog by ID: ({_id}) does not exist')
+        raise HTTPException(status_code=404, detail=f'Blog by ID: ({_id}) does not exist')
     else:
+
         # If the blog is found, convert the cursor data into a Blog object and return it
         return Blog(**cursor)
 
