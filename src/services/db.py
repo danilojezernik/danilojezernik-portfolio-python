@@ -10,6 +10,7 @@ from src.database.newsletter import newsletter
 from src.database.projects import projects
 from src.database.subscriber import subscriber
 from src.database.user import user
+from src.database.comment import comment
 
 client = MongoClient(env.DB_MAIN)
 process = client[env.DB_PROCESS]
@@ -23,6 +24,7 @@ def drop():
     process.projects.drop()
     process.newsletter.drop()
     process.subscriber.drop()
+    process.comment.drop()
     pass
 
 
@@ -39,6 +41,7 @@ def seed():
     process.projects.insert_many(projects)
     process.newsletter.insert_many(newsletter)
     process.subscriber.insert_many(subscriber)
+    process.comment.insert_many(comment)
     pass
 
 
