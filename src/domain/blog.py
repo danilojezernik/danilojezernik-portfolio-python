@@ -11,4 +11,5 @@ class Blog(BaseModel):
     kategorija: str
     podnaslov: str
     vsebina: str
+    image: str
     datum_vnosa: datetime.datetime = Field(default_factory=datetime.datetime.now)
