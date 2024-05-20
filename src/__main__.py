@@ -27,7 +27,7 @@ app.add_middleware(
 app.include_router(index.router, prefix='/index', tags=['Index'])
 app.include_router(blog.router, prefix='/blog', tags=['Blog'])
 
-app.include_router(comments.router, prefix='/comment', tags=['Comment'])
+app.include_router(comments.router, prefix='/comments', tags=['Comment'])
 app.include_router(experiences.router, prefix='/experiences', tags=['Experiences'])
 app.include_router(links.router, prefix='/links', tags=['Links'])
 app.include_router(email.router, prefix='/email', tags=['Email'])
