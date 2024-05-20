@@ -63,4 +63,11 @@ if __name__ == '__main__':
         print('All pass')
         pass
 
+    # Test connection to database for docker
+    try:
+        db.client.admin.command('ping')
+        print("Database connection successful")
+    except Exception as e:
+        print(f"Database connection failed: {e}")
+
     uvicorn.run(app, host="127.0.0.1", port=env.PORT)

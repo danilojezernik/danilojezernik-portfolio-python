@@ -15,7 +15,6 @@ from src.database.comment import comment
 client = MongoClient(env.DB_MAIN)
 process = client[env.DB_PROCESS]
 
-
 def drop():
     process.blog.drop()
     process.links.drop()
