@@ -39,5 +39,9 @@ tags_metadata = [
     {
         "name": "Email",
         "description": "Route je namenjen pregledu prejetih email sporočil",
+    },
+    {
+        "name": "Comment",
+        "description": "Route je namenjen pregledu prejetih komentarjev",
     }
 ]
