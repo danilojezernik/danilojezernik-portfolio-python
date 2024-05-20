@@ -1,9 +1,10 @@
 from fastapi import APIRouter
 
-from src.domain.comment import Comment
+from src.domain.comments import Comment
 from src.services import db
 
 router = APIRouter()
+
 
 # This route gets all comments from the database
 @router.get("/", operation_id="get_all_comments")

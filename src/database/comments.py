@@ -1,8 +1,8 @@
 import datetime
 
-from src.domain.comment import Comment
+from src.domain.comments import Comment
 
-comment = [
+comments = [
     Comment(
         blog_id='blog_id_1',
         content='Great post!',
