@@ -6,8 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src import env
 
 # Imported routes
-from src.routes import index, blog, email, login, user, experiences, links, register, contact, projects, newsletter, \
-    subscriber, comments
+from src.routes import index, blog, email, login, user, experiences, links, register, contact, projects, newsletter, subscriber, comments
 
 from src.services import db
 
