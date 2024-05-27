@@ -14,12 +14,6 @@ async def get_comments_for_post() -> list[Comment]:
 
     :return: a list of Comment objects containing all the comments in the database
     """
-    # Test connection
-    try:
-        db.client.admin.command('ping')
-        print("Database connection successful")
-    except Exception as e:
-        print(f"Database connection failed: {e}")
 
     # Retrieve all comments from the database using the find method
     cursor = db.process.comment.find()
