@@ -4,9 +4,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src import env
+from src.domain.blog import Blog
+from src.domain.experiences import Experiences
 
 # Imported routes
-from src.routes import index, blog, email, login, user, experiences, links, register, contact, projects, newsletter, subscriber, comments
+from src.routes import index, blog, email, login, user, experiences, links, register, contact, projects, newsletter, \
+    subscriber, comments
 
 from src.services import db
 
@@ -40,10 +43,24 @@ app.include_router(contact.router, prefix='/contact', tags=['Contact'])
 app.include_router(newsletter.router, prefix='/newsletter', tags=['Newsletter'])
 app.include_router(subscriber.router, prefix='/subscriber', tags=['Subscriber'])
 
+
+# Function to write fields to a text file
+def write_fields_to_txt(models):
+    with open('output.txt', 'w') as f:
+        for model in models:
+            model_name = model.__name__
+            f.write(f"{model_name}:\n")
+            for field in model.__fields__.keys():
+                f.write(f"  {field}\n")
+            f.write("\n")
+
+
 if __name__ == '__main__':
 
     # Confirm if you want to drop and seed database
     yes = input('Type "d" if you want to run drop and seed?')
+    yes_doc = input('Type "doc" if you want to write the document and press enter: ')
+
     true = 'd'
 
     if yes == true:
@@ -61,6 +78,13 @@ if __name__ == '__main__':
     else:
         print('All pass')
         pass
+
+    if yes_doc == 'doc':
+        print('Writing fields to output.txt...')
+        write_fields_to_txt([Blog, Experiences])
+        print('Done! Fields have been written to output.txt')
+    else:
+        print('Operation aborted')
 
     # Test connection to database for docker
     try:

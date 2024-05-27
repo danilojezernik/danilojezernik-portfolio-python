@@ -3,3 +3,5 @@ venv
 .idea!/.idea/
 
 /src/domain/users.py
+
+/src/output.txt
