@@ -46,41 +46,30 @@ app.include_router(subscriber.router, prefix='/subscriber', tags=['Subscriber'])
 
 
 if __name__ == '__main__':
-
     # Confirm if you want to drop and seed database
-    yes = input('Type "d" if you want to run drop and seed?')
-    yes_doc = input('Type "doc" if you want to write the document and press enter: ')
+    yes = input('Type "d" if you want to run drop and seed: ').strip().lower()
+    yes_doc = input('Type "doc" if you want to write the document and press enter: ').strip().lower()
 
-    true = 'd'
-
-    if yes == true:
+    if yes == 'd':
         print('drop() and seed() initialized')
         db.drop()
         db.seed()
-        drop_user = input('If you want to drop user type "d"')
-        true = 'd'
-        if drop_user == true:
+
+        drop_user = input('If you want to drop user type "d": ').strip().lower()
+        if drop_user == 'd':
             db.drop_user()
             db.seed_user()
         else:
-            print('User pass')
-            pass
+            print('User drop and seed skipped')
     else:
-        print('All pass')
-        pass
+        print('Database drop and seed skipped')
 
     if yes_doc == 'doc':
         print('Writing fields to output.txt...')
         write_fields_to_txt([Blog, Experiences])
         print('Done! Fields have been written to output.txt')
     else:
-        print('Operation aborted')
-
-    # Test connection to database for docker
-    try:
-        db.client.admin.command('ping')
-        print("Database connection successful")
-    except Exception as e:
-        print(f"Database connection failed: {e}")
+        print('Document writing aborted')
 
     uvicorn.run(app, host="127.0.0.1", port=env.PORT)
+
