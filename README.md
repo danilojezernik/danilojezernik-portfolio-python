@@ -74,7 +74,7 @@ The script will generate an `output.txt` file with the following format:
 /* eslint-disable */
 
 export interface Blog {
-   id: string;
+   '_id'?: string;
    naslov: string;
    kategorija: string;
    // and others
@@ -84,7 +84,7 @@ export interface Blog {
 /* eslint-disable */
 
 export interface Experiences {
-   id: string;
+   '_id'?: string;
    title: string;
    stack: string;
    // and others

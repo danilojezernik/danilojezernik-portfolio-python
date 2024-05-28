@@ -4,7 +4,7 @@ Use domains in models for frontend:
 /* eslint-disable */ 
 
 export interface Blog {
-  id: string;
+ '_id'?: string;
   naslov: string;
   kategorija: string;
   podnaslov: string;
@@ -17,7 +17,7 @@ export interface Blog {
 /* eslint-disable */ 
 
 export interface Experiences {
-  id: string;
+ '_id'?: string;
   title: string;
   stack: string;
   framework: string;
@@ -34,7 +34,7 @@ export interface Experiences {
 /* eslint-disable */ 
 
 export interface Comment {
-  id: string;
+ '_id'?: string;
   blog_id: string;
   content: string;
   author: string;
@@ -45,7 +45,7 @@ export interface Comment {
 /* eslint-disable */ 
 
 export interface Contact {
-  id: string;
+ '_id'?: string;
   name: string;
   surname: string;
   email: string;
@@ -57,7 +57,7 @@ export interface Contact {
 /* eslint-disable */ 
 
 export interface Links {
-  id: string;
+ '_id'?: string;
   title: string;
   link: string;
   datum_vnosa: string;
@@ -67,7 +67,7 @@ export interface Links {
 /* eslint-disable */ 
 
 export interface Newsletter {
-  id: string;
+ '_id'?: string;
   title: string;
   content: string;
   datum_vnosa: string;
@@ -77,7 +77,7 @@ export interface Newsletter {
 /* eslint-disable */ 
 
 export interface Projects {
-  id: string;
+ '_id'?: string;
   title: string;
   subtitle: string;
   category: string;
@@ -91,7 +91,7 @@ export interface Projects {
 /* eslint-disable */ 
 
 export interface Subscriber {
-  id: string;
+ '_id'?: string;
   name: string;
   surname: string;
   email: string;
@@ -103,7 +103,7 @@ export interface Subscriber {
 /* eslint-disable */ 
 
 export interface User {
-  id: string;
+ '_id'?: string;
   username: string;
   email: string;
   full_name: string;

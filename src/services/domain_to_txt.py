@@ -1,6 +1,5 @@
 import datetime
 
-
 def write_fields_to_txt(models):
     """
     Documents the field names and their types for each Pydantic model and writes them to a text file for frontend usage.
@@ -30,14 +29,14 @@ def write_fields_to_txt(models):
         /* eslint-disable */
 
         export interface Blog {
-          id: string;
+          _id: string;
           naslov: string;
           kategorija: string;
           ...
         }
 
         export interface Experiences {
-          id: string;
+          _id: string;
           title: string;
           stack: string;
           ...
@@ -50,6 +49,9 @@ def write_fields_to_txt(models):
             model_name = model.__name__  # Get the name of the model class
             f.write(f'export interface {model_name} {{\n')  # Write the model name as a TypeScript interface
             for field_name, field_info in model.__fields__.items():
+                if field_name == 'id':
+                    f.write(" '_id'?: string;\n")  # Write _id field with type 'str'
+                    continue
                 field_type = field_info.type_  # Get the type of the field
 
                 # Map field types to TypeScript types
