@@ -4,15 +4,25 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src import env
+
+# Import domain for output.txt
 from src.domain.blog import Blog
 from src.domain.experiences import Experiences
+from src.domain.contact import Contact
+from src.domain.user import User
+from src.domain.links import Links
+from src.domain.projects import Projects
+from src.domain.subscriber import Subscriber
+from src.domain.newsletter import Newsletter
+from src.domain.comments import Comment
+
 
 # Imported routes
 from src.routes import index, blog, email, login, user, experiences, links, register, contact, projects, newsletter, \
     subscriber, comments
 
 from src.services import db
-from src.services.model_to_txt import write_fields_to_txt
+from src.services.domain_to_txt import write_fields_to_txt
 
 from src.tags_metadata import tags_metadata
 
@@ -47,16 +57,16 @@ app.include_router(subscriber.router, prefix='/subscriber', tags=['Subscriber'])
 
 if __name__ == '__main__':
     # Confirm if you want to drop and seed database
-    yes = input('Type "d" if you want to run drop and seed: ').strip().lower()
-    yes_doc = input('Type "doc" if you want to write the document and press enter: ').strip().lower()
+    yes = input('Type "y" if you want to run drop and seed: ').strip().lower()
+    yes_doc = input('Type "y" if you want to write the document and press enter: ').strip().lower()
 
-    if yes == 'd':
+    if yes == 'y':
         print('drop() and seed() initialized')
         db.drop()
         db.seed()
 
-        drop_user = input('If you want to drop user type "d": ').strip().lower()
-        if drop_user == 'd':
+        drop_user = input('If you want to drop user type "y": ').strip().lower()
+        if drop_user == 'y':
             db.drop_user()
             db.seed_user()
         else:
@@ -64,9 +74,9 @@ if __name__ == '__main__':
     else:
         print('Database drop and seed skipped')
 
-    if yes_doc == 'doc':
+    if yes_doc == 'y':
         print('Writing fields to output.txt...')
-        write_fields_to_txt([Blog, Experiences])
+        write_fields_to_txt([Blog, Experiences, Comment, Contact, Links, Newsletter, Projects, Subscriber, User])
         print('Done! Fields have been written to output.txt')
     else:
         print('Document writing aborted')
