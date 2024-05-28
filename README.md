@@ -80,6 +80,9 @@ export interface Blog {
    // and others
 }
 
+/* tslint:disable */
+/* eslint-disable */
+
 export interface Experiences {
    id: string;
    title: string;
