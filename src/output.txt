@@ -1,0 +1,22 @@
+Blog:
+  id: str
+  naslov: str
+  kategorija: str
+  podnaslov: str
+  vsebina: str
+  image: str
+  datum_vnosa: datetime.datetime
+
+Experiences:
+  id: str
+  title: str
+  stack: str
+  framework: str
+  programming_language: str
+  company: str
+  employee: bool
+  tasks: str
+  company_start: str
+  company_end: str
+  datum_vnosa: datetime.datetime
+

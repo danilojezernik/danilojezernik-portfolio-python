@@ -12,6 +12,7 @@ from src.routes import index, blog, email, login, user, experiences, links, regi
     subscriber, comments
 
 from src.services import db
+from src.services.model_to_txt import write_fields_to_txt
 
 from src.tags_metadata import tags_metadata
 
@@ -42,17 +43,6 @@ app.include_router(register.router, prefix="/register", tags=["Register"])
 app.include_router(contact.router, prefix='/contact', tags=['Contact'])
 app.include_router(newsletter.router, prefix='/newsletter', tags=['Newsletter'])
 app.include_router(subscriber.router, prefix='/subscriber', tags=['Subscriber'])
-
-
-# Function to write fields to a text file
-def write_fields_to_txt(models):
-    with open('output.txt', 'w') as f:
-        for model in models:
-            model_name = model.__name__
-            f.write(f"{model_name}:\n")
-            for field in model.__fields__.keys():
-                f.write(f"  {field}\n")
-            f.write("\n")
 
 
 if __name__ == '__main__':
