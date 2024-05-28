@@ -18,3 +18,4 @@ httpx
 pandas
 openpyxl
 pdfkit
+github

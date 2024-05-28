@@ -18,6 +18,9 @@ USERNAME = str(os.getenv('USERNAME'))
 EMAIL = str(os.getenv('EMAIL'))
 PASSWORD = str(os.getenv('PASSWORD'))
 
+# GitHub
+GITHUB = str(os.getenv('GITHUB'))
+
 # Newsletter
 DOMAIN = str(os.getenv('DOMAIN'))
 
