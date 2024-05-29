@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from src import env
 
 from src.database.blog import blog
+from src.database.book import book
 from src.database.contact import contact
 from src.database.experiences import experiences
 from src.database.links import links
@@ -25,6 +26,7 @@ def drop():
     process.newsletter.drop()
     process.subscriber.drop()
     process.comments.drop()
+    process.book.drop()
     pass
 
 
@@ -42,6 +44,7 @@ def seed():
     process.newsletter.insert_many(newsletter)
     process.subscriber.insert_many(subscriber)
     process.comments.insert_many(comments)
+    process.book.insert_many(book)
     pass
 
 
