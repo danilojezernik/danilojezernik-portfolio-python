@@ -71,7 +71,8 @@ async def sys_info():  # Defines a function to fetch system information asynchro
 
     else:  # Executes if the operating system is not Windows or Linux
         return {
-            'error': 'Unsupported operating system'}  # Returns an error message indicating that the operating system is not supported
+            'error': 'Unsupported operating system'
+        }  # Returns an error message indicating that the operating system is not supported
 
     return sys_info  # Returns the processed system information dictionary
 
