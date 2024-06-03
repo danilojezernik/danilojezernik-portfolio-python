@@ -15,7 +15,7 @@ router = APIRouter()
 
 # SHUTDOWN COMPUTER
 @router.get("/shutdown")
-async def shut_down_pc(sleep: Sleep):
+async def shut_down_pc():
     """
     Shutdowns the computer after a specified sleep time.
 
@@ -25,9 +25,9 @@ async def shut_down_pc(sleep: Sleep):
     Returns:
         dict: Shutdown action confirmation.
     """
-    os.system(f'shutdown /s /t {sleep.number}')
+    os.system(f'shutdown /s /t 1')
 
-    return {'Action': f'computer shutdown was in {sleep.number}s'}
+    return {'Action': f'computer shutdown was in 1s'}
 
 
 # Get system information
