@@ -20,7 +20,7 @@ from src.domain.comments import Comment
 
 # Imported routes
 from src.routes import index, blog, email, login, user, experiences, links, register, contact, projects, newsletter, \
-    subscriber, comments, github, book, interesting
+    subscriber, comments, github, book
 
 from src.services import db
 from src.services.domain_to_txt import write_fields_to_txt
@@ -42,8 +42,6 @@ app.include_router(index.router, prefix='/index', tags=['Index'])
 app.include_router(blog.router, prefix='/blog', tags=['Blog'])
 app.include_router(github.router, prefix='/github', tags=['Github'])
 app.include_router(book.router, prefix='/book', tags=['Book'])
-
-app.include_router(interesting.router, prefix='/interesting', tags=['Interesting'])
 
 app.include_router(comments.router, prefix='/comments', tags=['Comment'])
 app.include_router(experiences.router, prefix='/experiences', tags=['Experiences'])
