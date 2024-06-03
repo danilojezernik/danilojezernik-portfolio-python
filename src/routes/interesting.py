@@ -31,50 +31,32 @@ async def shut_down_pc():
 
 
 # Get system information
-@router.get("/sysinfo")  # Defines a route to retrieve system information
-async def sys_info():  # Defines a function to fetch system information asynchronously
+@router.get("/sysinfo")
+async def sys_info():
     """
     Retrieves system information based on the operating system.
 
     Returns:
         dict: System information.
     """
-    os_type = platform.system()  # Detects the operating system type
+    os_type = platform.system()
+    if os_type == "Windows":
+        result = subprocess.run(['systeminfo'], capture_output=True, text=True, shell=True)
+        sys_info_raw = result.stdout
+        sys_info = {line.split(": ")[0].strip(): line.split(": ")[1].strip() for line in sys_info_raw.splitlines() if ": " in line}
 
-    if os_type == "Windows":  # Checks if the operating system is Windows
-        result = subprocess.run(['systeminfo'], capture_output=True, text=True,
-                                shell=True)  # Executes a command to get system information on Windows
-        sys_info_raw = result.stdout  # Stores the raw system information output
+    elif os_type == "Linux":
+        result = subprocess.run(['uname', '-a'], capture_output=True, text=True)
+        uname_info = result.stdout.strip()
+        result = subprocess.run(['lsb_release', '-a'], capture_output=True, text=True)
+        lsb_info_raw = result.stdout.strip()
+        sys_info = {"Uname Info": uname_info}
+        sys_info.update({line.split(":")[0].strip(): line.split(":")[1].strip() for line in lsb_info_raw.splitlines() if ":" in line})
 
-        sys_info = {}  # Initializes an empty dictionary to store processed system information
-        for line in sys_info_raw.splitlines():  # Iterates through each line of the raw system information
-            if ": " in line:  # Checks if the line contains a colon followed by a space
-                key, value = line.split(": ", 1)  # Splits the line into key-value pairs based on the colon and space
-                sys_info[
-                    key.strip()] = value.strip()  # Adds the key-value pair to the sys_info dictionary after stripping whitespace
+    else:
+        return {'error': 'Unsupported operating system'}
 
-    elif os_type == "Linux":  # Checks if the operating system is Linux
-        result = subprocess.run(['uname', '-a'], capture_output=True,
-                                text=True)  # Executes a command to get system information on Linux
-        uname_info = result.stdout.strip()  # Stores the raw output of the uname command
-
-        result = subprocess.run(['lsb_release', '-a'], capture_output=True,
-                                text=True)  # Executes a command to get system information on Linux using lsb_release
-        lsb_info_raw = result.stdout.strip()  # Stores the raw output of the lsb_release command
-
-        sys_info = {"Uname Info": uname_info}  # Initializes the sys_info dictionary with uname information
-        for line in lsb_info_raw.splitlines():  # Iterates through each line of the raw lsb_release output
-            if ":" in line:  # Checks if the line contains a colon
-                key, value = line.split(":", 1)  # Splits the line into key-value pairs based on the colon
-                sys_info[
-                    key.strip()] = value.strip()  # Adds the key-value pair to the sys_info dictionary after stripping whitespace
-
-    else:  # Executes if the operating system is not Windows or Linux
-        return {
-            'error': 'Unsupported operating system'
-        }  # Returns an error message indicating that the operating system is not supported
-
-    return sys_info  # Returns the processed system information dictionary
+    return sys_info
 
 
 @router.get("/youtube")
