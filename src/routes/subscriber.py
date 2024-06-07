@@ -4,7 +4,7 @@ from fastapi.responses import RedirectResponse
 
 from src import env
 from src.domain.subscriber import Subscriber
-from src.services import db, security, email_confirm
+from src.services import db, security, emails
 from src.services.security import get_current_user
 from src.template import confirmation_email
 
@@ -164,7 +164,7 @@ async def subscribe(subscriber: Subscriber):
     body = confirmation_email.html(link=f'{env.DOMAIN}/subscribers/confirm/{token}', name=subscriber.name, surname=subscriber.surname)
 
     # Send the confirmation email to the subscriber
-    if not email_confirm.send_confirm(email_to=subscriber.email, subject='Danilo Jezernik.com | Potrdite svojo registracijo na E-novičke ♥', body=body):
+    if not emails.send_confirm(email_to=subscriber.email, subject='Danilo Jezernik.com | Potrdite svojo registracijo na E-novičke ♥', body=body):
         return HTTPException(status_code=500, detail="Email not sent")
 
     # Insert the subscriber's data into the database
