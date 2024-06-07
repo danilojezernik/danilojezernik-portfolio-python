@@ -36,11 +36,10 @@ async def register_new_user(user_data: User):
     body = registered_user.html(full_name=user_data.full_name, username=user_data.username, email=user_data.email)
 
     # Attempt to send the registration email
-    if not emails.send_email(email_from=user_data.email, subject='New user registered on danilojezernik.com', body=body):
+    if not emails.send_email(email_from=user_data.email, subject='New user registered on danilojezernik.com',
+                             body=body):
         # If sending fails, raise an HTTPException with a 500 status code and a detail message
         raise HTTPException(status_code=500, detail='Email not sent')
-
-
 
     # Return a success response
     return {'registered_user'}
