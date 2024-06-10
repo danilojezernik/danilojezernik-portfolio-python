@@ -36,7 +36,7 @@ THIS ROUTES ARE PRIVATE
 
 
 # Get all users from database
-@router.get('/', operation_id='get_user_private')
+@router.get('/private/', operation_id='get_user_private')
 async def get_user_private(current_user: str = Depends(get_current_user)) -> list[User]:
     """
     This route handles the retrieval of all the users from the database
@@ -55,8 +55,8 @@ async def get_user_private(current_user: str = Depends(get_current_user)) -> lis
 
 
 # Get user by ID
-@router.get('/{_id}', operation_id='get_user_by_id')
-async def get_user_by_id(_id: str, current_user: str = Depends(get_current_user)) -> User:
+@router.get('/admin/{_id}', operation_id='get_user_by_id_admin')
+async def get_user_by_id_admin(_id: str, current_user: str = Depends(get_current_user)) -> User:
     """
     This route handles the retrieval of one user by its ID from the database
 
