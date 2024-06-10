@@ -26,7 +26,9 @@ async def register_new_user(user_data: User):
         email=user_data.email,
         full_name=user_data.full_name,
         hashed_password=hashed_password,
-        disabled=False
+        disabled=False,
+        confirmed=user_data.confirmed,
+        blog_notification=user_data.blog_notification,
     )
 
     # Save the user to the database
