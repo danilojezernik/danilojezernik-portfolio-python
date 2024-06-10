@@ -30,6 +30,27 @@ async def get_user_public() -> list[User]:
     return user_list
 
 
+# Get user by ID
+@router.get('/{_id}', operation_id='get_user_by_id')
+async def get_user_by_id(_id: str) -> User:
+    """
+    This route handles the retrieval of one user by its ID from the database
+
+    :param _id: The ID of the user to be retrieved
+    :return: If the user is found, returns the user data; otherwise, returns a 404 error
+    """
+
+    # Attempt to find a user in the database based on the provided ID
+    cursor = db.process.user.find_one({'_id': _id})
+
+    # If no user is found, return a 404 error with a relevant detail message
+    if cursor is None:
+        raise HTTPException(status_code=404, detail=f'Blog by ID: ({_id}) does not exist')
+    else:
+        # If the user is found, convert the cursor data into a User object and return it
+        return User(**cursor)
+
+
 """
 THIS ROUTES ARE PRIVATE
 """
