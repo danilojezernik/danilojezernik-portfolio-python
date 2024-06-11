@@ -1,5 +1,6 @@
 from src.services.emails import fetch_email_addresses, send_emails
 
+
 def blog_notification(subject: str, body: str) -> bool:
     """
     Sends a blog notification email to users who have opted in for blog notifications.

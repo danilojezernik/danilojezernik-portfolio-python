@@ -1,4 +1,5 @@
 from datetime import timedelta
+
 from fastapi import APIRouter, HTTPException, Depends, status
 from fastapi.responses import RedirectResponse
 
@@ -6,7 +7,7 @@ from src import env
 from src.domain.subscriber import Subscriber
 from src.services import db, security, emails
 from src.services.security import get_current_user
-from src.template import confirmation_email
+from src.template import confirmation_newsletter_email
 
 router = APIRouter()
 
@@ -77,7 +78,8 @@ async def post_subscriber(subscriber: Subscriber, current_user: str = Depends(ge
 
 # EDIT SUBSCRIBER BY ID
 @router.put("/{_id}")
-async def edit_subscriber(_id: str, subscriber: Subscriber, current_user: str = Depends(get_current_user)) -> Subscriber | None:
+async def edit_subscriber(_id: str, subscriber: Subscriber,
+                          current_user: str = Depends(get_current_user)) -> Subscriber | None:
     """
     This route edits an existing subscriber by its ID in the database.
 
@@ -161,10 +163,12 @@ async def subscribe(subscriber: Subscriber):
     token = security.create_access_token(data={'user_id': subscriber.id}, expires_delta=timedelta(minutes=10))
 
     # Generate the confirmation email's HTML content
-    body = confirmation_email.html(link=f'{env.DOMAIN}/subscribers/confirm/{token}', name=subscriber.name, surname=subscriber.surname)
+    body = confirmation_newsletter_email.html(link=f'{env.DOMAIN}/subscribers/confirm/{token}', name=subscriber.name,
+                                   surname=subscriber.surname)
 
     # Send the confirmation email to the subscriber
-    if not emails.send_confirm(email_to=subscriber.email, subject='Danilo Jezernik.com | Potrdite svojo registracijo na E-novičke ♥', body=body):
+    if not emails.send_confirm(email_to=subscriber.email,
+                               subject='DaniloJezernik.com | Potrdite svojo registracijo na E-novičke ♥', body=body):
         return HTTPException(status_code=500, detail="Email not sent")
 
     # Insert the subscriber's data into the database
@@ -194,4 +198,4 @@ async def confirm(token: str):
     # Mark the subscriber as confirmed in the database
     db.process.subscriber.update_one({"_id": payload['user_id']}, {"$set": {"confirmed": True}})
 
-    return RedirectResponse(url='http://localhost:3000/index', status_code=status.HTTP_303_SEE_OTHER)
+    return RedirectResponse(url=f'{env.DOMAIN}/index', status_code=status.HTTP_303_SEE_OTHER)

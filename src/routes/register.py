@@ -1,9 +1,14 @@
-from fastapi import APIRouter, HTTPException
+from datetime import timedelta
 
+from fastapi import APIRouter, HTTPException
+from starlette import status
+from starlette.responses import RedirectResponse
+
+from src import env
 from src.domain.user import User
-from src.services import emails, db
+from src.services import emails, db, security
 from src.services.security import make_hash
-from src.template import registered_user
+from src.template import registered_user, confirmation_registered_user
 
 router = APIRouter()
 
@@ -28,8 +33,21 @@ async def register_new_user(user_data: User):
         hashed_password=hashed_password,
         disabled=False,
         confirmed=user_data.confirmed,
+        registered=user_data.registered,
         blog_notification=user_data.blog_notification,
     )
+
+    # Create an access token with a short expiration time
+    token = security.create_access_token(data={'user_id': user_data.id}, expires_delta=timedelta(minutes=10))
+
+    # Generate the confirmation email's HTML content
+    body = confirmation_registered_user.html(link=f'{env.DOMAIN}/registered/{token}',
+                                             full_name=user_data.full_name)
+
+    # Send the confirmation email to the subscriber
+    if not emails.send_confirm(email_to=user_data.email,
+                               subject='DaniloJezernik.com | Potrdite svojo registracijo ♥', body=body):
+        return HTTPException(status_code=500, detail="Email not sent")
 
     # Save the user to the database
     db.process.user.insert_one(user_data.dict(by_alias=True))
@@ -45,3 +63,27 @@ async def register_new_user(user_data: User):
 
     # Return a success response
     return {'registered_user'}
+
+
+# CLIENT CONFIRMING EMAIL FOR REGISTRATION
+@router.get("/registered/{token}")
+async def confirm(token: str):
+    """
+    Route for clients to confirm their subscription by clicking on the confirmation link.
+
+    Parameters:
+    - token (str): The confirmation token.
+
+    Behavior:
+    - Extracts the user_id from the token.
+    - Marks the subscriber as confirmed in the database.
+    - Returns the payload from the token, which can be useful for additional actions.
+    """
+
+    # Extract the user_id from the confirmation token
+    payload = await security.get_payload(token=token)
+
+    # Mark the subscriber as confirmed in the database
+    db.process.user.update_one({"_id": payload['user_id']}, {"$set": {"registered": True}})
+
+    return RedirectResponse(url=f'{env.DOMAIN_REGISTER}/', status_code=status.HTTP_303_SEE_OTHER)

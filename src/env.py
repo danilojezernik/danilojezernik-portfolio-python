@@ -23,6 +23,7 @@ GITHUB = str(os.getenv('GITHUB'))
 
 # Newsletter
 DOMAIN = str(os.getenv('DOMAIN'))
+DOMAIN_REGISTER = str(os.getenv('DOMAIN_REGISTER'))
 
 # TESTING
 EMAIL_1 = str(os.getenv('EMAIL_1'))

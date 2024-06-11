@@ -356,7 +356,7 @@ def html(link: str, name: str, surname: str) -> str:
                               <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                   <td>
-                                    <p>Hi {name} {surname},</p>
+                                    <p>Živjo {name} {surname},</p>
                                     <p>Da bi se prijavili na E-novičke, morate svoj elektronski naslov potrditi!</p>
                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                                       <tbody>

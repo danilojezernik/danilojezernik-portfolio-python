@@ -113,6 +113,7 @@ export interface User {
   hashed_password: string;
   disabled: boolean;
   confirmed: boolean;
+  registered: boolean;
   blog_notification: boolean;
   datum_vnosa: string;
 }
