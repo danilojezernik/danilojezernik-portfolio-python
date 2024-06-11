@@ -1,7 +1,8 @@
-from email.message import EmailMessage
 import smtplib
+from email.message import EmailMessage
 
 from src import env
+from src.services import db
 
 
 def send_email(email_from: str, subject: str, body: str) -> bool:
@@ -86,3 +87,49 @@ def send_confirm(email_to: str, subject: str, body: str) -> bool:
             return True  # Email sent successfully
         else:
             return False  # Failed to send the email
+
+
+def fetch_email_addresses(filter_criteria: dict) -> list:
+    """
+    Fetch email addresses from the database based on the provided filter criteria.
+
+    Args:
+        filter_criteria (dict): The filter criteria for querying the database.
+
+    Returns:
+        list: A list of email addresses that match the filter criteria.
+    """
+    cursor = db.process.user.find(filter_criteria, {'email': 1})
+    email_addresses = [document['email'] for document in cursor]
+    return email_addresses
+
+
+def send_emails(subject: str, body: str, email_addresses: list) -> bool:
+    """
+    Email a list of recipients.
+
+    Args:
+        subject (str): The subject of the email.
+        body (str): The HTML content of the email.
+        email_addresses (list): A list of email addresses to send the email to.
+
+    Returns:
+        bool: True if the email was sent successfully to all recipients, False otherwise.
+    """
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+        smtp.login(env.EMAIL, env.PASSWORD)
+
+        for recipient in email_addresses:
+            em = EmailMessage()
+            em['From'] = env.EMAIL
+            em['To'] = recipient
+            em['Subject'] = subject
+            em.set_content(body, subtype='html')
+
+            try:
+                smtp.send_message(em)
+            except Exception as e:
+                print(f"Failed to send email to {recipient}: {e}")
+                return False
+
+    return True

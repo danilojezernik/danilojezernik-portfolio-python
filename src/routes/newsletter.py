@@ -97,7 +97,7 @@ async def send_newsletter_to_all(newsletter: Newsletter, current_user: str = Dep
     body = newsletter_body.html_newsletter(title=newsletter.title, content=newsletter.content)
 
     # Send the newsletter to all
-    if not newsletters.newsletter(subject='Hypnosis Studio Alen | E-novice ♥', body=body):
+    if not newsletters.newsletter(subject='DaniloJezernik.com | E-novice ♥', body=body):
         # If sending the email fails, return a 500 Internal Server Error
         return HTTPException(status_code=500, detail="Email not sent")
 

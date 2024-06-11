@@ -12,9 +12,9 @@ Routes:
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.domain.blog import Blog
-from src.services import db
-
+from src.services import db, blog_notification
 from src.services.security import get_current_user
+from src.template import blog_notifications
 
 router = APIRouter()
 
@@ -143,7 +143,7 @@ async def add_new_blog(blog: Blog, current_user: str = Depends(get_current_user)
     :return: If the addition is successful, returns the newly added Blog object; otherwise, returns None.
     """
 
-    # Convert the Blog object to a dictionary
+    # Convert the Blog object to a dictionary for database insertion
     blog_dict = blog.dict(by_alias=True)
 
     # Insert the blog data into the database
@@ -151,16 +151,21 @@ async def add_new_blog(blog: Blog, current_user: str = Depends(get_current_user)
 
     # Check if the insertion was acknowledged by the database
     if insert_result.acknowledged:
-
-        # Update the dictionary with the newly assigned _id
+        # If insertion is successful, update the dictionary with the newly assigned _id
         blog_dict['_id'] = str(insert_result.inserted_id)
 
-        # Return the newly added Blog object
+        # Generate the body content for the blog notification email
+        body = blog_notifications.html(title=blog.naslov)
+
+        # Send notification to users that have blog_notification set to true
+        if not blog_notification.blog_notification(subject='Nov blog na strani DaniloJezernik.com', body=body):
+            # If email notification fails, return None to indicate failure
+            return None
+
+        # Return the newly added Blog object, using the updated dictionary
         return Blog(**blog_dict)
-
     else:
-
-        # If the insertion was not acknowledged, return None
+        # If the insertion was not acknowledged, return None to indicate failure
         return None
 
 
@@ -219,4 +224,3 @@ async def delete_blog_by_id_private(_id: str, current_user: str = Depends(get_cu
     else:
         # If the blog was not found, raise a 404 error
         raise HTTPException(status_code=404, detail=f'Blog by ID: ({_id}) not found!')
-
