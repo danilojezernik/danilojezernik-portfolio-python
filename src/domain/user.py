@@ -16,6 +16,6 @@ class User(BaseModel):
     hashed_password: str
     disabled: bool
     confirmed: bool
-    registered: Optional[bool] = False
+    registered: Optional[bool]
     blog_notification: bool
     datum_vnosa: datetime.datetime = Field(default_factory=datetime.datetime.now)
