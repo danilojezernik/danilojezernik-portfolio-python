@@ -41,7 +41,7 @@ async def register_new_user(user_data: User):
     token = security.create_access_token(data={'user_id': user_data.id}, expires_delta=timedelta(minutes=10))
 
     # Generate the confirmation email's HTML content
-    body = confirmation_registered_user.html(link=f'{env.DOMAIN}/registered/{token}',
+    body = confirmation_registered_user.html(link=f'{env.DOMAIN}/register/registered/{token}',
                                              full_name=user_data.full_name)
 
     # Send the confirmation email to the subscriber
