@@ -68,8 +68,9 @@ def authenticate_user(username: str, password: str):
     - If a user is found and the provided password matches the stored hashed password, the user is considered authenticated and returned.
     - If no user is found or the password doesn't match, it returns None, indicating authentication failure.
     """
+
     user = get_user(username)
-    if user and verify_password(password, user.hashed_password):
+    if user and user.registered is not False and verify_password(password, user.hashed_password):
         return user
     return None
 

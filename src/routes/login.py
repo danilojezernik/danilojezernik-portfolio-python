@@ -27,6 +27,7 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
 
     # Authenticate the user using the provided username and password
     user = authenticate_user(form_data.username, form_data.password)
+
     if not user:
         # Raise an exception if the authentication fails
         raise HTTPException(
