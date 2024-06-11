@@ -14,7 +14,6 @@ class User(BaseModel):
     technology: Optional[str] = None
     description: Optional[str] = None
     hashed_password: str
-    disabled: bool
     confirmed: bool
     registered: Optional[bool]
     blog_notification: bool

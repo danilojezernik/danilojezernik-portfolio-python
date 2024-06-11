@@ -170,24 +170,6 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     return user
 
 
-async def get_current_active_user(current_user: Annotated[User, Depends(get_current_user)]):
-    """
-    This asynchronous function checks if the provided user is active.
-
-    Behavior:
-    - If the user is inactive (disabled), it raises an exception indicating an inactive user.
-    - Otherwise, if the user is active, it simply returns the current user.
-    """
-
-    # Check if the user is inactive
-    if current_user.disabled:
-        # Raise an exception if the user is inactive
-        raise HTTPException(status_code=400, detail="Inactive user")
-
-    # Return the current user if active
-    return current_user
-
-
 # Has a password
 def make_hash(password):
     return pwd_context.hash(password)
@@ -210,7 +192,6 @@ def register_user(user: User):
         email=user.email,
         full_name=user.full_name,
         hashed_password=hashed_password,
-        disabled=False
     )
 
     # Save user to database
