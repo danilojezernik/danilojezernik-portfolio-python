@@ -57,7 +57,7 @@ THIS ROUTES ARE PRIVATE
 
 
 # Get all users from database
-@router.get('/private/', operation_id='get_user_private')
+@router.get('/admin/', operation_id='get_user_private')
 async def get_user_private(current_user: str = Depends(get_current_user)) -> list[User]:
     """
     This route handles the retrieval of all the users from the database
@@ -109,21 +109,20 @@ async def edit_user_by_id(_id: str, user: User, current_user: str = Depends(get_
     :return: If the user is successfully edited, returns the updated User object; otherwise, returns None.
     """
 
-    # Check if the user wants to update the password
-    if 'hashed_password' in user.dict(by_alias=True):
-        # Hash the provided password using pwd_context.hash
-        hashed_password = pwd_context.hash(user.dict(by_alias=True)['hashed_password'])
-        user.dict()['hashed_password'] = hashed_password
-
     # Convert the user object to a dictionary with alias
     user_dict = user.dict(by_alias=True)
 
-    # Remove '_id' from the dictionary as it shouldn't be updated
-    del user_dict['_id']
+    # Check if the user wants to update the password
+    if 'hashed_password' in user_dict and user_dict['hashed_password']:
+        # Hash the provided password using pwd_context.hash
+        hashed_password = pwd_context.hash(user_dict['hashed_password'])
+        user_dict['hashed_password'] = hashed_password
+    else:
+        # Remove the 'hashed_password' key if it exists but is empty
+        user_dict.pop('hashed_password', None)
 
-    # Hash the password before updating the document in the database
-    if 'hashed_password' in user_dict:
-        user_dict['hashed_password'] = pwd_context.hash(user_dict['hashed_password'])
+    # Remove '_id' from the dictionary as it shouldn't be updated
+    user_dict.pop('_id', None)
 
     # Update the user document in the database
     cursor = db.process.user.update_one({'_id': _id}, {'$set': user_dict})

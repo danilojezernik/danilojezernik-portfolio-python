@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import Depends, HTTPException, status, APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 
-from src.api.token import Token
+from src.domain.token import Token
 from src.services.security import authenticate_user, create_access_token
 
 # Create a new APIRouter instance for this module

@@ -2,9 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from src.domain.contact import Contact
 from src.services import db, emails
-from src.template import email_template
-
 from src.services.security import get_current_user
+from src.template import email_template
 
 router = APIRouter()
 
@@ -75,6 +74,28 @@ async def get_all_emails_private(current_user: str = Depends(get_current_user)):
 
     # Return the list of Blog objects
     return contact_list
+
+
+@router.get('/{:id}', operation_id='get_email_by_id_admin')
+async def get_email_by_id_admin(_id: str,current_user: str = Depends(get_current_user)):
+    """
+    This route handles the retrieval of one email by its ID from the database
+
+    :param current_user: Current user that is registered
+    :param _id: The ID of the contact to be retrieved
+    :return: If the project is found, returns the contact data; otherwise, returns a 404 error
+    """
+
+    # Attempt to find a project in the database based on the provided ID
+    cursor = db.process.contact.find_one({'_id': id})
+
+    # If no contact is found, return a 404 error with a relevant detail message
+    if cursor is None:
+        raise HTTPException(status_code=404, detail=f'Contact by ID: ({id}) not found!')
+    else:
+
+        # If the contact is found, convert the cursor data into a Contact object and return it
+        return Contact(**cursor)
 
 
 # Delete email by ID

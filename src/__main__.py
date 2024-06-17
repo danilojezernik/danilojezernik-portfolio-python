@@ -19,7 +19,7 @@ from src.domain.user import User
 from src.routes import index, blog, email, login, user, experiences, links, register, contact, projects, newsletter, \
     subscriber, comments, github, book
 from src.services import db
-from src.services.domain_to_txt import write_fields_to_txt
+from src.utils.domain_to_txt import write_fields_to_txt
 from src.tags_metadata import tags_metadata
 
 app = FastAPI(openapi_tags=tags_metadata)

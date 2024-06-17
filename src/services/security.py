@@ -10,7 +10,7 @@ from fastapi import Depends, HTTPException, status
 from src.domain.user import User
 from src import env
 from src.domain.user_in_db import UserInDB
-from src.api.token_data import TokenData
+from src.domain.token_data import TokenData
 from src.services import db
 
 # Initialize a password context with bcrypt hashing
