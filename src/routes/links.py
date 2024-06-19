@@ -1,12 +1,11 @@
 """
-This module defines API routes for managing links
-
-Routes:
-1. GET all links
-2. GET links by ID
-3. ADD a new links
-4. Edit (PUT) and existing links by ID
-5. DELETE a links by ID
+Routes Overview:
+1. GET / - Retrieve all links from the database.
+2. GET /admin/ - Retrieve all links from the database (private).
+3. POST / - Add a new link to the database (private).
+4. GET /{_id} - Retrieve a link by its ID (private).
+5. PUT /{_id} - Edit a link by its ID (private).
+6. DELETE /{_id} - Delete a link by its ID (private).
 """
 
 from fastapi import APIRouter, Depends, HTTPException

@@ -1,3 +1,8 @@
+"""
+Routes Overview:
+1. POST / - User authentication route to obtain an access token.
+"""
+
 from datetime import timedelta
 from typing import Annotated
 

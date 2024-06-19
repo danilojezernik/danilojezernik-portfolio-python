@@ -1,9 +1,17 @@
+"""
+Routes Overview:
+1. GET / - Retrieve all newsletters from the database.
+2. GET /{_id} - Retrieve a specific newsletter by its ID from the database.
+3. DELETE /{_id} - Delete a specific newsletter by its ID from the database.
+4. POST / - Add and send a new newsletter to all recipients.
+"""
+
 from fastapi import APIRouter, HTTPException, Depends
 
 from src.domain.newsletter import Newsletter
 from src.services import newsletters, db
-from src.template import newsletter_body
 from src.services.security import get_current_user
+from src.template import newsletter_body
 
 router = APIRouter()
 
@@ -109,5 +117,3 @@ async def send_newsletter_to_all(newsletter: Newsletter, current_user: str = Dep
     else:
         # If the insertion was not acknowledged, return None
         return None
-
-

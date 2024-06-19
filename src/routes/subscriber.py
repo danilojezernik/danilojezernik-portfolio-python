@@ -1,3 +1,14 @@
+"""
+Routes Overview:
+1. GET / - Retrieve all subscribers from the database.
+2. GET /{_id} - Retrieve a subscriber by their ID.
+3. POST / - Add a new subscriber to the database.
+4. PUT /{_id} - Edit an existing subscriber by their ID.
+5. DELETE /{_id} - Delete a subscriber by their ID.
+6. POST /subscribe - Subscribe a client to the newsletter and send a confirmation email.
+7. GET /confirm/{token} - Confirm a client's email for the newsletter subscription.
+"""
+
 from datetime import timedelta
 
 from fastapi import APIRouter, HTTPException, Depends, status
@@ -164,7 +175,7 @@ async def subscribe(subscriber: Subscriber):
 
     # Generate the confirmation email's HTML content
     body = confirmation_newsletter_email.html(link=f'{env.DOMAIN}/subscribers/confirm/{token}', name=subscriber.name,
-                                   surname=subscriber.surname)
+                                              surname=subscriber.surname)
 
     # Send the confirmation email to the subscriber
     if not emails.send_confirm(email_to=subscriber.email,

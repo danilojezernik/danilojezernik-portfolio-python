@@ -1,12 +1,13 @@
 """
-This module defines API routes for managing blogs
-
 Routes:
-1. GET all blogs
-2. GET blog by ID
-3. ADD a new blog
-4. Edit (PUT) and existing blog by ID
-5. DELETE a blog by ID
+1. GET all blogs - Retrieve all blogs from the database.
+2. GET blog by ID - Retrieve a specific blog by its ID.
+3. GET limited blogs - Retrieve a limited number of blogs.
+4. GET all blogs (private) - Retrieve all blogs for authenticated users.
+5. GET blog by ID (private) - Retrieve a specific blog by its ID for authenticated users.
+6. ADD a new blog - Add a new blog to the database.
+7. EDIT a blog by ID - Edit an existing blog by its ID.
+8. DELETE a blog by ID - Delete a blog by its ID.
 """
 
 from fastapi import APIRouter, Depends, HTTPException

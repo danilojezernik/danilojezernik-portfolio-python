@@ -1,3 +1,14 @@
+"""
+Routes Overview:
+1. GET / - Retrieves all users from the database (public).
+2. GET /{_id} - Retrieves a user by their ID (public).
+3. GET /admin/ - Retrieves all users from the database (private).
+4. POST / - Adds a new user to the database (private).
+5. GET /admin/{_id} - Retrieves a user by their ID (private).
+6. PUT /{_id} - Edits a user by their ID (private).
+7. DELETE /{_id} - Deletes a user by their ID (private).
+"""
+
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.domain.user import User

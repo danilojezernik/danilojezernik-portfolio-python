@@ -1,12 +1,12 @@
 """
-This module defines API routes for managing experiences
-
-Routes:
-1. GET all experiences
-2. GET experiences by ID
-3. ADD a new experiences
-4. Edit (PUT) and existing experiences by ID
-5. DELETE an experience by ID
+Routes Overview:
+1. GET / - Retrieves all experiences from the database (public).
+2. GET /{_id} - Retrieves a specific experience by its ID (public).
+3. GET /admin/ - Retrieves all experiences from the database (private).
+4. POST / - Adds a new experience to the database (private).
+5. GET /admin/{_id} - Retrieves a specific experience by its ID (private).
+6. PUT /{_id} - Updates an existing experience by its ID (private).
+7. DELETE /{_id} - Deletes an experience from the database by its ID (private).
 """
 
 from fastapi import APIRouter, Depends, HTTPException

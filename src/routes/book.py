@@ -1,12 +1,10 @@
 """
-This module defines API routes for managing book
-
-Routes:
-1. GET all book
-2. GET book by ID
-3. ADD a new book
-4. Edit (PUT) and existing book by ID
-5. DELETE an experience by ID
+Routes Overview:
+1. GET / - Retrieve all books from the database.
+2. GET /{_id} - Retrieve a book by its ID.
+3. POST / - Add a new book to the database.
+4. PUT /{_id} - Edit an existing book by its ID.
+5. DELETE /{_id} - Delete a book by its ID.
 """
 
 from fastapi import APIRouter, Depends, HTTPException

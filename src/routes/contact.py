@@ -1,3 +1,11 @@
+"""
+Routes Overview:
+1. POST / - Endpoint for clients to send an email and store it in the database.
+2. GET / - Retrieve all emails from the database (private route, requires authentication).
+3. GET /{_id} - Retrieve an email by its ID (private route, requires authentication).
+4. DELETE /{_id} - Delete an email by its ID (private route, requires authentication).
+"""
+
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.domain.contact import Contact

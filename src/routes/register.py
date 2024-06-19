@@ -1,3 +1,9 @@
+"""
+Routes:
+1. Register new user - Register a new user and store their data in the database.
+2. Confirm registration - Confirm a user's registration via a confirmation link.
+"""
+
 from datetime import timedelta
 
 from fastapi import APIRouter, HTTPException

@@ -1,3 +1,12 @@
+"""
+Routes Overview:
+1. GET / - Retrieve all projects from the database.
+2. GET /{_id} - Retrieve a specific project by its ID from the database.
+3. DELETE /{_id} - Delete a specific project by its ID from the database.
+4. POST / - Add a new project to the database.
+5. PUT /{_id} - Edit an existing project by its ID in the database.
+"""
+
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.domain.projects import Projects

@@ -12,6 +12,12 @@ router = APIRouter()
 # Route handler to fetch GitHub repositories
 @router.get('/')
 async def get_repo():
+    """
+    Route handler to fetch GitHub repositories of a specific user.
+
+    Returns:
+        dict: A dictionary containing the fetched repositories.
+    """
     # Constructing the URL to fetch user repositories from GitHub API
     url = f"https://api.github.com/users/{env.GITHUB}/repos"
 

@@ -1,3 +1,12 @@
+"""
+Routes Overview:
+1. GET / - Retrieve all comments from the database.
+2. GET /{blog_id} - Retrieve all comments for a specific blog post from the database.
+3. POST /{blog_id} - Add a new comment to a specific blog post in the database.
+4. PUT /{blog_id}/{comment_id} - Edit an existing comment by its ID for a specific blog post.
+5. DELETE /{blog_id}/{comment_id} - Delete a comment by its ID for a specific blog post.
+"""
+
 from fastapi import APIRouter
 
 from src.domain.comments import Comment
