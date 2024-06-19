@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from src.domain.user import User
 from src.services import db
-from src.services.security import get_current_user, pwd_context
+from src.services.security import get_current_user, pwd_context, make_hash
 
 router = APIRouter()
 
@@ -73,6 +73,50 @@ async def get_user_private(current_user: str = Depends(get_current_user)) -> lis
 
     # Return the list of User objects
     return user_list
+
+
+# ADD USER BY ID
+@router.post('/', operation_id='add_new_user')
+async def add_new_user(user_data: User, current_user: str = Depends(get_current_user)) -> User | None:
+    """
+    This route adds a new user to the database.
+
+    Parameters:
+    - user_data (User): The user object containing user details to be added.
+
+    Behavior:
+    - Hashes the user's password.
+    - Creates a new User object with the provided data.
+    - Inserts the new user into the database.
+    - Returns the added User object if successful, or None if unsuccessful.
+    """
+
+    # Hash the user's password for security
+    hashed_password = make_hash(user_data.hashed_password)
+
+    # Create a User object with the provided data, including the hashed password
+    new_user = User(
+        username=user_data.username,
+        email=user_data.email,
+        full_name=user_data.full_name,
+        hashed_password=hashed_password,
+        disabled=False,  # Set the user as enabled by default
+        confirmed=user_data.confirmed,
+        registered=user_data.registered,
+        blog_notification=user_data.blog_notification,
+    ).dict(by_alias=True)
+
+    # Insert the new user into the database
+    insert_user = db.process.user.insert_one(new_user)
+
+    # Check if the insertion was acknowledged by the database
+    if insert_user.acknowledged:
+        # If insertion is successful, update the dictionary with the newly assigned _id
+        new_user['_id'] = str(insert_user.inserted_id)
+        return User(**new_user)
+    else:
+        # If the insertion was not acknowledged, return None to indicate failure
+        return None
 
 
 # Get user by ID
