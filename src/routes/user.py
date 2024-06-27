@@ -102,6 +102,8 @@ async def add_new_user(user_data: User, current_user: str = Depends(get_current_
     - Returns the added User object if successful, or None if unsuccessful.
     """
 
+    print(user_data)
+
     # Hash the user's password for security
     hashed_password = make_hash(user_data.hashed_password)
 
@@ -111,12 +113,16 @@ async def add_new_user(user_data: User, current_user: str = Depends(get_current_
         email=user_data.email,
         full_name=user_data.full_name,
         hashed_password=hashed_password,
+        description=user_data.description,
+        profession=user_data.profession,
+        technology=user_data.technology,
         disabled=False,  # Set the user as enabled by default
         confirmed=user_data.confirmed,
         registered=user_data.registered,
         blog_notification=user_data.blog_notification,
     ).dict(by_alias=True)
 
+    print(new_user)
     # Insert the new user into the database
     insert_user = db.process.user.insert_one(new_user)
 
