@@ -1,6 +1,6 @@
 # Import necessary modules and libraries
 import httpx  # Library for making HTTP requests
-from fastapi import APIRouter  # Importing APIRouter from FastAPI framework
+from fastapi import APIRouter, HTTPException   # Importing APIRouter from FastAPI framework
 
 # Importing environment variables from src folder
 from src import env
@@ -18,29 +18,38 @@ async def get_repo():
     Returns:
         dict: A dictionary containing the fetched repositories.
     """
-    username = env.GITHUB  # Assuming 'env.GITHUB' contains the GitHub username
     per_page = 30  # Number of repositories per page
-    total_repos_to_fetch = 44  # Total number of repositories to fetch
     repos = []  # List to store all fetched repositories
+    page = 1  # Initial page number
+
+    headers = {
+        'Authorization': f'token {env.GITHUB_TOKEN}'
+    }
 
     async with httpx.AsyncClient() as client:
-        for page in range(1, (total_repos_to_fetch // per_page) + 2):
-            url = f"https://api.github.com/users/{username}/repos?per_page={per_page}&page={page}"
-            response = await client.get(url)
-            page_repos = response.json()
+        while True:
+            url = f"https://api.github.com/users/{env.GITHUB}/repos?per_page={per_page}&page={page}"
+            response = await client.get(url, headers=headers)
+
+            # Check if the response status code is not 200 (OK)
+            if response.status_code != 200:
+                raise HTTPException(status_code=response.status_code, detail=f"Error fetching repositories: {response.text}")
+
+            try:
+                page_repos = response.json()
+            except ValueError:
+                raise HTTPException(status_code=500, detail="Invalid JSON response from GitHub API")
 
             # Check if the response contains repositories
-            if page_repos:
-                # Filter public repositories and add them to the list
-                public_repos = [repo for repo in page_repos if not repo.get('private')]
-                repos.extend(public_repos)
+            if not page_repos:
+                break  # Exit the loop if there are no more repositories
 
-            # Break the loop if we have fetched enough repositories
-            if len(repos) >= total_repos_to_fetch:
-                break
+            # Filter public repositories and add them to the list
+            public_repos = [repo for repo in page_repos if not repo.get('private')]
+            repos.extend(public_repos)
 
-    # Limit the number of repositories to the desired amount
-    repos = repos[:total_repos_to_fetch]
+            # Increment page number for the next set of repositories
+            page += 1
 
     # Returning the fetched repositories as a dictionary
     return {'repos': repos}

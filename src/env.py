@@ -20,6 +20,7 @@ PASSWORD = str(os.getenv('PASSWORD'))
 
 # GitHub
 GITHUB = str(os.getenv('GITHUB'))
+GITHUB_TOKEN = str(os.getenv('GITHUB_TOKEN'))
 
 # Newsletter
 DOMAIN = str(os.getenv('DOMAIN'))
