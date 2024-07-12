@@ -14,13 +14,14 @@ from src.domain.links import Links
 from src.domain.newsletter import Newsletter
 from src.domain.projects import Projects
 from src.domain.subscriber import Subscriber
+from src.domain.technology import Technology
 from src.domain.user import User
 # Imported routes
 from src.routes import index, blog, email, login, user, experiences, links, register, contact, projects, newsletter, \
-    subscriber, comments, github, book
+    subscriber, comments, github, book, technology
 from src.services import db
-from src.utils.domain_to_txt import write_fields_to_txt
 from src.tags_metadata import tags_metadata
+from src.utils.domain_to_txt import write_fields_to_txt
 
 app = FastAPI(openapi_tags=tags_metadata)
 
@@ -37,6 +38,7 @@ app.include_router(index.router, prefix='/index', tags=['Index'])
 app.include_router(blog.router, prefix='/blog', tags=['Blog'])
 app.include_router(github.router, prefix='/github', tags=['Github'])
 app.include_router(book.router, prefix='/book', tags=['Book'])
+app.include_router(technology.router, prefix='/technology', tags=['Technology'])
 
 app.include_router(comments.router, prefix='/comments', tags=['Comment'])
 app.include_router(experiences.router, prefix='/experiences', tags=['Experiences'])
@@ -75,7 +77,8 @@ if __name__ == '__main__':
     yes_doc = input('Type "y" if you want to write the document and press enter: ').strip().lower()
     if yes_doc == 'y':
         print('Writing fields to output.txt...')
-        write_fields_to_txt([Blog, Experiences, Comment, Contact, Links, Newsletter, Projects, Subscriber, User, Book])
+        write_fields_to_txt(
+            [Blog, Experiences, Comment, Contact, Links, Newsletter, Projects, Subscriber, User, Book, Technology])
         print('Done! Fields have been written to output.txt')
     else:
         print('Document writing aborted')

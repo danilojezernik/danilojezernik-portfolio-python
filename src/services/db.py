@@ -10,6 +10,7 @@ from src.database.links import links
 from src.database.newsletter import newsletter
 from src.database.projects import projects
 from src.database.subscriber import subscriber
+from src.database.technology import technology
 from src.database.user import user
 from src.database.comments import comments
 
@@ -27,6 +28,7 @@ def drop():
     process.subscriber.drop()
     process.comments.drop()
     process.book.drop()
+    process.technology.drop()
     pass
 
 
@@ -45,6 +47,7 @@ def seed():
     process.subscriber.insert_many(subscriber)
     process.comments.insert_many(comments)
     process.book.insert_many(book)
+    process.technology.insert_many(technology)
     pass
 
 
