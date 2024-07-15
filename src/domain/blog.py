@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 
 class Blog(BaseModel):
     id: Optional[str] = Field(alias='_id', default_factory=lambda: str(ObjectId()))
-    naslov: str
+    title: str
     kategorija: str
     podnaslov: str
     vsebina: str

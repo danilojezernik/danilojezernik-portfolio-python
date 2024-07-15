@@ -156,7 +156,7 @@ async def add_new_blog(blog: Blog, current_user: str = Depends(get_current_user)
         blog_dict['_id'] = str(insert_result.inserted_id)
 
         # Generate the body content for the blog notification email
-        body = blog_notifications.html(title=blog.naslov)
+        body = blog_notifications.html(title=blog.title)
 
         # Send notification to users that have blog_notification set to true
         if not blog_notification.blog_notification(subject='Nov blog na strani DaniloJezernik.com', body=body):

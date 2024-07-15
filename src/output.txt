@@ -5,7 +5,7 @@ Use domains in models for frontend:
 
 export interface Blog {
  '_id'?: string;
-  naslov: string;
+  title: string;
   kategorija: string;
   podnaslov: string;
   vsebina: string;

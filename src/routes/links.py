@@ -41,6 +41,27 @@ async def get_all_links_public() -> list[Links]:
     return links_list
 
 
+# Get link by ID
+@router.get('/{_id}', operation_id='get_link_by_id')
+async def get_link_by_id(_id: str) -> Links:
+    """
+    This route handles the retrieval of one link by its ID from the database
+
+    :param _id: The ID of the link to be retrieved
+    :return: If the link is found, returns the link data; otherwise, returns a 404 error
+    """
+
+    # Attempt to find a link in the database based on the provided ID
+    cursor = db.process.links.find_one({'_id': _id})
+
+    # If no user is found, return a 404 error with a relevant detail message
+    if cursor is None:
+        raise HTTPException(status_code=404, detail=f'Link by ID: ({_id}) does not exist')
+    else:
+        # If the link is found, convert the cursor data into a Links object and return it
+        return Links(**cursor)
+
+
 """
 THIS ROUTES ARE PRIVATE
 """

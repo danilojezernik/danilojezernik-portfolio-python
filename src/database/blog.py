@@ -4,7 +4,7 @@ from src.domain.blog import Blog
 
 blog = [
     Blog(
-        naslov='Test Naslov 1',
+        title='Test Naslov 1',
         kategorija='angular',
         podnaslov='Test Podnaslov 1',
         datum_vnosa=datetime.datetime.now(),
@@ -12,7 +12,7 @@ blog = [
         image='test1.jpg'
     ).dict(by_alias=True),
     Blog(
-        naslov='Test Naslov 2',
+        title='Test Naslov 2',
         kategorija='angular',
         podnaslov='Test Podnaslov 2',
         datum_vnosa=datetime.datetime.now(),
@@ -20,7 +20,7 @@ blog = [
         image='test2.jpg'
     ).dict(by_alias=True),
     Blog(
-        naslov='Test Naslov 3',
+        title='Test Naslov 3',
         kategorija='angular',
         podnaslov='Test Podnaslov 3',
         datum_vnosa=datetime.datetime.now(),
