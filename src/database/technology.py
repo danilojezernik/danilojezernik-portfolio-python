@@ -9,7 +9,7 @@ technology = [
         subtitle='Angular je framework, ki ga dela Google in je zelo priljubljen. V tem članku bomo pregledali nekaj '
                  'vprašanj, ki se pogosto pojavljajo na tehničnih razgovorih.',
         vsebina='Angular je odprtokodni JavaScriptov ogrodje, ki ga uporabljajo za razvoj enostranskih aplikacij. ',
-        image=['angular1.jpg', 'angular2.jpg'],
+        image='angular1.jpg',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True),
     Technology(
@@ -18,7 +18,7 @@ technology = [
         subtitle='Vue je framework, ki ga dela Google in je zelo priljubljen. V tem članku bomo pregledali nekaj '
                  'vprašanj, ki se pogosto pojavljajo na tehničnih razgovorih.',
         vsebina='Vue je odprtokodni JavaScriptov ogrodje, ki ga uporabljajo za razvoj enostranskih aplikacij. ',
-        image=['vue1.jpg', 'vue2.jpg'],
+        image='vue2.jpg',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True),
     Technology(
@@ -27,7 +27,7 @@ technology = [
         subtitle='Typescript je framework, ki ga dela Google in je zelo priljubljen. V tem članku bomo pregledali nekaj'
                  'vprašanj, ki se pogosto pojavljajo na tehničnih razgovorih.',
         vsebina='Typescript je odprtokodni JavaScriptov ogrodje, ki ga uporabljajo za razvoj enostranskih aplikacij. ',
-        image=['typescript1.jpg', 'typescript2.jpg'],
+        image='typescript2.jpg',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True),
 ]

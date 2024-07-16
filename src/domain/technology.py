@@ -1,5 +1,5 @@
 import datetime
-from typing import Optional, List
+from typing import Optional
 
 from bson import ObjectId
 from pydantic import BaseModel, Field
@@ -11,5 +11,5 @@ class Technology(BaseModel):
     title: str
     subtitle: str
     vsebina: str
-    image: Optional[List[str]] = None
+    image: str
     datum_vnosa: datetime.datetime = Field(default_factory=datetime.datetime.now)

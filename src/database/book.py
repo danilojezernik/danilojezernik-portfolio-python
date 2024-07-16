@@ -5,7 +5,7 @@ from src.domain.book import Book
 book = [
     Book(
         naslov='Test Knjiga 1',
-        tehnologija='angular',
+        tehnologija='TypeScript',
         podnaslov='Test Podnaslov 1',
         datum_vnosa=datetime.datetime.now(),
         vsebina='Test Vsebina 1',
@@ -13,7 +13,7 @@ book = [
     ).dict(by_alias=True),
     Book(
         naslov='Test Knjiga 2',
-        tehnologija='angular',
+        tehnologija='Angular',
         podnaslov='Test Podnaslov 2',
         datum_vnosa=datetime.datetime.now(),
         vsebina='Test Vsebina 2',
@@ -21,7 +21,7 @@ book = [
     ).dict(by_alias=True),
     Book(
         naslov='Test Knjiga 3',
-        tehnologija='angular',
+        tehnologija='Vue',
         podnaslov='Test Podnaslov 3',
         datum_vnosa=datetime.datetime.now(),
         vsebina='Test Vsebina 3',
