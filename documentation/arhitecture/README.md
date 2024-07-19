@@ -4,7 +4,7 @@
 
 This project is a comprehensive web application with various functionalities such as blogs, books, comments, contacts, experiences, links, newsletters, projects, subscribers, technology, and user management. It is organized into different directories for better modularity and maintainability.
 
-## Architecture
+## Architecture 
 
 The project is structured into the following main directories:
 
