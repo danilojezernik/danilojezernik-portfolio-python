@@ -9,11 +9,13 @@ about_me_media_directory = os.path.join(media_root_directory, 'about_me_media') 
 
 router = APIRouter()  # Create a new APIRouter instance for defining routes
 
-@router.post("/media/")
-async def upload_media_file(file: UploadFile = File(...)):
+
+@router.post("/")
+async def upload_media_file(file: UploadFile = File(...), current_user: str = Depends(get_current_user)):
     """
     Upload a media file to the server and save it to the 'about_me_media' directory.
 
+    :param current_user:
     :param file: The file to be uploaded.
     :return: A success message indicating the file was uploaded.
     """
@@ -43,7 +45,8 @@ async def upload_media_file(file: UploadFile = File(...)):
     # Return a success message indicating the file was uploaded successfully
     return {"message": f"Successfully uploaded {file_name} to {about_me_media_directory}"}
 
-@router.get('/media/{filename}')
+
+@router.get('/{filename}')
 async def get_media_image(filename: str):
     """
     Retrieve a media file by filename from the 'about_me_media' directory.
@@ -65,7 +68,8 @@ async def get_media_image(filename: str):
         # Raise an HTTP 500 error if there was an issue serving the file
         raise HTTPException(status_code=500, detail=f'Error serving file: {str(e)}')
 
-@router.get('/media/images/')
+
+@router.get('/images/')
 async def list_images():
     """
     List all media files in the 'about_me_media' directory.
@@ -78,16 +82,19 @@ async def list_images():
         raise HTTPException(status_code=404, detail='Upload directory not found!')
 
     # List all files in the directory
-    image_names = [f for f in os.listdir(about_me_media_directory) if os.path.isfile(os.path.join(about_me_media_directory, f))]
+    image_names = [f for f in os.listdir(about_me_media_directory) if
+                   os.path.isfile(os.path.join(about_me_media_directory, f))]
 
     # Return the list of filenames
     return {"images": image_names}
 
-@router.delete("/media/{filename}")
-async def delete_image(filename: str):
+
+@router.delete("/{filename}")
+async def delete_image(filename: str, current_user: str = Depends(get_current_user)):
     """
     Delete a media file from the 'about_me_media' directory.
 
+    :param current_user:
     :param filename: The name of the file to be deleted.
     :return: A success message if the file is deleted; otherwise, raises a 404 error.
     """

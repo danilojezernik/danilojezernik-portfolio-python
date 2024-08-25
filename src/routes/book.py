@@ -5,7 +5,9 @@ from src.domain.book import Book
 from src.services import db
 from src.services.security import get_current_user
 
-books_media = 'media/books_media'
+# Define the root media directory and the subdirectory for media files
+media_root_directory = 'media'  # The root directory where all media files are stored
+book_media_directory = os.path.join(media_root_directory, 'books_media')  # Subdirectory for specific media files
 
 router = APIRouter()
 
@@ -150,16 +152,17 @@ Media Routes:
 
 
 # Upload a media file
-@router.post("/")
-async def upload_media_file(file: UploadFile = File(...)):
+@router.post("/media/")
+async def upload_book_file(file: UploadFile = File(...), current_user: str = Depends(get_current_user)):
     """
     Upload a media file to the server.
 
+    :param current_user:
     :param file: The file to be uploaded.
     :return: A success message indicating the file was uploaded.
     """
     try:
-        upload_directory = books_media
+        upload_directory = book_media_directory
         os.makedirs(upload_directory, exist_ok=True)
         contents = await file.read()
         file_name = file.filename if file.filename else 'uploaded_file'
@@ -174,21 +177,26 @@ async def upload_media_file(file: UploadFile = File(...)):
 
 
 # Retrieve a media file by filename
-@router.get('/{filename}')
+@router.get('/media/{filename}')
 async def get_book_image(filename: str):
     """
-    Retrieve a media file by filename.
+    Retrieve a media file by filename from the 'about_me_media' directory.
 
     :param filename: The name of the file to be retrieved.
     :return: The file if found; otherwise, raises a 404 error.
     """
-    upload_directory = books_media
-    file_path = os.path.join(upload_directory, filename)
+    file_path = os.path.join(book_media_directory, filename)
+
+    # Check if the file exists
     if not os.path.exists(file_path):
+        # Raise a 404 error if the file is not found
         raise HTTPException(status_code=404, detail='Image not found!')
+
     try:
+        # Return the file as a response
         return FileResponse(file_path)
     except Exception as e:
+        # Raise an HTTP 500 error if there was an issue serving the file
         raise HTTPException(status_code=500, detail=f'Error serving file: {str(e)}')
 
 
@@ -200,7 +208,7 @@ async def list_book_images():
 
     :return: A list of filenames in the upload directory.
     """
-    upload_directory = books_media
+    upload_directory = book_media_directory
     if not os.path.exists(upload_directory):
         raise HTTPException(status_code=404, detail='Upload directory not found!')
     image_names = [f for f in os.listdir(upload_directory) if os.path.isfile(os.path.join(upload_directory, f))]
@@ -208,15 +216,16 @@ async def list_book_images():
 
 
 # Delete a media file by filename
-@router.delete("/{filename}")
-async def delete_book_image(filename: str):
+@router.delete("/media/{filename}")
+async def delete_book_image(filename: str, current_user: str = Depends(get_current_user)):
     """
     Delete a media file from the upload directory.
 
+    :param current_user:
     :param filename: The name of the file to be deleted.
     :return: A success message if the file is deleted; otherwise, raises a 404 error.
     """
-    upload_directory = books_media
+    upload_directory = book_media_directory
     file_path = os.path.join(upload_directory, filename)
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="Image not found")
