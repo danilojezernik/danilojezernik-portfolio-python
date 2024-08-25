@@ -18,7 +18,7 @@ from src.domain.technology import Technology
 from src.domain.user import User
 # Imported routes
 from src.routes import index, blog, email, login, user, experiences, links, register, contact, projects, newsletter, \
-    subscriber, comments, github, book, technology
+    subscriber, comments, github, book, technology, media
 from src.services import db
 from src.tags_metadata import tags_metadata
 from src.utils.domain_to_txt import write_fields_to_txt
@@ -36,6 +36,7 @@ app.add_middleware(
 
 app.include_router(index.router, prefix='/index', tags=['Index'])
 app.include_router(blog.router, prefix='/blog', tags=['Blog'])
+app.include_router(media.router, prefix='/media', tags=['Media'])
 app.include_router(github.router, prefix='/github', tags=['Github'])
 app.include_router(book.router, prefix='/book', tags=['Book'])
 app.include_router(technology.router, prefix='/technology', tags=['Technology'])
