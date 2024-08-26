@@ -15,8 +15,9 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
 
 from src.domain.blog import Blog
+from src.domain.user import User
 from src.services import db, blog_notification
-from src.services.security import get_current_user
+from src.services.security import get_current_user, require_role
 from src.template import blog_notifications
 
 # Define the root media directory and the subdirectory for media files
@@ -141,7 +142,7 @@ async def get_blog_by_id_private(_id: str, current_user: str = Depends(get_curre
 
 # This route adds a new blog
 @router.post('/', operation_id='add_new_blog_private')
-async def add_new_blog(blog: Blog, current_user: str = Depends(get_current_user)) -> Blog | None:
+async def add_new_blog(blog: Blog, current_user: User = Depends(require_role('admin'))) -> Blog | None:
     """
     Handles the addition of a new blog to the database.
 

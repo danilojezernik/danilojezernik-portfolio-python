@@ -25,4 +25,5 @@ class Projects(BaseModel):
     content: str
     github: str
     website: str
+    image: str
     datum_vnosa: datetime.datetime = Field(default_factory=datetime.datetime.now)

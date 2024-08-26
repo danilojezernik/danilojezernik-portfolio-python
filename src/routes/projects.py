@@ -6,13 +6,18 @@ Routes Overview:
 4. POST / - Add a new project to the database.
 5. PUT /{_id} - Edit an existing project by its ID in the database.
 """
-
-from fastapi import APIRouter, Depends, HTTPException
+import os
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi.responses import FileResponse
 
 from src.domain.projects import Projects
 from src.services import db
 
 from src.services.security import get_current_user
+
+# Define the root media directory and the subdirectory for media files
+projects_root_directory = 'media'  # The root directory where all media files are stored
+projects_media_directory = os.path.join(projects_root_directory, 'projects_media')  # Subdirectory for specific media files
 
 router = APIRouter()
 
@@ -187,3 +192,98 @@ async def delete_project_by_id_private(_id: str):
         return {'message': 'Project deleted successfully'}
     else:
         raise HTTPException(status_code=404, detail=f'Project by ID: ({_id}) not found!')
+
+
+
+"""
+Media Routes:
+1. POST / - Upload a media file.
+2. GET /{filename} - Retrieve a media file by filename.
+3. GET /images/ - List all media files.
+4. DELETE /{filename} - Delete a media file by filename.
+"""
+
+
+# Upload a media file
+@router.post("/media/")
+async def upload_project_file(file: UploadFile = File(...), current_user: str = Depends(get_current_user)):
+    """
+    Upload a media file to the server.
+
+    :param current_user:
+    :param file: The file to be uploaded.
+    :return: A success message indicating the file was uploaded.
+    """
+    try:
+        upload_directory = projects_media_directory
+        os.makedirs(upload_directory, exist_ok=True)
+        contents = await file.read()
+        file_name = file.filename if file.filename else 'uploaded_file'
+        file_path = os.path.join(upload_directory, file_name)
+        with open(file_path, 'wb') as f:
+            f.write(contents)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'There was an error uploading the file: {str(e)}')
+    finally:
+        await file.close()
+    return {"message": f"Successfully uploaded {file_name} to {upload_directory}"}
+
+
+# Retrieve a media file by filename
+@router.get('/media/{filename}')
+async def get_project_image(filename: str):
+    """
+    Retrieve a media file by filename from the 'about_me_media' directory.
+
+    :param filename: The name of the file to be retrieved.
+    :return: The file if found; otherwise, raises a 404 error.
+    """
+    file_path = os.path.join(projects_media_directory, filename)
+
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        # Raise a 404 error if the file is not found
+        raise HTTPException(status_code=404, detail='Image not found!')
+
+    try:
+        # Return the file as a response
+        return FileResponse(file_path)
+    except Exception as e:
+        # Raise an HTTP 500 error if there was an issue serving the file
+        raise HTTPException(status_code=500, detail=f'Error serving file: {str(e)}')
+
+
+# List all media files
+@router.get('/images/')
+async def list_project_images():
+    """
+    List all media files in the upload directory.
+
+    :return: A list of filenames in the upload directory.
+    """
+    upload_directory = projects_media_directory
+    if not os.path.exists(upload_directory):
+        raise HTTPException(status_code=404, detail='Upload directory not found!')
+    image_names = [f for f in os.listdir(upload_directory) if os.path.isfile(os.path.join(upload_directory, f))]
+    return {"images": image_names}
+
+
+# Delete a media file by filename
+@router.delete("/media/{filename}")
+async def delete_project_image(filename: str, current_user: str = Depends(get_current_user)):
+    """
+    Delete a media file from the upload directory.
+
+    :param current_user:
+    :param filename: The name of the file to be deleted.
+    :return: A success message if the file is deleted; otherwise, raises a 404 error.
+    """
+    upload_directory = projects_media_directory
+    file_path = os.path.join(upload_directory, filename)
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Image not found")
+    try:
+        os.remove(file_path)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"There was an error deleting the file: {str(e)}")
+    return {"message": f"Successfully deleted {filename} from {upload_directory}"}

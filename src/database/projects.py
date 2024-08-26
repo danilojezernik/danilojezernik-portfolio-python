@@ -10,6 +10,7 @@ projects = [
         content='Kalkuliranje preprostih izračunov za izračun stopinj',
         github='',
         website='',
+        image='',
         datum_vnosa=datetime.datetime.now()
     ).dict(by_alias=True)
 ]

@@ -6,8 +6,7 @@ technology = [
     Technology(
         technology='Angular',
         title='Angular interview questions',
-        subtitle='Angular je framework, ki ga dela Google in je zelo priljubljen. V tem članku bomo pregledali nekaj '
-                 'vprašanj, ki se pogosto pojavljajo na tehničnih razgovorih.',
+        subtitle='Angular je framework, ki ga dela Google in je zelo priljubljen.',
         vsebina='Angular je odprtokodni JavaScriptov ogrodje, ki ga uporabljajo za razvoj enostranskih aplikacij. ',
         image='angular1.jpg',
         datum_vnosa=datetime.datetime.now(),
@@ -15,8 +14,7 @@ technology = [
     Technology(
         technology='Vue',
         title='Vue interview questions',
-        subtitle='Vue je framework, ki ga dela Google in je zelo priljubljen. V tem članku bomo pregledali nekaj '
-                 'vprašanj, ki se pogosto pojavljajo na tehničnih razgovorih.',
+        subtitle='Vue je framework, ki ga dela Google in je zelo priljubljen.',
         vsebina='Vue je odprtokodni JavaScriptov ogrodje, ki ga uporabljajo za razvoj enostranskih aplikacij. ',
         image='vue2.jpg',
         datum_vnosa=datetime.datetime.now(),
@@ -24,8 +22,7 @@ technology = [
     Technology(
         technology='Typescript',
         title='Typescript interview questions',
-        subtitle='Typescript je framework, ki ga dela Google in je zelo priljubljen. V tem članku bomo pregledali nekaj'
-                 'vprašanj, ki se pogosto pojavljajo na tehničnih razgovorih.',
+        subtitle='Typescript je framework, ki ga dela Google in je zelo priljubljen.',
         vsebina='Typescript je odprtokodni JavaScriptov ogrodje, ki ga uporabljajo za razvoj enostranskih aplikacij. ',
         image='typescript2.jpg',
         datum_vnosa=datetime.datetime.now(),

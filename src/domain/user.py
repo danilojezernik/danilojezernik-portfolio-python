@@ -14,6 +14,7 @@ class User(BaseModel):
     technology: Optional[str] = ''
     description: str
     hashed_password: str
+    role: str
     confirmed: bool
     registered: bool
     blog_notification: bool

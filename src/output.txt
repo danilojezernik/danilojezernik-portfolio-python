@@ -84,6 +84,7 @@ export interface Projects {
   content: string;
   github: string;
   website: string;
+  image: string;
   datum_vnosa: string;
 }
 
@@ -111,6 +112,7 @@ export interface User {
   technology: string;
   description: string;
   hashed_password: string;
+  role: string;
   confirmed: boolean;
   registered: boolean;
   blog_notification: boolean;
