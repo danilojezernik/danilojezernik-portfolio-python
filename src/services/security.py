@@ -77,7 +77,7 @@ def authenticate_user(username: str, password: str):
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     """
-    This function is responsible for creating an access token (JWT) using the jwt.encode function from the jose library.
+    This function is responsible for creating an access token (JWT) using the jwt. Encode function from the jose library.
 
     Parameters:
     - data: A dictionary containing the data to be encoded into the token (e.g., user information).
@@ -114,6 +114,18 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
 
 async def get_payload(token: Annotated[str, Depends(oauth2_scheme)]):
+    """
+    Extracts and decodes the payload from the JWT token.
+
+    Parameters:
+    - token: The JWT token.
+
+    Returns:
+    - The decoded payload as a dictionary.
+
+    Raises:
+    - HTTPException if token validation fails.
+    """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -149,13 +161,14 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         # Decode the token and extract the username (subject)
         payload = jwt.decode(token, env.SECRET_KEY, algorithms=[env.ALGORITHM])
         username: str = payload.get("sub")
+        role: list[str] = payload.get("role", [])  # Extract roles from the payload
 
         if username is None:
             # Raise an exception if username is not found in the token
             raise credentials_exception
 
         # Create token data based on the extracted username
-        token_data = TokenData(username=username)
+        token_data = TokenData(username=username, role=role)
     except JWTError:
         # Raise an exception if token decoding fails
         raise credentials_exception
@@ -198,7 +211,7 @@ def require_role(required_role: str):
             User: The current user object if the role check passes.
         """
         # Check if the user's role matches the required role
-        if current_user.role != required_role:
+        if required_role not in current_user.role:  # Check if required_role is in user's roles
             # If the role does not match, raise a 403 Forbidden error
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
@@ -233,6 +246,7 @@ def register_user(user: User):
         email=user.email,
         full_name=user.full_name,
         hashed_password=hashed_password,
+        role=user.role  # Ensure roles are also stored
     )
 
     # Save user to database
