@@ -169,13 +169,47 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 
     return user
 
-# Check for role. If not required router will throw 403
+
+# This function is a decorator that checks if the current user has the required role.
 def require_role(required_role: str):
+    """
+    A decorator function to enforce role-based access control.
+
+    Args:
+        required_role (str): The role required to access the endpoint.
+
+    Returns:
+        Callable: A function that performs the role check and returns the current user
+                  if they have the required role, otherwise raises an HTTP 403 Forbidden error.
+    """
+
     def role_checker(current_user: User = Depends(get_current_user)):
+        """
+        Checks if the current user has the required role.
+
+        Args:
+            current_user (User): The user object obtained from the authentication system.
+
+        Raises:
+            HTTPException: If the current user's role does not match the required role,
+                           a 403 Forbidden error is raised.
+
+        Returns:
+            User: The current user object if the role check passes.
+        """
+        # Check if the user's role matches the required role
         if current_user.role != required_role:
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not enough permissions")
+            # If the role does not match, raise a 403 Forbidden error
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Not enough permissions"
+            )
+        # Return the current user object if the role check passes
         return current_user
+
+    # Return the role_checker function which will be used as a dependency
     return role_checker
+
 
 # Has a password
 def make_hash(password):
