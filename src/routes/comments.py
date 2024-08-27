@@ -7,7 +7,7 @@ Routes Overview:
 5. DELETE /{blog_id}/{comment_id} - Delete a comment by its ID for a specific blog post.
 """
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from src.domain.comments import Comment
 from src.services import db
@@ -78,6 +78,83 @@ async def add_comment_to_post(blog_id: str, comment: Comment) -> Comment | None:
 """
 THIS ROUTES ARE PRIVATE
 """
+
+# This route gets all comments from the database
+@router.get("/admin/", operation_id="get_all_comments")
+async def get_comments_for_post() -> list[Comment]:
+    """
+    This route handles the retrieval of all comments from the database
+
+    :return: a list of Comment objects containing all the comments in the database
+    """
+
+    # Retrieve all comments from the database using the find method
+    cursor = db.process.comment.find()
+
+    # Create a list of Comment objects by unpacking data from each document retrieved
+    return [Comment(**document) for document in cursor]
+
+
+# This route gets all comments of a specific post from the database
+@router.get("/admin/{_id}", operation_id="get_comment_by_id")
+async def get_comment_by_id(_id: str) -> list[Comment]:
+    """
+    This route handles the retrieval of a comment from the database
+
+    :param _id: the ID of the comment post to retrieve comment
+    :return: a Comment object containing comment for the specified comment
+    """
+
+    # Retrieve comments for the specific blog post using the find method with a filter
+    cursor = db.process.comment.find({'_id': _id})
+
+    # If no blog is found, return a 404 error with a relevant detail message
+    if cursor is None:
+        raise HTTPException(status_code=404, detail=f'Comment by ID: ({_id}) does not exist')
+    else:
+        # Create a list of Comment objects by unpacking data from each document retrieved
+        return [Comment(**document) for document in cursor]
+
+
+
+# This route gets all comments of a specific post from the database
+@router.get("/admin/{blog_id}", operation_id="get_comments_of_post")
+async def get_comments_for_blog_id(blog_id: str) -> list[Comment]:
+    """
+    This route handles the retrieval of all comments for a specific post from the database
+
+    :param blog_id: the ID of the blog post to retrieve comments for
+    :return: a list of Comment objects containing all comments for the specified blog post
+    """
+
+    # Retrieve comments for the specific blog post using the find method with a filter
+    cursor = db.process.comment.find({'blog_id': blog_id})
+
+    # Create a list of Comment objects by unpacking data from each document retrieved
+    return [Comment(**document) for document in cursor]
+
+
+# This route adds a comment to a specific post
+@router.post("/admin/{blog_id}", operation_id="add_comments_to_specific_post")
+async def add_comment_to_post(blog_id: str, comment: Comment) -> Comment | None:
+    """
+    This route handles adding a new comment to a specific blog post
+
+    :param blog_id: the ID of the blog post to add a comment to
+    :param comment: the Comment object containing the details of the new comment
+    :return: the added Comment object with its ID or None if the operation failed
+    """
+
+    # Convert Comment object to dictionary and add the blog_id
+    comment_dict = comment.dict(by_alias=True)
+    comment_dict['blog_id'] = blog_id
+
+    # Insert the comment into the database
+    insert_result = db.process.comment.insert_one(comment_dict)
+    if insert_result.acknowledged:
+        comment_dict['_id'] = str(insert_result.inserted_id)
+        return Comment(**comment_dict)
+    return None
 
 
 # This route edits a comment by its ID
