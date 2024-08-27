@@ -14,6 +14,10 @@ from src.services import db
 
 router = APIRouter()
 
+"""
+THIS ROUTES ARE PUBLIC
+"""
+
 
 # This route gets all comments from the database
 @router.get("/", operation_id="get_all_comments")
@@ -71,8 +75,13 @@ async def add_comment_to_post(blog_id: str, comment: Comment) -> Comment | None:
     return None
 
 
+"""
+THIS ROUTES ARE PRIVATE
+"""
+
+
 # This route edits a comment by its ID
-@router.put("/{blog_id}/{comment_id}", operation_id="edit_comment_by_id")
+@router.put("/admin/{blog_id}/{comment_id}", operation_id="edit_comment_by_id")
 async def edit_comment(blog_id: str, comment_id: str, comment: Comment) -> Comment | None:
     """
     This route handles editing an existing comment by its ID
@@ -98,7 +107,7 @@ async def edit_comment(blog_id: str, comment_id: str, comment: Comment) -> Comme
 
 
 # This route deletes a comment by its ID
-@router.delete("/{blog_id}/{comment_id}", operation_id="delete_comment_by_id")
+@router.delete("/admin/{blog_id}/{comment_id}", operation_id="delete_comment_by_id")
 async def delete_comment(blog_id: str, comment_id: str) -> dict:
     """
     This route handles deleting a comment by its ID
