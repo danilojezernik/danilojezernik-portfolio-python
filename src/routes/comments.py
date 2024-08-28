@@ -6,8 +6,9 @@ Routes Overview:
 4. PUT /{blog_id}/{comment_id} - Edit an existing comment by its ID for a specific blog post.
 5. DELETE /{blog_id}/{comment_id} - Delete a comment by its ID for a specific blog post.
 """
+from typing import Dict, Any, List
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 
 from src.domain.comments import Comment
 from src.services import db
@@ -35,21 +36,40 @@ async def get_comments_for_post() -> list[Comment]:
     return [Comment(**document) for document in cursor]
 
 
-# This route gets all comments of a specific post from the database
 @router.get("/{blog_id}", operation_id="get_comments_of_post")
-async def get_comments_for_blog_id(blog_id: str) -> list[Comment]:
+async def get_comments_for_blog_id(
+        blog_id: str,
+        limit: int = Query(10, gt=0),  # Default to 10 comments
+        offset: int = Query(0, ge=0)  # Start from the 0th comment by default
+):
     """
-    This route handles the retrieval of all comments for a specific post from the database
+    This route handles the retrieval of comments for a specific post from the database.
 
-    :param blog_id: the ID of the blog post to retrieve comments for
-    :return: a list of Comment objects containing all comments for the specified blog post
+    :param blog_id: The ID of the blog post to retrieve comments for
+    :param limit: The number of comments to retrieve (default is 10)
+    :param offset: The starting point for retrieval (default is 0)
+    :return: A list of Comment objects containing the requested number of comments for the specified blog post
     """
+
+    # Retrieve the total count of comments
+    total_count = db.process.comments.count_documents({'blog_id': blog_id})
 
     # Retrieve comments for the specific blog post using the find method with a filter
-    cursor = db.process.comments.find({'blog_id': blog_id})
+    # Sort by datum_vnosa in descending order (newest comment first)
+    cursor = db.process.comments.find({'blog_id': blog_id}).sort('datum_vnosa', -1).skip(offset).limit(limit)
 
-    # Create a list of Comment objects by unpacking data from each document retrieved
-    return [Comment(**document) for document in cursor]
+    # Convert the cursor to a list of Comment objects
+    comments = [Comment(**document) for document in cursor]
+
+    # If no comments are found, raise a 404 error
+    if not comments:
+        raise HTTPException(status_code=404, detail="No comments found")
+
+    # Return the comments along with the total count
+    return {
+        'comments': comments,
+        'total_count': total_count
+    }
 
 
 # This route adds a comment to a specific post
@@ -78,6 +98,7 @@ async def add_comment_to_post(blog_id: str, comments: Comment) -> Comment | None
 """
 THIS ROUTES ARE PRIVATE
 """
+
 
 # This route gets all comments from the database
 @router.get("/admin/", operation_id="get_all_comments")
@@ -114,7 +135,6 @@ async def get_comment_by_id(_id: str) -> Comment:
     else:
         # Create a list of Comment objects by unpacking data from each document retrieved
         return Comment(**cursor)
-
 
 
 # This route gets all comments of a specific post from the database
@@ -154,6 +174,41 @@ async def add_comment_to_post(blog_id: str, comments: Comment) -> Comment | None
     if insert_result.acknowledged:
         comment_dict['_id'] = str(insert_result.inserted_id)
         return Comment(**comment_dict)
+    return None
+
+
+# This route is to edit a blog by its ID
+@router.put('/admin/{_id}', operation_id='edit_blog_by_id_private')
+async def edit_blog_by_id_private(_id: str, comment: Comment) -> Comment | None:
+    """
+    Handles the editing of a blog by its ID in the database.
+
+    :param _id: The ID of the blog to be edited.
+    :param comment: The updated Blog object with the new data.
+    :param current_user: The current user, obtained from the authentication system.
+    :return: If the blog is successfully edited, returns the updated Blog object; otherwise, returns None.
+    """
+
+    # Convert the Blog object to a dictionary
+    comment_dict = comment.dict(by_alias=True)
+
+    # Delete the '_id' field from the blog dictionary to avoid updating the ID
+    del comment_dict['_id']
+
+    # Update the blog in the database using the update_one method
+    cursor = db.process.comments.update_one({'_id': _id}, {'$set': comment_dict})
+
+    # Check if the blog was successfully updated
+    if cursor.modified_count > 0:
+        # Retrieve the updated blog from the database
+        updated_document = db.process.comments.find_one({'_id': _id})
+
+        # Check if the updated blog exists
+        if updated_document:
+            updated_document['_id'] = str(updated_document['_id'])
+            return Comment(**updated_document)
+
+    # Return None if the blog was not updated
     return None
 
 
