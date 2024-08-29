@@ -2,6 +2,14 @@ from pymongo import MongoClient
 
 from src import env
 
+# Technologies
+from src.database.angular import angular
+from src.database.javascript import javascript
+from src.database.mongodb import mongodb
+from src.database.python import python
+from src.database.typescript import typescript
+from src.database.vue import vue
+
 from src.database.blog import blog
 from src.database.book import book
 from src.database.contact import contact
@@ -28,7 +36,15 @@ def drop():
     process.subscriber.drop()
     process.comments.drop()
     process.book.drop()
-    process.technology.drop()
+    # process.technology.drop()
+
+    # Technologies
+    process.angular.drop()
+    process.vue.drop()
+    process.typescript.drop()
+    process.javascript.drop()
+    process.python.drop()
+    process.mongodb.drop()
     pass
 
 
@@ -47,7 +63,15 @@ def seed():
     process.subscriber.insert_many(subscriber)
     process.comments.insert_many(comments)
     process.book.insert_many(book)
-    process.technology.insert_many(technology)
+    # process.technology.insert_many(technology)
+
+    # Technologies
+    process.angular.insert_many(angular)
+    process.vue.insert_many(vue)
+    process.typescript.insert_many(typescript)
+    process.javascript.insert_many(javascript)
+    process.python.insert_many(python)
+    process.mongodb.insert_many(mongodb)
     pass
 
 

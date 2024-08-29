@@ -9,6 +9,7 @@ export interface Blog {
   kategorija: string;
   podnaslov: string;
   vsebina: string;
+  author: string;
   image: string;
   datum_vnosa: string;
 }
@@ -128,6 +129,8 @@ export interface Book {
   podnaslov: string;
   tehnologija: string;
   vsebina: string;
+  author: string;
+  buy_url: string;
   image: string;
   datum_vnosa: string;
 }
@@ -135,12 +138,65 @@ export interface Book {
 /* tslint:disable */ 
 /* eslint-disable */ 
 
-export interface Technology {
+export interface Angular {
  '_id'?: string;
-  technology: string;
-  title: string;
-  subtitle: string;
-  vsebina: string;
+  question: string;
+  answer: string;
+  image: string;
+  datum_vnosa: string;
+}
+
+/* tslint:disable */ 
+/* eslint-disable */ 
+
+export interface Vue {
+ '_id'?: string;
+  question: string;
+  answer: string;
+  image: string;
+  datum_vnosa: string;
+}
+
+/* tslint:disable */ 
+/* eslint-disable */ 
+
+export interface JavaScript {
+ '_id'?: string;
+  question: string;
+  answer: string;
+  image: string;
+  datum_vnosa: string;
+}
+
+/* tslint:disable */ 
+/* eslint-disable */ 
+
+export interface TypeScript {
+ '_id'?: string;
+  question: string;
+  answer: string;
+  image: string;
+  datum_vnosa: string;
+}
+
+/* tslint:disable */ 
+/* eslint-disable */ 
+
+export interface Python {
+ '_id'?: string;
+  question: string;
+  answer: string;
+  image: string;
+  datum_vnosa: string;
+}
+
+/* tslint:disable */ 
+/* eslint-disable */ 
+
+export interface MongoDb {
+ '_id'?: string;
+  question: string;
+  answer: string;
   image: string;
   datum_vnosa: string;
 }

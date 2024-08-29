@@ -11,5 +11,7 @@ class Book(BaseModel):
     podnaslov: str
     tehnologija: str
     vsebina: str
+    author: str
+    buy_url: str
     image: str
     datum_vnosa: datetime.datetime = Field(default_factory=datetime.datetime.now)
