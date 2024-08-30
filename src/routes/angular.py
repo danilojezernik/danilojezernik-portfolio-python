@@ -144,13 +144,13 @@ async def add_new_Angular(angular: Angular, current_user: str = Depends(get_curr
     """
     Handles the addition of a new Angular to the database.
 
-    :param Angular: The Angular object representing the new Angular to be added.
+    :param angular: The Angular object representing the new Angular to be added.
     :param current_user: The current user, obtained from the authentication system.
     :return: If the addition is successful, returns the newly added Angular object; otherwise, returns None.
     """
 
     # Convert the Angular object to a dictionary for database insertion
-    angular_dict = Angular.dict(by_alias=True)
+    angular_dict = angular.dict(by_alias=True)
 
     # Insert the Angular data into the database
     insert_result = db.process.angular.insert_one(angular_dict)
@@ -180,7 +180,7 @@ async def edit_angular_by_id_private(_id: str, angular: Angular, current_user: s
     """
 
     # Convert the Angular object to a dictionary
-    angular_dict = Angular.dict(by_alias=True)
+    angular_dict = angular.dict(by_alias=True)
 
     # Delete the '_id' field from the Angular dictionary to avoid updating the ID
     del angular_dict['_id']
