@@ -10,12 +10,17 @@ class User(BaseModel):
     username: str
     email: str
     full_name: str
-    profession: Optional[str] = ''
-    technology: Optional[str] = ''
+    profession: str
+    technology: str
     description: str
     hashed_password: str
-    role: str
+    facebook: Optional[str]
+    instagram: Optional[str]
+    twitter: Optional[str]
+    github: Optional[str]
+    www: Optional[str]
+    role: Optional[str] = 'visitor'
     confirmed: bool
-    registered: bool
+    registered: Optional[bool] = False
     blog_notification: bool
     datum_vnosa: datetime.datetime = Field(default_factory=datetime.datetime.now)

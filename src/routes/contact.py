@@ -36,7 +36,7 @@ async def client_sent_email_public(emailing: Contact):
     """
 
     # Generate the HTML body for the email using the provided data
-    body = email_template.html(name=emailing.name, surname=emailing.surname, email=emailing.email,
+    body = email_template.html(full_name=emailing.full_name, email=emailing.email,
                                message=emailing.message)
 
     # Attempt to send the email using the emails module
@@ -47,8 +47,7 @@ async def client_sent_email_public(emailing: Contact):
     # Store email data in the database
     email_data = {
         "_id": emailing.id,
-        "name": emailing.name,
-        "surname": emailing.surname,
+        "full_name": emailing.full_name,
         "email": emailing.email,
         "message": emailing.message,
         "datum_vnosa": emailing.datum_vnosa

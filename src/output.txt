@@ -47,8 +47,7 @@ export interface Comment {
 
 export interface Contact {
  '_id'?: string;
-  name: string;
-  surname: string;
+  full_name: string;
   email: string;
   message: string;
   datum_vnosa: string;
@@ -113,6 +112,11 @@ export interface User {
   technology: string;
   description: string;
   hashed_password: string;
+  facebook: string;
+  instagram: string;
+  twitter: string;
+  github: string;
+  www: string;
   role: string;
   confirmed: boolean;
   registered: boolean;

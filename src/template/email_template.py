@@ -334,7 +334,7 @@ head: str = """
 """
 
 
-def html(name: str, surname: str, message: str, email: str) -> str:
+def html(full_name: str, message: str, email: str) -> str:
     return f"""
         <!doctype html>
             <html>
@@ -358,7 +358,7 @@ def html(name: str, surname: str, message: str, email: str) -> str:
                                   <td>
                                     <p>Živjo Dani,</p>
                                     
-                                    <p>Dobil si elektronsko sporočilo od <b>{name}</b> <b>{surname}</b> iz naslova <b>{email}</b> in vsebina je: </p>
+                                    <p>Dobil si elektronsko sporočilo od <b>{full_name}</b> iz naslova <b>{email}</b> in vsebina je: </p>
                                     <p>{message}</p>
                                   </td>
                                 </tr>
