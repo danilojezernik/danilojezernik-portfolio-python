@@ -114,6 +114,7 @@ export interface User {
   hashed_password: string;
   facebook: string;
   instagram: string;
+  youtube: string;
   twitter: string;
   github: string;
   www: string;

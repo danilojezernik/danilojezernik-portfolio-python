@@ -63,6 +63,18 @@ async def get_user_by_id(_id: str) -> User:
         return User(**cursor)
 
 
+@router.post('/send-email', operation_id='send_email_to_registered_user')
+async def send_email_registered():
+    """
+    Registered user will be able to send email to a registered user:
+    1. Only authenticated users will be able to send emails
+    2. User will only type in his name, email and message
+    3. Make a new email template for users
+    4. It will be sent to the user's email that user will want to send to
+    """
+    return {"message": "message was sent"}
+
+
 """
 THIS ROUTES ARE PRIVATE
 """

@@ -16,6 +16,7 @@ class User(BaseModel):
     hashed_password: str
     facebook: Optional[str]
     instagram: Optional[str]
+    youtube: Optional[str]
     twitter: Optional[str]
     github: Optional[str]
     www: Optional[str]
