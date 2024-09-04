@@ -2,8 +2,9 @@ import os
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
 from src.domain.book import Book
+from src.domain.user import User
 from src.services import db
-from src.services.security import get_current_user
+from src.services.security import get_current_user, require_role
 
 # Define the root media directory and the subdirectory for media files
 media_root_directory = 'media'  # The root directory where all media files are stored
@@ -58,7 +59,7 @@ Private Routes:
 
 # Get all books from the database (admin only)
 @router.get('/admin/', operation_id='get_all_book_private')
-async def get_all_book_private(current_user: str = Depends(get_current_user)) -> list[Book]:
+async def get_all_book_private(current_user: User = Depends(require_role('admin'))) -> list[Book]:
     """
     Retrieve all books from the database. Admin access only.
 
@@ -72,7 +73,7 @@ async def get_all_book_private(current_user: str = Depends(get_current_user)) ->
 
 # Get a book by its ID (admin only)
 @router.get('/admin/{_id}', operation_id='get_book_by_id_private')
-async def get_book_by_id_private(_id: str, current_user: str = Depends(get_current_user)):
+async def get_book_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))):
     """
     Retrieve a book by its ID from the database. Admin access only.
 
@@ -88,7 +89,7 @@ async def get_book_by_id_private(_id: str, current_user: str = Depends(get_curre
 
 # Add a new book to the database (admin only)
 @router.post('/', operation_id='add_new_book_private')
-async def add_new_book_private(book: Book, current_user: str = Depends(get_current_user)) -> Book | None:
+async def add_new_book_private(book: Book, current_user: User = Depends(require_role('admin'))) -> Book | None:
     """
     Add a new book to the database. Admin access only.
 
@@ -106,7 +107,7 @@ async def add_new_book_private(book: Book, current_user: str = Depends(get_curre
 
 # Edit an existing book by its ID (admin only)
 @router.put('/{_id}', operation_id='edit_book_by_id_private')
-async def edit_book_by_id_private(_id: str, book: Book, current_user: str = Depends(get_current_user)):
+async def edit_book_by_id_private(_id: str, book: Book, current_user: User = Depends(require_role('admin'))):
     """
     Edit an existing book by its ID in the database. Admin access only.
 
@@ -128,7 +129,7 @@ async def edit_book_by_id_private(_id: str, book: Book, current_user: str = Depe
 
 # Delete a book by its ID (admin only)
 @router.delete("/{_id}", operation_id='delete_book_by_id_private')
-async def delete_book_by_id_private(_id: str, current_user: str = Depends(get_current_user)):
+async def delete_book_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))):
     """
     Delete a book by its ID from the database. Admin access only.
 
@@ -153,7 +154,7 @@ Media Routes:
 
 # Upload a media file
 @router.post("/media/")
-async def upload_book_file(file: UploadFile = File(...), current_user: str = Depends(get_current_user)):
+async def upload_book_file(file: UploadFile = File(...), current_user: User = Depends(require_role('admin'))):
     """
     Upload a media file to the server.
 
@@ -217,7 +218,7 @@ async def list_book_images():
 
 # Delete a media file by filename
 @router.delete("/media/{filename}")
-async def delete_book_image(filename: str, current_user: str = Depends(get_current_user)):
+async def delete_book_image(filename: str, current_user: User = Depends(require_role('admin'))):
     """
     Delete a media file from the upload directory.
 

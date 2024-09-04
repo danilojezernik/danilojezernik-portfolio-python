@@ -120,7 +120,7 @@ async def get_all_blogs_private(current_user: str = Depends(get_current_user)) -
 
 # This route get one blog by its ID
 @router.get('/admin/{_id}', operation_id='get_blog_by_id_private')
-async def get_blog_by_id_private(_id: str, current_user: str = Depends(get_current_user)) -> Blog:
+async def get_blog_by_id_private(_id: str,  current_user: User = Depends(require_role('admin'))) -> Blog:
     """
     This route handles the retrieval of one blog by its ID from the database
 
@@ -179,7 +179,7 @@ async def add_new_blog(blog: Blog, current_user: User = Depends(require_role('ad
 
 # This route is to edit a blog by its ID
 @router.put('/{_id}', operation_id='edit_blog_by_id_private')
-async def edit_blog_by_id_private(_id: str, blog: Blog, current_user: str = Depends(get_current_user)) -> Blog | None:
+async def edit_blog_by_id_private(_id: str, blog: Blog,  current_user: User = Depends(require_role('admin'))) -> Blog | None:
     """
     Handles the editing of a blog by its ID in the database.
 
@@ -214,7 +214,7 @@ async def edit_blog_by_id_private(_id: str, blog: Blog, current_user: str = Depe
 
 # Delete a blog by its ID from the database
 @router.delete('/{_id}', operation_id='delete_blog_by_id_private')
-async def delete_blog_by_id_private(_id: str, current_user: str = Depends(get_current_user)):
+async def delete_blog_by_id_private(_id: str,  current_user: User = Depends(require_role('admin'))):
     """
     Handles the deletion of a blog by its ID from the database.
 
@@ -245,7 +245,7 @@ Media Routes:
 
 # Upload a media file
 @router.post("/media/")
-async def upload_blog_file(file: UploadFile = File(...), current_user: str = Depends(get_current_user)):
+async def upload_blog_file(file: UploadFile = File(...),  current_user: User = Depends(require_role('admin'))):
     """
     Upload a media file to the server.
 
@@ -294,7 +294,7 @@ async def get_blog_image(filename: str):
 
 # List all media files
 @router.get('/images/')
-async def list_blog_images():
+async def list_blog_images(current_user: User = Depends(require_role('admin'))):
     """
     List all media files in the upload directory.
 
@@ -309,7 +309,7 @@ async def list_blog_images():
 
 # Delete a media file by filename
 @router.delete("/media/{filename}")
-async def delete_blog_image(filename: str, current_user: str = Depends(get_current_user)):
+async def delete_blog_image(filename: str,  current_user: User = Depends(require_role('admin'))):
     """
     Delete a media file from the upload directory.
 

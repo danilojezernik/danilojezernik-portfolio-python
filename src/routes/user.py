@@ -14,7 +14,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from src.domain.user import User
 from src.domain.user_profile import UserProfile
 from src.services import db
-from src.services.security import get_current_user, pwd_context, make_hash
+from src.services.security import get_current_user, pwd_context, make_hash, require_role
 
 router = APIRouter()
 
@@ -70,7 +70,7 @@ THIS ROUTES ARE PRIVATE
 
 # Get all users from database
 @router.get('/admin/', operation_id='get_user_private')
-async def get_user_private(current_user: str = Depends(get_current_user)) -> list[User]:
+async def get_user_private(current_user: User = Depends(require_role('admin'))) -> list[User]:
     """
     This route handles the retrieval of all the users from the database
 
@@ -89,7 +89,7 @@ async def get_user_private(current_user: str = Depends(get_current_user)) -> lis
 
 # ADD USER BY ID
 @router.post('/', operation_id='add_new_user')
-async def add_new_user(user_data: User, current_user: str = Depends(get_current_user)) -> User | None:
+async def add_new_user(user_data: User, current_user: User = Depends(require_role('admin'))) -> User | None:
     """
     This route adds a new user to the database.
 
@@ -139,7 +139,7 @@ async def add_new_user(user_data: User, current_user: str = Depends(get_current_
 
 # Get user by ID
 @router.get('/admin/{_id}', operation_id='get_user_by_id_admin')
-async def get_user_by_id_admin(_id: str, current_user: str = Depends(get_current_user)) -> User:
+async def get_user_by_id_admin(_id: str, current_user: User = Depends(require_role('admin'))) -> User:
     """
     This route handles the retrieval of one user by its ID from the database
 
@@ -161,7 +161,7 @@ async def get_user_by_id_admin(_id: str, current_user: str = Depends(get_current
 
 # Define a route for updating a user by ID - password is hashed when changed
 @router.put('/{_id}', operation_id='edit_user_by_id')
-async def edit_user_by_id(_id: str, user: User, current_user: str = Depends(get_current_user)) -> User | None:
+async def edit_user_by_id(_id: str, user: User, current_user: User = Depends(require_role('admin'))) -> User | None:
     """
     Handles the editing of a user by its ID in the database.
 
@@ -207,7 +207,7 @@ async def edit_user_by_id(_id: str, user: User, current_user: str = Depends(get_
 
 # Delete user by ID
 @router.delete('/{_id}', operation_id='delete_user_by_id')
-async def delete_user_by_id(_id: str, current_user: str = Depends(get_current_user)):
+async def delete_user_by_id(_id: str, current_user: User = Depends(require_role('admin'))):
     """
     Handles the deletion of a user by its ID from the database.
 
@@ -281,7 +281,7 @@ async def update_user_profile(
 
     # Check if the update was successful
     if update_result.modified_count == 0:
-        raise HTTPException(status_code=400, detail="Update failed or no changes detected")
+        return UserProfile(**current_user.dict())
 
     # Return the updated profile data
     updated_profile = db.process.user.find_one({'_id': current_user.id})

@@ -8,10 +8,12 @@ Routes Overview:
 """
 from typing import Dict, Any, List
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
 
 from src.domain.comments import Comment
+from src.domain.user import User
 from src.services import db
+from src.services.security import require_role, get_current_user
 
 router = APIRouter()
 
@@ -74,10 +76,11 @@ async def get_comments_for_blog_id(
 
 # This route adds a comment to a specific post
 @router.post("/{blog_id}", operation_id="add_comments_to_specific_post")
-async def add_comment_to_post(blog_id: str, comments: Comment) -> Comment | None:
+async def add_comment_to_post(blog_id: str, comments: Comment, current_user: str = Depends(get_current_user)) -> Comment | None:
     """
     This route handles adding a new comment to a specific blog post
 
+    :param current_user:
     :param blog_id: the ID of the blog post to add a comment to
     :param comments: the Comment object containing the details of the new comment
     :return: the added Comment object with its ID or None if the operation failed
@@ -102,7 +105,7 @@ THIS ROUTES ARE PRIVATE
 
 # This route gets all comments from the database
 @router.get("/admin/", operation_id="get_all_comments")
-async def get_comments_for_post() -> list[Comment]:
+async def get_comments_for_post(current_user: User = Depends(require_role('admin'))) -> list[Comment]:
     """
     This route handles the retrieval of all comments from the database
 
@@ -118,10 +121,11 @@ async def get_comments_for_post() -> list[Comment]:
 
 # This route gets one comment by it's ID from the database
 @router.get("/admin/{_id}", operation_id="get_comment_by_id")
-async def get_comment_by_id(_id: str) -> Comment:
+async def get_comment_by_id(_id: str, current_user: User = Depends(require_role('admin'))) -> Comment:
     """
     This route handles the retrieval of a comment from the database
 
+    :param current_user:
     :param _id: the ID of the comment post to retrieve comment
     :return: a Comment object containing comment for the specified comment
     """
@@ -139,10 +143,11 @@ async def get_comment_by_id(_id: str) -> Comment:
 
 # This route gets all comments of a specific post from the database
 @router.get("/admin/{blog_id}", operation_id="get_comments_of_post")
-async def get_comments_for_blog_id(blog_id: str) -> list[Comment]:
+async def get_comments_for_blog_id(blog_id: str, current_user: User = Depends(require_role('admin'))) -> list[Comment]:
     """
     This route handles the retrieval of all comments for a specific post from the database
 
+    :param current_user:
     :param blog_id: the ID of the blog post to retrieve comments for
     :return: a list of Comment objects containing all comments for the specified blog post
     """
@@ -156,10 +161,11 @@ async def get_comments_for_blog_id(blog_id: str) -> list[Comment]:
 
 # This route adds a comment to a specific post
 @router.post("/admin/{blog_id}", operation_id="add_comments_to_specific_post")
-async def add_comment_to_post(blog_id: str, comments: Comment) -> Comment | None:
+async def add_comment_to_post(blog_id: str, comments: Comment, current_user: User = Depends(require_role('admin'))) -> Comment | None:
     """
     This route handles adding a new comment to a specific blog post
 
+    :param current_user:
     :param blog_id: the ID of the blog post to add a comment to
     :param comments: the Comment object containing the details of the new comment
     :return: the added Comment object with its ID or None if the operation failed
@@ -179,7 +185,7 @@ async def add_comment_to_post(blog_id: str, comments: Comment) -> Comment | None
 
 # This route is to edit a blog by its ID
 @router.put('/admin/{_id}', operation_id='edit_blog_by_id_private')
-async def edit_blog_by_id_private(_id: str, comment: Comment) -> Comment | None:
+async def edit_blog_by_id_private(_id: str, comment: Comment, current_user: User = Depends(require_role('admin'))) -> Comment | None:
     """
     Handles the editing of a blog by its ID in the database.
 
@@ -214,10 +220,11 @@ async def edit_blog_by_id_private(_id: str, comment: Comment) -> Comment | None:
 
 # This route edits a comment by its ID
 @router.put("/admin/{blog_id}/{comment_id}", operation_id="edit_comment_by_id")
-async def edit_comment(blog_id: str, comment_id: str, comments: Comment) -> Comment | None:
+async def edit_comment(blog_id: str, comment_id: str, comments: Comment, current_user: User = Depends(require_role('admin'))) -> Comment | None:
     """
     This route handles editing an existing comment by its ID
 
+    :param current_user:
     :param blog_id: the ID of the blog post the comment belongs to
     :param comment_id: the ID of the comment to be edited
     :param comments: the Comment object containing the updated details of the comment
@@ -240,10 +247,11 @@ async def edit_comment(blog_id: str, comment_id: str, comments: Comment) -> Comm
 
 # This route deletes a comment by its ID
 @router.delete("/admin/{blog_id}/{comment_id}", operation_id="delete_comment_by_id")
-async def delete_comment(blog_id: str, comment_id: str) -> dict:
+async def delete_comment(blog_id: str, comment_id: str, current_user: User = Depends(require_role('admin'))) -> dict:
     """
     This route handles deleting a comment by its ID
 
+    :param current_user:
     :param blog_id: the ID of the blog post the comment belongs to
     :param comment_id: the ID of the comment to be deleted
     :return: a dictionary message indicating the result of the delete operation
