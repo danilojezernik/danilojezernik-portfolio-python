@@ -12,6 +12,7 @@ Routes Overview:
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.domain.user import User
+from src.domain.user_profile import UserProfile
 from src.services import db
 from src.services.security import get_current_user, pwd_context, make_hash
 
@@ -224,3 +225,64 @@ async def delete_user_by_id(_id: str, current_user: str = Depends(get_current_us
     else:
         # If the blog was not found, raise a 404 error
         raise HTTPException(status_code=404, detail=f'User by ID: ({_id}) not found!')
+
+
+# USER DASHBOARD ROUTES
+
+# Get ot view profile
+@router.get('/me/profile', operation_id='get_user_profile')
+async def get_user_profile(current_user: User = Depends(get_current_user)) -> UserProfile:
+    """
+    Get the profile information for the authenticated user.
+    Only the logged-in user can access this route.
+    """
+
+    # Fetch the user profile from the database
+    user_profile = db.process.user.find_one({'_id': current_user.id}, {
+        'username': 1, 'profession': 1, 'email': 1, 'facebook': 1, 'instagram': 1,
+        'twitter': 1, 'github': 1, 'www': 1, 'blog_notification': 1, 'full_name' : 1,
+        'description' :1, 'confirmed': 1
+    })
+
+    # If user profile is not found, raise a 404 error
+    if not user_profile:
+        raise HTTPException(status_code=404, detail="User profile not found")
+
+    # Return the user profile
+    return UserProfile(**user_profile)
+
+
+# Edit or update profile
+@router.put('/me/profile', operation_id='update_user_profile')
+async def update_user_profile(
+        profile_data: UserProfile, current_user: User = Depends(get_current_user)
+) -> UserProfile:
+    """
+    Update the profile information for the authenticated user.
+    Users can only update certain fields like profession, social links, email, etc.
+    """
+
+    # Convert profile_data to a dictionary and remove any empty fields
+    # Create an empty dictionary to hold the updated data
+    update_data = {}
+
+    # Convert the profile_data object to a dictionary
+    profile_dict = profile_data.dict()
+
+    # Loop through each key-value pair in the profile dictionary
+    for key, value in profile_dict.items():
+        # Check if the value is not None (i.e., only include fields that have values)
+        if value is not None:
+            # Add the key-value pair to the update_data dictionary
+            update_data[key] = value
+
+    # Update the user document in the database
+    update_result = db.process.user.update_one({'_id': current_user.id}, {'$set': update_data})
+
+    # Check if the update was successful
+    if update_result.modified_count == 0:
+        raise HTTPException(status_code=400, detail="Update failed or no changes detected")
+
+    # Return the updated profile data
+    updated_profile = db.process.user.find_one({'_id': current_user.id})
+    return UserProfile(**updated_profile)

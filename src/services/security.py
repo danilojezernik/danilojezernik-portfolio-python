@@ -246,7 +246,7 @@ def register_user(user: User):
         email=user.email,
         full_name=user.full_name,
         hashed_password=hashed_password,
-        role=user.role  # Ensure roles are also stored
+        role=user.role
     )
 
     # Save user to database
