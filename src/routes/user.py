@@ -11,10 +11,13 @@ Routes Overview:
 
 from fastapi import APIRouter, Depends, HTTPException
 
+from src.domain.contact import Contact
+from src.domain.email_data import EmailData
 from src.domain.user import User
 from src.domain.user_profile import UserProfile
-from src.services import db
+from src.services import db, emails
 from src.services.security import get_current_user, pwd_context, make_hash, require_role
+from src.template import send_email_reg_template
 
 router = APIRouter()
 
@@ -63,22 +66,41 @@ async def get_user_by_id(_id: str) -> User:
         return User(**cursor)
 
 
-@router.post('/send-email', operation_id='send_email_to_registered_user')
-async def send_email_registered():
-    """
-    Registered user will be able to send email to a registered user:
-    1. Only authenticated users will be able to send emails
-    2. User will only type in his name, email and message
-    3. Make a new email template for users
-    4. It will be sent to the user's email that user will want to send to
-    """
-    return {"message": "message was sent"}
-
-
 """
 THIS ROUTES ARE PRIVATE
 """
 
+
+@router.post('/send-email/{user_id}', operation_id='send_email_to_registered_user')
+async def send_email_registered_user(
+        user_id: str,
+        emailing: EmailData,
+        current_user: User = Depends(get_current_user)
+):
+    """
+    Registered user sends an email to another registered user.
+
+    - user_id: The ID of the user to whom the email will be sent.
+    - full_name: Full name of the sender.
+    - sender_email: Email of the sender.
+    - message: The message to be sent.
+    """
+
+    recipient = db.process.user.find_one({'_id': user_id})
+
+    if not recipient:
+        return HTTPException(status_code=404, detail='User not found')
+
+    recipient_user = User(**recipient)
+
+
+    body = send_email_reg_template.html(username_receiver=recipient_user.full_name, full_name_sender=emailing.full_name,
+                                        message=emailing.message, email=emailing.sender_email)
+
+    if not emails.write_email(email_to=recipient_user.email, email_from=emailing.sender_email, subject='Dobil si novo sporočilo s strani DaniloJezernik.com', body=body):
+        raise HTTPException(status_code=500, detail='Email not sent')
+
+    return {"message": "Email successfully sent to " + recipient_user.full_name}
 
 # Get all users from database
 @router.get('/admin/', operation_id='get_user_private')
@@ -252,8 +274,8 @@ async def get_user_profile(current_user: User = Depends(get_current_user)) -> Us
     # Fetch the user profile from the database
     user_profile = db.process.user.find_one({'_id': current_user.id}, {
         'username': 1, 'profession': 1, 'email': 1, 'facebook': 1, 'instagram': 1,
-        'twitter': 1, 'github': 1, 'www': 1, 'blog_notification': 1, 'full_name' : 1,
-        'description' :1, 'confirmed': 1
+        'twitter': 1, 'github': 1, 'www': 1, 'blog_notification': 1, 'full_name': 1,
+        'description': 1, 'confirmed': 1
     })
 
     # If user profile is not found, raise a 404 error

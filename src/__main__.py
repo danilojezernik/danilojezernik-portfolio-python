@@ -44,7 +44,6 @@ app.include_router(blog.router, prefix='/blog', tags=['Blog'])
 app.include_router(media.router, prefix='/media', tags=['Media'])
 app.include_router(github.router, prefix='/github', tags=['Github'])
 app.include_router(book.router, prefix='/book', tags=['Book'])
-# app.include_router(technology.router, prefix='/technology', tags=['Technology'])
 
 # Technologies
 app.include_router(angular.router, prefix='/angular', tags=['Angular'])

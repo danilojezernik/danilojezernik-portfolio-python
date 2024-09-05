@@ -8,6 +8,7 @@ from src.database.javascript import javascript
 from src.database.mongodb import mongodb
 from src.database.python import python
 from src.database.typescript import typescript
+from src.database.users_messages import message_reg
 from src.database.vue import vue
 
 from src.database.blog import blog
@@ -18,7 +19,6 @@ from src.database.links import links
 from src.database.newsletter import newsletter
 from src.database.projects import projects
 from src.database.subscriber import subscriber
-from src.database.technology import technology
 from src.database.user import user
 from src.database.comments import comments
 
@@ -28,6 +28,7 @@ process = client[env.DB_PROCESS]
 
 def drop():
     process.blog.drop()
+    process.message_reg.drop()
     process.links.drop()
     process.experiences.drop()
     process.contact.drop()
@@ -36,7 +37,6 @@ def drop():
     process.subscriber.drop()
     process.comments.drop()
     process.book.drop()
-    # process.technology.drop()
 
     # Technologies
     process.angular.drop()
@@ -55,6 +55,7 @@ def drop_user():
 
 def seed():
     process.blog.insert_many(blog)
+    process.message_reg.insert_many(message_reg)
     process.links.insert_many(links)
     process.experiences.insert_many(experiences)
     process.contact.insert_many(contact)
@@ -63,7 +64,6 @@ def seed():
     process.subscriber.insert_many(subscriber)
     process.comments.insert_many(comments)
     process.book.insert_many(book)
-    # process.technology.insert_many(technology)
 
     # Technologies
     process.angular.insert_many(angular)
