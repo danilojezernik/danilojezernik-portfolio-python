@@ -11,7 +11,6 @@ Routes Overview:
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from src.domain.contact import Contact
 from src.domain.email_data import EmailData
 from src.domain.user import User
 from src.domain.user_profile import UserProfile
@@ -100,6 +99,18 @@ async def send_email_registered_user(
     if not emails.write_email(email_to=recipient_user.email, email_from=emailing.sender_email, subject='Dobil si novo sporočilo s strani DaniloJezernik.com', body=body):
         raise HTTPException(status_code=500, detail='Email not sent')
 
+    message_data = {
+        "_id": emailing.id,
+        "user_id": user_id,
+        "full_name_sender": emailing.full_name,
+        "email_sender": emailing.sender_email,
+        "message": emailing.message,
+        "datum_vnosa": emailing.datum_vnosa
+    }
+
+    # Insert the message into the 'messages' collection
+    db.process.message_reg.insert_one(message_data)
+
     return {"message": "Email successfully sent to " + recipient_user.full_name}
 
 # Get all users from database
@@ -170,6 +181,26 @@ async def add_new_user(user_data: User, current_user: User = Depends(require_rol
         # If the insertion was not acknowledged, return None to indicate failure
         return None
 
+# Get user by username
+@router.get('/admin/{username}', operation_id='get_user_by_username_admin')
+async def get_user_by_username_admin(username: str, current_user: str = Depends(get_current_user)) -> User:
+    """
+    This route handles the retrieval of one user by its ID from the database
+
+    :param username:
+    :param current_user: Current user that is registered
+    :return: If the user is found, returns the user data; otherwise, returns a 404 error
+    """
+
+    # Attempt to find a user in the database based on the provided ID
+    cursor = db.process.user.find_one({'username': username})
+
+    # If no user is found, return a 404 error with a relevant detail message
+    if cursor is None:
+        raise HTTPException(status_code=404, detail=f'Blog by ID: ({username}) does not exist')
+    else:
+        # If the user is found, convert the cursor data into a User object and return it
+        return User(**cursor)
 
 # Get user by ID
 @router.get('/admin/{_id}', operation_id='get_user_by_id_admin')
