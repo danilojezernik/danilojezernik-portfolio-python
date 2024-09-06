@@ -9,8 +9,9 @@ Routes Overview:
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.domain.contact import Contact
+from src.domain.user import User
 from src.services import db, emails
-from src.services.security import get_current_user
+from src.services.security import require_role
 from src.template import email_template
 
 router = APIRouter()
@@ -66,7 +67,7 @@ THIS ROUTES ARE PRIVATE
 
 # Get all emails private
 @router.get('/', operation_id='get_all_emails_private')
-async def get_all_emails_private(current_user: str = Depends(get_current_user)):
+async def get_all_emails_private(current_user: User = Depends(require_role('admin'))):
     """
     This route handles the retrieval of all the projects from the database
 
@@ -84,10 +85,11 @@ async def get_all_emails_private(current_user: str = Depends(get_current_user)):
 
 
 @router.get('/{_id}', operation_id='get_email_by_id_admin')
-async def get_email_by_id_admin(_id: str):
+async def get_email_by_id_admin(_id: str, current_user: User = Depends(require_role('admin'))):
     """
     This route handles the retrieval of one email by its ID from the database
 
+    :param current_user:
     :param _id: The ID of the contact to be retrieved
     :return: If the project is found, returns the contact data; otherwise, returns a 404 error
     """
@@ -106,7 +108,7 @@ async def get_email_by_id_admin(_id: str):
 
 # Delete email by ID
 @router.delete('/{_id}', operation_id='delete_email_by_id_private')
-async def delete_email_by_id_private(_id: str, current_user: str = Depends(get_current_user)):
+async def delete_email_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))):
     """
     Route for deleting an email by its unique ID.
 

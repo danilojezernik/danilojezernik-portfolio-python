@@ -101,7 +101,7 @@ User/Admin has to login!
 
 # This route gets all the blogs from the database
 @router.get('/admin/', operation_id='get_all_blogs_private')
-async def get_all_blogs_private(current_user: str = Depends(get_current_user)) -> list[Blog]:
+async def get_all_blogs_private(current_user: str = Depends(require_role('admin'))) -> list[Blog]:
     """
     This route handles the retrieval of all the blogs from the database
 

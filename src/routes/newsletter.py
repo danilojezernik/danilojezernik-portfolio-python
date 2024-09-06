@@ -9,8 +9,9 @@ Routes Overview:
 from fastapi import APIRouter, HTTPException, Depends
 
 from src.domain.newsletter import Newsletter
+from src.domain.user import User
 from src.services import newsletters, db
-from src.services.security import get_current_user
+from src.services.security import get_current_user, require_role
 from src.template import newsletter_body
 
 router = APIRouter()
@@ -18,7 +19,7 @@ router = APIRouter()
 
 # GET ALL NEWSLETTER
 @router.get("/", operation_id="get_all_newsletter")
-async def get_all_newsletter(current_user: str = Depends(get_current_user)) -> list[Newsletter]:
+async def get_all_newsletter(current_user: User = Depends(require_role('admin'))) -> list[Newsletter]:
     """
     This route handles the retrieval of all newsletter from the database.
 
@@ -33,7 +34,7 @@ async def get_all_newsletter(current_user: str = Depends(get_current_user)) -> l
 
 # GET NEWSLETTER BY ID
 @router.get('/{_id}', operation_id='get_newsletter_by_id')
-async def get_newsletter_by_id(_id: str, current_user: str = Depends(get_current_user)):
+async def get_newsletter_by_id(_id: str, current_user: User = Depends(require_role('admin'))):
     """
     This route handles the retrieval of a newsletter by its ID from the database.
 
@@ -54,7 +55,7 @@ async def get_newsletter_by_id(_id: str, current_user: str = Depends(get_current
 
 # DELETE NEWSLETTER BY ID
 @router.delete('/{_id}', operation_id='delete_newsletter_by_id')
-async def delete_newsletter_by_id(_id: str, current_user: str = Depends(get_current_user)):
+async def delete_newsletter_by_id(_id: str, current_user: User = Depends(require_role('admin'))):
     """
     Route to delete a newsletter by its ID from the database.
 
@@ -82,7 +83,7 @@ async def delete_newsletter_by_id(_id: str, current_user: str = Depends(get_curr
 
 # SEND NEWSLETTER TO ALL
 @router.post("/", operation_id="send_newsletter_to_all")
-async def send_newsletter_to_all(newsletter: Newsletter, current_user: str = Depends(get_current_user)):
+async def send_newsletter_to_all(newsletter: Newsletter, current_user: User = Depends(require_role('admin'))):
     """
     Route for sending a newsletter to all recipients.
 

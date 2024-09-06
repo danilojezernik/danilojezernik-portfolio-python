@@ -6,6 +6,8 @@ from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
 from typing import Annotated
 from fastapi import Depends, HTTPException, status
+from cryptography.fernet import Fernet
+import json
 
 from src.domain.user import User
 from src import env
@@ -15,6 +17,7 @@ from src.services import db
 
 # Initialize a password context with bcrypt hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+role_cipher = Fernet(env.ROLE_ENCRYPTION_KEY)
 
 # Define OAuth2 password bearer scheme for authentication
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -95,18 +98,18 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     # Make a copy of the data to encode
     to_encode = data.copy()
 
-    # Calculate the expiration time for the token
-    if expires_delta:
-        # If an expiration delta is provided, calculate the expiration time
-        expire = datetime.utcnow() + expires_delta
-    else:
-        # If no expiration delta is provided, default to 15 minutes expiration
-        expire = datetime.utcnow() + timedelta(minutes=60)
+    expire = datetime.utcnow() + (expires_delta if expires_delta else timedelta(minutes=60))
+
 
     # Update the data with the expiration time
     to_encode.update({"exp": expire})
 
-    # Encode the data into a JWT using the provided SECRET_KEY and algorithm
+    # Encrypt the role before adding it to the token
+    if 'role' in to_encode:
+        decrypted_role = decrypt_role(to_encode['role'])
+        to_encode["role"] = decrypted_role
+
+        # Encode the data into a JWT using the provided SECRET_KEY and algorithm
     encoded_jwt = jwt.encode(to_encode, env.SECRET_KEY, algorithm=env.ALGORITHM)
 
     # Return the encoded JWT (access token)
@@ -133,9 +136,30 @@ async def get_payload(token: Annotated[str, Depends(oauth2_scheme)]):
     )
     try:
         payload = jwt.decode(token, env.SECRET_KEY, algorithms=["HS256"])
+
     except JWTError:
         raise credentials_exception
+
+    print(f'payload: {payload}')
     return payload
+
+def test_encryption_decryption():
+    test_role = "admin"
+    encrypted_role = role_cipher.encrypt(json.dumps(test_role).encode())
+    print(f"Encrypted Role: {encrypted_role.decode()}")
+
+    decrypted_role = json.loads(role_cipher.decrypt(encrypted_role).decode())
+    print(f"Decrypted Role: {decrypted_role}")
+
+test_encryption_decryption()
+
+def decrypt_role(encrypted_role: str) -> str:
+    try:
+        decrypted_role = json.loads(role_cipher.decrypt(encrypted_role.encode()).decode())
+        return decrypted_role
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to decrypt role")
+
 
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
@@ -143,14 +167,13 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     Asynchronously retrieves the current user based on the provided token.
 
     Steps:
-    1. Creates an exception to handle authentication failures (credentials_exception).
-    2. Decodes the token to extract the username (subject), handling potential exceptions.
-    3. Attempts to retrieve the user from the database based on the extracted username.
-    4. If the user is not found, raises an exception indicating authentication failure.
-       Otherwise, the user is returned.
+    1. Decodes the token to extract the username and encrypted role.
+    2. Decrypts the role from the token.
+    3. Retrieves the user from the database using the decoded username.
+    4. Adds the decrypted role to the user object.
+    5. Returns the user object with the decrypted role.
     """
 
-    # Create an exception for handling authentication failures
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -158,29 +181,47 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     )
 
     try:
-        # Decode the token and extract the username (subject)
+        # Decode the token
         payload = jwt.decode(token, env.SECRET_KEY, algorithms=[env.ALGORITHM])
+        print(payload)
         username: str = payload.get("sub")
-        role: list[str] = payload.get("role", [])  # Extract roles from the payload
+        role: str = payload.get("role")
 
-        if username is None:
-            # Raise an exception if username is not found in the token
+        decrypted_role = decrypt_role_if_encrypted(role)
+
+        print(f"Decrypted role: {role}")
+        if username is None or role is None:
             raise credentials_exception
 
-        # Create token data based on the extracted username
-        token_data = TokenData(username=username, role=role)
+
+        token_data = TokenData(username=username, role=decrypted_role)
+
     except JWTError:
-        # Raise an exception if token decoding fails
         raise credentials_exception
 
-    # Get user based on the username extracted from the token
     user = get_user(token_data.username)
-
     if user is None:
-        # Raise an exception if the user is not found in the database
         raise credentials_exception
 
+    # Assign decrypted role to the user object
+    user.role = decrypted_role
+    print(f"Decrypted Role after JWT Decode: {decrypted_role}")  # Debugging output
     return user
+
+
+def decrypt_role_if_encrypted(role: str) -> str:
+    """
+    Decrypts the role if it is encrypted, otherwise returns it as-is.
+    """
+    try:
+        # Check if the role is already in plaintext (adjust logic as needed)
+        if role == "admin" or role == "visitor":  # Assume roles like 'admin' or 'user' are plaintext
+            return role
+        else:
+            # If not, attempt to decrypt it
+            return json.loads(role_cipher.decrypt(role.encode()).decode())
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Failed to decrypt role")
 
 
 # This function is a decorator that checks if the current user has the required role.
@@ -212,6 +253,7 @@ def require_role(required_role: str):
         """
         # Check if the user's role matches the required role
         if required_role not in current_user.role:  # Check if required_role is in user's roles
+            print(current_user.role)
             # If the role does not match, raise a 403 Forbidden error
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,

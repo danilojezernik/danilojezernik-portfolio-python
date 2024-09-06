@@ -203,7 +203,7 @@ async def get_book_image(filename: str):
 
 # List all media files
 @router.get('/images/')
-async def list_book_images():
+async def list_book_images(current_user: User = Depends(require_role('admin'))):
     """
     List all media files in the upload directory.
 

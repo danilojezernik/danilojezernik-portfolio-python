@@ -6,8 +6,6 @@ Routes Overview:
 4. PUT /{blog_id}/{comment_id} - Edit an existing comment by its ID for a specific blog post.
 5. DELETE /{blog_id}/{comment_id} - Delete a comment by its ID for a specific blog post.
 """
-from typing import Dict, Any, List
-
 from fastapi import APIRouter, HTTPException, Query, Depends
 
 from src.domain.comments import Comment
@@ -197,6 +195,7 @@ async def edit_blog_by_id_private(_id: str, comment: Comment, current_user: User
 
     # Convert the Blog object to a dictionary
     comment_dict = comment.dict(by_alias=True)
+    print(comment_dict)  # Add this before updating to ensure the data is being processed correctly
 
     # Delete the '_id' field from the blog dictionary to avoid updating the ID
     del comment_dict['_id']

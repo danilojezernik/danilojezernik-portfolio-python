@@ -16,8 +16,9 @@ from fastapi.responses import RedirectResponse
 
 from src import env
 from src.domain.subscriber import Subscriber
+from src.domain.user import User
 from src.services import db, security, emails
-from src.services.security import get_current_user
+from src.services.security import get_current_user, require_role
 from src.template import confirmation_newsletter_email
 
 router = APIRouter()
@@ -25,7 +26,7 @@ router = APIRouter()
 
 # GET ALL SUBSCRIBERS
 @router.get("/", operation_id="get_all_subscribers")
-async def get_all_subscribers(current_user: str = Depends(get_current_user)) -> list[Subscriber]:
+async def get_all_subscribers(current_user: User = Depends(require_role('admin'))) -> list[Subscriber]:
     """
     This route handles the retrieval of all subscribers from the database.
 
@@ -40,7 +41,7 @@ async def get_all_subscribers(current_user: str = Depends(get_current_user)) -> 
 
 # GET SUBSCRIBER BY ID
 @router.get("/{_id}", operation_id="get_subscriber_by_id")
-async def get_subscriber_id(_id: str, current_user: str = Depends(get_current_user)):
+async def get_subscriber_id(_id: str, current_user: User = Depends(require_role('admin'))):
     """
     This route handles the retrieval of a subscriber by its ID from the database.
 
@@ -62,7 +63,7 @@ async def get_subscriber_id(_id: str, current_user: str = Depends(get_current_us
 
 # ADD SUBSCRIBER
 @router.post("/", operation_id="add_subscriber")
-async def post_subscriber(subscriber: Subscriber, current_user: str = Depends(get_current_user)) -> Subscriber | None:
+async def post_subscriber(subscriber: Subscriber, current_user: User = Depends(require_role('admin'))) -> Subscriber | None:
     """
     This route adds a new subscriber to the database.
 
@@ -90,7 +91,7 @@ async def post_subscriber(subscriber: Subscriber, current_user: str = Depends(ge
 # EDIT SUBSCRIBER BY ID
 @router.put("/{_id}")
 async def edit_subscriber(_id: str, subscriber: Subscriber,
-                          current_user: str = Depends(get_current_user)) -> Subscriber | None:
+                          current_user: User = Depends(require_role('admin'))) -> Subscriber | None:
     """
     This route edits an existing subscriber by its ID in the database.
 
@@ -127,7 +128,7 @@ async def edit_subscriber(_id: str, subscriber: Subscriber,
 
 # DELETE SUBSCRIBER BY ID
 @router.delete("/{_id}", operation_id="delete_subscriber")
-async def delete_subscriber(_id: str, current_user: str = Depends(get_current_user)):
+async def delete_subscriber(_id: str, current_user: User = Depends(require_role('admin'))):
     """
     Route to delete a blog by its ID from the database.
 

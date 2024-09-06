@@ -1,7 +1,9 @@
 import os
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from fastapi.responses import FileResponse
-from src.services.security import get_current_user
+
+from src.domain.user import User
+from src.services.security import get_current_user, require_role
 
 # Define the root media directory and the subdirectory for media files
 media_root_directory = 'media'  # The root directory where all media files are stored
@@ -11,7 +13,7 @@ router = APIRouter()  # Create a new APIRouter instance for defining routes
 
 
 @router.post("/")
-async def upload_media_file(file: UploadFile = File(...), current_user: str = Depends(get_current_user)):
+async def upload_media_file(file: UploadFile = File(...), current_user: User = Depends(require_role('admin'))):
     """
     Upload a media file to the server and save it to the 'about_me_media' directory.
 
@@ -90,7 +92,7 @@ async def list_images():
 
 
 @router.delete("/{filename}")
-async def delete_image(filename: str, current_user: str = Depends(get_current_user)):
+async def delete_image(filename: str, current_user: User = Depends(require_role('admin'))):
     """
     Delete a media file from the 'about_me_media' directory.
 

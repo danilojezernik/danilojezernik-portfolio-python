@@ -15,8 +15,9 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
 
 from src.domain.python import Python
+from src.domain.user import User
 from src.services import db
-from src.services.security import get_current_user
+from src.services.security import get_current_user, require_role
 
 # Define the root media directory and the subdirectory for media files
 python_root_directory = 'media'  # The root directory where all media files are stored
@@ -99,7 +100,7 @@ User/Admin has to login!
 
 # This route gets all the python from the database
 @router.get('/admin/', operation_id='get_all_python_private')
-async def get_all_python_private(current_user: str = Depends(get_current_user)) -> list[Python]:
+async def get_all_python_private(current_user: User = Depends(require_role('admin'))) -> list[Python]:
     """
     This route handles the retrieval of all the python from the database
 
@@ -118,7 +119,7 @@ async def get_all_python_private(current_user: str = Depends(get_current_user)) 
 
 # This route get one Python by its ID
 @router.get('/admin/{_id}', operation_id='get_python_by_id_private')
-async def get_python_by_id_private(_id: str, current_user: str = Depends(get_current_user)) -> Python:
+async def get_python_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))) -> Python:
     """
     This route handles the retrieval of one Python by its ID from the database
 
@@ -140,7 +141,7 @@ async def get_python_by_id_private(_id: str, current_user: str = Depends(get_cur
 
 # This route adds a new Python
 @router.post('/', operation_id='add_new_python_private')
-async def add_new_python(python: Python, current_user: str = Depends(get_current_user)) -> Python | None:
+async def add_new_python(python: Python, current_user: User = Depends(require_role('admin'))) -> Python | None:
     """
     Handles the addition of a new Python to the database.
 
@@ -169,7 +170,8 @@ async def add_new_python(python: Python, current_user: str = Depends(get_current
 
 # This route is to edit a Python by its ID
 @router.put('/{_id}', operation_id='edit_python_by_id_private')
-async def edit_python_by_id_private(_id: str, python: Python, current_user: str = Depends(get_current_user)) -> Python | None:
+async def edit_python_by_id_private(_id: str, python: Python,
+                                    current_user: User = Depends(require_role('admin'))) -> Python | None:
     """
     Handles the editing of a Python by its ID in the database.
 
@@ -204,7 +206,7 @@ async def edit_python_by_id_private(_id: str, python: Python, current_user: str 
 
 # Delete a Python by its ID from the database
 @router.delete('/{_id}', operation_id='delete_python_by_id_private')
-async def delete_python_by_id_private(_id: str, current_user: str = Depends(get_current_user)):
+async def delete_python_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))):
     """
     Handles the deletion of a Python by its ID from the database.
 
@@ -224,7 +226,6 @@ async def delete_python_by_id_private(_id: str, current_user: str = Depends(get_
         raise HTTPException(status_code=404, detail=f'Python by ID: ({_id}) not found!')
 
 
-
 """
 Media Routes:
 1. POST / - Upload a media file.
@@ -234,29 +235,7 @@ Media Routes:
 """
 
 
-# Upload a media file
-@router.post("/media/")
-async def upload_python_file(file: UploadFile = File(...), current_user: str = Depends(get_current_user)):
-    """
-    Upload a media file to the server.
-
-    :param current_user:
-    :param file: The file to be uploaded.
-    :return: A success message indicating the file was uploaded.
-    """
-    try:
-        upload_directory = python_media_directory
-        os.makedirs(upload_directory, exist_ok=True)
-        contents = await file.read()
-        file_name = file.filename if file.filename else 'uploaded_file'
-        file_path = os.path.join(upload_directory, file_name)
-        with open(file_path, 'wb') as f:
-            f.write(contents)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f'There was an error uploading the file: {str(e)}')
-    finally:
-        await file.close()
-    return {"message": f"Successfully uploaded {file_name} to {upload_directory}"}
+# PUBLIC
 
 
 # Retrieve a media file by filename
@@ -283,9 +262,36 @@ async def get_python_image(filename: str):
         raise HTTPException(status_code=500, detail=f'Error serving file: {str(e)}')
 
 
+# PRIVATE
+
+# Upload a media file
+@router.post("/media/")
+async def upload_python_file(file: UploadFile = File(...), current_user: User = Depends(require_role('admin'))):
+    """
+    Upload a media file to the server.
+
+    :param current_user:
+    :param file: The file to be uploaded.
+    :return: A success message indicating the file was uploaded.
+    """
+    try:
+        upload_directory = python_media_directory
+        os.makedirs(upload_directory, exist_ok=True)
+        contents = await file.read()
+        file_name = file.filename if file.filename else 'uploaded_file'
+        file_path = os.path.join(upload_directory, file_name)
+        with open(file_path, 'wb') as f:
+            f.write(contents)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'There was an error uploading the file: {str(e)}')
+    finally:
+        await file.close()
+    return {"message": f"Successfully uploaded {file_name} to {upload_directory}"}
+
+
 # List all media files
 @router.get('/images/')
-async def list_python_images():
+async def list_python_images(current_user: User = Depends(require_role('admin'))):
     """
     List all media files in the upload directory.
 
@@ -300,7 +306,7 @@ async def list_python_images():
 
 # Delete a media file by filename
 @router.delete("/media/{filename}")
-async def delete_python_image(filename: str, current_user: str = Depends(get_current_user)):
+async def delete_python_image(filename: str, current_user: User = Depends(require_role('admin'))):
     """
     Delete a media file from the upload directory.
 

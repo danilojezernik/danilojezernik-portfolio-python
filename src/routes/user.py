@@ -294,7 +294,7 @@ async def delete_user_by_id(_id: str, current_user: User = Depends(require_role(
 
 # USER DASHBOARD ROUTES
 
-# Get ot view profile
+# Get user view profile
 @router.get('/me/profile', operation_id='get_user_profile')
 async def get_user_profile(current_user: User = Depends(get_current_user)) -> UserProfile:
     """

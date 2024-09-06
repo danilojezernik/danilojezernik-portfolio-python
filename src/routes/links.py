@@ -11,9 +11,10 @@ Routes Overview:
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.domain.links import Links
+from src.domain.user import User
 from src.services import db
 
-from src.services.security import get_current_user
+from src.services.security import get_current_user, require_role
 
 router = APIRouter()
 
@@ -69,7 +70,7 @@ THIS ROUTES ARE PRIVATE
 
 # Get all the links from database
 @router.get('/admin/', operation_id='get_all_links_private')
-async def get_all_links_private(current_user: str = Depends(get_current_user)) -> list[Links]:
+async def get_all_links_private(current_user: User = Depends(require_role('admin'))) -> list[Links]:
     """
     This route handles the retrieval of all the links from the database
 
@@ -88,7 +89,7 @@ async def get_all_links_private(current_user: str = Depends(get_current_user)) -
 
 # Add new link
 @router.post('/', operation_id='add_new_link_private')
-async def add_new_link_private(links: Links, current_user: str = Depends(get_current_user)) -> Links | None:
+async def add_new_link_private(links: Links, current_user: User = Depends(require_role('admin'))) -> Links | None:
     """
     Handles the addition of a new links to the database.
 
@@ -120,7 +121,7 @@ async def add_new_link_private(links: Links, current_user: str = Depends(get_cur
 
 # Edit link by its ID
 @router.put('/{_id}', operation_id='edit_link_private')
-async def edit_link_private(_id: str, links: Links, current_user: str = Depends(get_current_user)) -> Links | None:
+async def edit_link_private(_id: str, links: Links, current_user: User = Depends(require_role('admin'))) -> Links | None:
     """
     Handles the editing of a links by its ID in the database.
 
@@ -156,7 +157,7 @@ async def edit_link_private(_id: str, links: Links, current_user: str = Depends(
 
 # Delete link by its ID
 @router.delete('/{_id}', operation_id='delete_links_by_id_private')
-async def delete_links_by_id_private(_id: str, current_user: str = Depends(get_current_user)):
+async def delete_links_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))):
     """
     Handles the deletion of a link by its ID from the database.
 

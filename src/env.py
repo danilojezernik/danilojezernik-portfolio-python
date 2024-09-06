@@ -12,6 +12,7 @@ DB_PROCESS = str(os.getenv('DB_PROCESS'))
 # Fast API security
 ALGORITHM = str(os.getenv('ALGORITHM'))
 SECRET_KEY = str(os.getenv('SECRET_KEY'))
+ROLE_ENCRYPTION_KEY = str(os.getenv('ROLE_ENCRYPTION_KEY'))
 
 # User in database
 USERNAME = str(os.getenv('USERNAME'))

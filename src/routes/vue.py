@@ -14,13 +14,15 @@ import os
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
 
+from src.domain.user import User
 from src.domain.vue import Vue
 from src.services import db
-from src.services.security import get_current_user
+from src.services.security import get_current_user, require_role
 
 # Define the root media directory and the subdirectory for media files
 typescript_root_directory = 'media'  # The root directory where all media files are stored
-typescript_media_directory = os.path.join(typescript_root_directory, 'typescript_media')  # Subdirectory for specific media files
+typescript_media_directory = os.path.join(typescript_root_directory,
+                                          'typescript_media')  # Subdirectory for specific media files
 
 router = APIRouter()
 
@@ -99,7 +101,7 @@ User/Admin has to login!
 
 # This route gets all the typescript from the database
 @router.get('/admin/', operation_id='get_all_vue_private')
-async def get_all_vue_private(current_user: str = Depends(get_current_user)) -> list[Vue]:
+async def get_all_vue_private(current_user: User = Depends(require_role('admin'))) -> list[Vue]:
     """
     This route handles the retrieval of all the typescript from the database
 
@@ -118,7 +120,7 @@ async def get_all_vue_private(current_user: str = Depends(get_current_user)) -> 
 
 # This route get one Vue by its ID
 @router.get('/admin/{_id}', operation_id='get_vue_by_id_private')
-async def get_vue_by_id_private(_id: str, current_user: str = Depends(get_current_user)) -> Vue:
+async def get_vue_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))) -> Vue:
     """
     This route handles the retrieval of one Vue by its ID from the database
 
@@ -140,7 +142,7 @@ async def get_vue_by_id_private(_id: str, current_user: str = Depends(get_curren
 
 # This route adds a new Vue
 @router.post('/', operation_id='add_new_vue_private')
-async def add_new_typescript(typescript: Vue, current_user: str = Depends(get_current_user)) -> Vue | None:
+async def add_new_typescript(typescript: Vue, current_user: User = Depends(require_role('admin'))) -> Vue | None:
     """
     Handles the addition of a new Vue to the database.
 
@@ -169,7 +171,8 @@ async def add_new_typescript(typescript: Vue, current_user: str = Depends(get_cu
 
 # This route is to edit a Vue by its ID
 @router.put('/{_id}', operation_id='edit_vue_by_id_private')
-async def edit_vue_by_id_private(_id: str, typescript: Vue, current_user: str = Depends(get_current_user)) -> Vue | None:
+async def edit_vue_by_id_private(_id: str, typescript: Vue,
+                                 current_user: User = Depends(require_role('admin'))) -> Vue | None:
     """
     Handles the editing of a Vue by its ID in the database.
 
@@ -204,7 +207,7 @@ async def edit_vue_by_id_private(_id: str, typescript: Vue, current_user: str = 
 
 # Delete a Vue by its ID from the database
 @router.delete('/{_id}', operation_id='delete_vue_by_id_private')
-async def delete_vue_by_id_private(_id: str, current_user: str = Depends(get_current_user)):
+async def delete_vue_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))):
     """
     Handles the deletion of a Vue by its ID from the database.
 
@@ -224,7 +227,6 @@ async def delete_vue_by_id_private(_id: str, current_user: str = Depends(get_cur
         raise HTTPException(status_code=404, detail=f'Vue by ID: ({_id}) not found!')
 
 
-
 """
 Media Routes:
 1. POST / - Upload a media file.
@@ -234,30 +236,7 @@ Media Routes:
 """
 
 
-# Upload a media file
-@router.post("/media/")
-async def upload_vue_file(file: UploadFile = File(...), current_user: str = Depends(get_current_user)):
-    """
-    Upload a media file to the server.
-
-    :param current_user:
-    :param file: The file to be uploaded.
-    :return: A success message indicating the file was uploaded.
-    """
-    try:
-        upload_directory = typescript_media_directory
-        os.makedirs(upload_directory, exist_ok=True)
-        contents = await file.read()
-        file_name = file.filename if file.filename else 'uploaded_file'
-        file_path = os.path.join(upload_directory, file_name)
-        with open(file_path, 'wb') as f:
-            f.write(contents)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f'There was an error uploading the file: {str(e)}')
-    finally:
-        await file.close()
-    return {"message": f"Successfully uploaded {file_name} to {upload_directory}"}
-
+# PUBLIC
 
 # Retrieve a media file by filename
 @router.get('/media/{filename}')
@@ -283,9 +262,36 @@ async def get_vue_image(filename: str):
         raise HTTPException(status_code=500, detail=f'Error serving file: {str(e)}')
 
 
+# PRIVATE
+
+# Upload a media file
+@router.post("/media/")
+async def upload_vue_file(file: UploadFile = File(...), current_user: User = Depends(require_role('admin'))):
+    """
+    Upload a media file to the server.
+
+    :param current_user:
+    :param file: The file to be uploaded.
+    :return: A success message indicating the file was uploaded.
+    """
+    try:
+        upload_directory = typescript_media_directory
+        os.makedirs(upload_directory, exist_ok=True)
+        contents = await file.read()
+        file_name = file.filename if file.filename else 'uploaded_file'
+        file_path = os.path.join(upload_directory, file_name)
+        with open(file_path, 'wb') as f:
+            f.write(contents)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'There was an error uploading the file: {str(e)}')
+    finally:
+        await file.close()
+    return {"message": f"Successfully uploaded {file_name} to {upload_directory}"}
+
+
 # List all media files
 @router.get('/images/')
-async def list_vue_images():
+async def list_vue_images(current_user: User = Depends(require_role('admin'))):
     """
     List all media files in the upload directory.
 
@@ -300,7 +306,7 @@ async def list_vue_images():
 
 # Delete a media file by filename
 @router.delete("/media/{filename}")
-async def delete_vue_image(filename: str, current_user: str = Depends(get_current_user)):
+async def delete_vue_image(filename: str, current_user: User = Depends(require_role('admin'))):
     """
     Delete a media file from the upload directory.
 
