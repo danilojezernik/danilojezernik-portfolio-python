@@ -10,7 +10,7 @@ from src.database.python import python
 from src.database.typescript import typescript
 from src.database.users_messages import message_reg
 from src.database.vue import vue
-
+from src.database.sent_email_data import sent_email_data
 from src.database.blog import blog
 from src.database.book import book
 from src.database.contact import contact
@@ -28,6 +28,7 @@ process = client[env.DB_PROCESS]
 
 def drop():
     process.blog.drop()
+    process.sent_email_data.drop()
     process.message_reg.drop()
     process.links.drop()
     process.experiences.drop()
@@ -56,6 +57,7 @@ def drop_user():
 def seed():
     process.blog.insert_many(blog)
     process.message_reg.insert_many(message_reg)
+    process.sent_email_data.insert_many(sent_email_data)
     process.links.insert_many(links)
     process.experiences.insert_many(experiences)
     process.contact.insert_many(contact)

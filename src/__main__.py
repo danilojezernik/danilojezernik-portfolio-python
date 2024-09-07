@@ -1,4 +1,6 @@
 # Fast API imports
+from sys import prefix
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -23,7 +25,7 @@ from src.domain.user import User
 from src.domain.vue import Vue
 # Imported routes
 from src.routes import index, blog, email, login, user, experiences, links, register, contact, projects, newsletter, \
-    subscriber, comments, github, book, media, angular, vue, typescript, javascript, mongodb, python
+    subscriber, comments, github, book, media, angular, vue, typescript, javascript, mongodb, python, language
 from src.services import db
 from src.tags_metadata import tags_metadata
 from src.utils.domain_to_txt import write_fields_to_txt
@@ -47,6 +49,8 @@ app.include_router(book.router, prefix='/book', tags=['Book'])
 
 # Technologies
 app.include_router(angular.router, prefix='/angular', tags=['Angular'])
+
+app.include_router(language.router, prefix='/language')
 app.include_router(vue.router, prefix='/vue', tags=['Vue'])
 app.include_router(javascript.router, prefix='/javascript', tags=['JavaScript'])
 app.include_router(typescript.router, prefix='/typescript', tags=['TypeScript'])

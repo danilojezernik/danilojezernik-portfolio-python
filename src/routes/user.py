@@ -113,6 +113,51 @@ async def send_email_registered_user(
 
     return {"message": "Email successfully sent to " + recipient_user.full_name}
 
+
+
+@router.post('/send-email/{user_email}', operation_id='send_email_to_registered_user_by_email')
+async def send_email_registered_user(
+        user_id: str,
+        emailing: EmailData,
+        current_user: User = Depends(get_current_user)
+):
+    """
+    Registered user sends an email to another registered user.
+
+    - user_id: The ID of the user to whom the email will be sent.
+    - full_name: Full name of the sender.
+    - sender_email: Email of the sender.
+    - message: The message to be sent.
+    """
+
+    recipient = db.process.user.find_one({'_id': user_id})
+
+    if not recipient:
+        return HTTPException(status_code=404, detail='User not found')
+
+    recipient_user = User(**recipient)
+
+
+    body = send_email_reg_template.html(username_receiver=recipient_user.full_name, full_name_sender=emailing.full_name,
+                                        message=emailing.message, email=emailing.sender_email)
+
+    if not emails.write_email(email_to=recipient_user.email, email_from=emailing.sender_email, subject='Dobil si novo sporočilo s strani DaniloJezernik.com', body=body):
+        raise HTTPException(status_code=500, detail='Email not sent')
+
+    message_data = {
+        "_id": emailing.id,
+        "user_id": user_id,
+        "full_name_sender": emailing.full_name,
+        "email_sender": emailing.sender_email,
+        "message": emailing.message,
+        "datum_vnosa": emailing.datum_vnosa
+    }
+
+    # Insert the message into the 'messages' collection
+    db.process.message_reg.insert_one(message_data)
+
+    return {"message": "Email successfully sent to " + recipient_user.full_name}
+
 # Get all users from database
 @router.get('/admin/', operation_id='get_user_private')
 async def get_user_private(current_user: User = Depends(require_role('admin'))) -> list[User]:

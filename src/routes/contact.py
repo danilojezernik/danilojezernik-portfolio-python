@@ -9,6 +9,7 @@ Routes Overview:
 from fastapi import APIRouter, Depends, HTTPException
 
 from src.domain.contact import Contact
+from src.domain.email_data import EmailData
 from src.domain.user import User
 from src.services import db, emails
 from src.services.security import require_role
@@ -19,7 +20,6 @@ router = APIRouter()
 """
 THIS ROUTES ARE PUBLIC
 """
-
 
 @router.post('/', operation_id='client_sent_email_public')
 async def client_sent_email_public(emailing: Contact):
@@ -63,6 +63,50 @@ async def client_sent_email_public(emailing: Contact):
 """
 THIS ROUTES ARE PRIVATE
 """
+
+
+@router.post('/email-to/', operation_id='client_sent_email_public')
+async def client_sent_email_public(email_from: str, emailing: EmailData):
+    """
+    Route for sending an email and storing it in the database.
+
+    Args:
+        emailing (Contact): The email content provided in the request body.
+
+    Returns:
+        dict: A message indicating the status of the email sending and storage.
+
+    Raises:
+        HTTPException: If email sending fails or if there's an issue with storing the email data.
+        :param emailing:
+        :param email_from:
+    """
+
+    # Generate the HTML body for the email using the provided data
+    body = email_template.html(full_name=emailing.full_name, email=emailing.sender_email,
+                               message=emailing.message)
+
+    # Attempt to send the email using the emails module
+    if not emails.write_email(email_to=email_from, email_from=emailing.sender_email, subject='Dobil si email danilojezernik.com', body=body):
+        # If sending fails, raise an HTTPException with a 500 status code and a detail message
+        return HTTPException(status_code=500, detail='Email not sent')
+
+    # Store email data in the database
+    email_data = {
+        "_id": emailing.id,
+        "full_name": emailing.full_name,
+        "sender_email": emailing.sender_email,
+        "message": emailing.message,
+        "datum_vnosa": emailing.datum_vnosa
+    }
+
+    # Insert the email data into the 'contact' collection of the 'process' database
+    db.process.sent_email_data.insert_one(email_data)
+
+    # If the email is sent successfully and stored in the database, return a success message
+    return {"message": "Message was sent"}
+
+
 
 
 # Get all emails private

@@ -19,6 +19,8 @@ USERNAME = str(os.getenv('USERNAME'))
 EMAIL = str(os.getenv('EMAIL'))
 PASSWORD = str(os.getenv('PASSWORD'))
 
+OPENAI_API_KEY = str(os.getenv('OPENAI_API_KEY'))
+
 # GitHub
 GITHUB = str(os.getenv('GITHUB'))
 GITHUB_TOKEN = str(os.getenv('GITHUB_TOKEN'))
