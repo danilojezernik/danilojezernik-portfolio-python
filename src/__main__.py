@@ -24,8 +24,8 @@ from src.domain.typescript import TypeScript
 from src.domain.user import User
 from src.domain.vue import Vue
 # Imported routes
-from src.routes import index, blog, email, login, user, experiences, links, register, contact, projects, newsletter, \
-    subscriber, comments, github, book, media, angular, vue, typescript, javascript, mongodb, python, language
+from src.routes import index, blog, login, user, experiences, links, register, contact, projects, newsletter, \
+    subscriber, comments, github, book, media, angular, vue, typescript, javascript, mongodb, python, language, chatgpt
 from src.services import db
 from src.tags_metadata import tags_metadata
 from src.utils.domain_to_txt import write_fields_to_txt
@@ -47,9 +47,10 @@ app.include_router(media.router, prefix='/media', tags=['Media'])
 app.include_router(github.router, prefix='/github', tags=['Github'])
 app.include_router(book.router, prefix='/book', tags=['Book'])
 
+app.include_router(chatgpt.router, prefix='/chat')
+
 # Technologies
 app.include_router(angular.router, prefix='/angular', tags=['Angular'])
-
 app.include_router(language.router, prefix='/language')
 app.include_router(vue.router, prefix='/vue', tags=['Vue'])
 app.include_router(javascript.router, prefix='/javascript', tags=['JavaScript'])
@@ -60,7 +61,6 @@ app.include_router(mongodb.router, prefix='/mongodb', tags=['MongoDB'])
 app.include_router(comments.router, prefix='/comments', tags=['Comment'])
 app.include_router(experiences.router, prefix='/experiences', tags=['Experiences'])
 app.include_router(links.router, prefix='/links', tags=['Links'])
-app.include_router(email.router, prefix='/email', tags=['Email'])
 app.include_router(projects.router, prefix='/projects', tags=['Projects'])
 
 app.include_router(user.router, prefix='/user', tags=['User'])
