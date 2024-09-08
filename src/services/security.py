@@ -140,18 +140,14 @@ async def get_payload(token: Annotated[str, Depends(oauth2_scheme)]):
     except JWTError:
         raise credentials_exception
 
-    print(f'payload: {payload}')
     return payload
 
+
 def test_encryption_decryption():
-    test_role = "admin"
+    test_role = "role"
     encrypted_role = role_cipher.encrypt(json.dumps(test_role).encode())
-    print(f"Encrypted Role: {encrypted_role.decode()}")
+    decrypted_rol = json.loads(role_cipher.decrypt(encrypted_role).decode())
 
-    decrypted_role = json.loads(role_cipher.decrypt(encrypted_role).decode())
-    print(f"Decrypted Role: {decrypted_role}")
-
-test_encryption_decryption()
 
 def decrypt_role(encrypted_role: str) -> str:
     try:
@@ -183,13 +179,11 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     try:
         # Decode the token
         payload = jwt.decode(token, env.SECRET_KEY, algorithms=[env.ALGORITHM])
-        print(payload)
         username: str = payload.get("sub")
         role: str = payload.get("role")
 
         decrypted_role = decrypt_role_if_encrypted(role)
 
-        print(f"Decrypted role: {role}")
         if username is None or role is None:
             raise credentials_exception
 
@@ -205,7 +199,6 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 
     # Assign decrypted role to the user object
     user.role = decrypted_role
-    print(f"Decrypted Role after JWT Decode: {decrypted_role}")  # Debugging output
     return user
 
 
@@ -253,7 +246,6 @@ def require_role(required_role: str):
         """
         # Check if the user's role matches the required role
         if required_role not in current_user.role:  # Check if required_role is in user's roles
-            print(current_user.role)
             # If the role does not match, raise a 403 Forbidden error
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
