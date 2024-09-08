@@ -1,3 +1,4 @@
+import requests
 from pymongo import MongoClient
 
 from src import env
@@ -5,6 +6,7 @@ from src import env
 # Technologies
 from src.database.angular import angular
 from src.database.javascript import javascript
+from src.database.language_data import language_data
 from src.database.mongodb import mongodb
 from src.database.python import python
 from src.database.typescript import typescript
@@ -24,7 +26,6 @@ from src.database.comments import comments
 
 client = MongoClient(env.DB_MAIN)
 process = client[env.DB_PROCESS]
-
 
 def drop():
     process.blog.drop()
@@ -46,6 +47,9 @@ def drop():
     process.javascript.drop()
     process.python.drop()
     process.mongodb.drop()
+
+    # Drop language_data collection
+    process.language_data.drop()
     pass
 
 
@@ -55,6 +59,7 @@ def drop_user():
 
 
 def seed():
+    process.language_data.insert_many(language_data)
     process.blog.insert_many(blog)
     process.message_reg.insert_many(message_reg)
     process.sent_email_data.insert_many(sent_email_data)

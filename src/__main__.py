@@ -25,7 +25,8 @@ from src.domain.user import User
 from src.domain.vue import Vue
 # Imported routes
 from src.routes import index, blog, login, user, experiences, links, register, contact, projects, newsletter, \
-    subscriber, comments, github, book, media, angular, vue, typescript, javascript, mongodb, python, language, chatgpt
+    subscriber, comments, github, book, media, angular, vue, typescript, javascript, mongodb, python, language, chatgpt, \
+    chat
 from src.services import db
 from src.tags_metadata import tags_metadata
 from src.utils.domain_to_txt import write_fields_to_txt
@@ -48,6 +49,8 @@ app.include_router(github.router, prefix='/github', tags=['Github'])
 app.include_router(book.router, prefix='/book', tags=['Book'])
 
 app.include_router(chatgpt.router, prefix='/chat')
+
+app.include_router(chat.router, prefix='/webchat')
 
 # Technologies
 app.include_router(angular.router, prefix='/angular', tags=['Angular'])

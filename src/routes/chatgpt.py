@@ -10,7 +10,6 @@ client = OpenAI(api_key=env.OPENAI_API_KEY)
 # Define the router for your FastAPI app, allowing you to group routes
 router = APIRouter()
 
-
 # Asynchronous function to handle the call to the OpenAI API
 # It takes the 'ChatRequest' object and passes the question to OpenAI's GPT-4 model
 async def get_openai_response(request: ChatRequest):
