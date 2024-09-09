@@ -1,50 +1,43 @@
-from fastapi import WebSocket, WebSocketDisconnect, APIRouter, Depends
-from typing import List
+from fastapi import WebSocket, WebSocketDisconnect, APIRouter
 
-from src.domain.user import User
-from src.services.security import get_current_user
+from src.services.connection_maneger import ConnectionManager
 
 router = APIRouter()
 
-class ConnectionManager:
-    def __init__(self):
-        self.active_connections: List[WebSocket] = []
-        self.users: dict[WebSocket, str] = {}
-
-    async def connect(self, websocket: WebSocket):
-        await websocket.accept()
-        self.active_connections.append(websocket)
-
-    def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
-        if websocket in self.users:
-            del self.users[websocket]
-
-    async def broadcast(self, message: str):
-        for connection in self.active_connections:
-            await connection.send_text(message)
-
-    async def broadcast_user_join(self, username: str):
-        await self.broadcast(f"{username} has joined the chat")
-
-    async def register_user(self, websocket: WebSocket, username: str):
-        self.users[websocket] = username
-        await self.broadcast_user_join(username)
-
-
+# Instantiate the ConnectionManager to manage WebSocket connections and users
 manager = ConnectionManager()
 
+
+# Define a WebSocket endpoint for chat functionality
 @router.websocket("/ws/chat")
-async def websocket_endpoint(websocket: WebSocket, current_user: User = Depends(get_current_user)):
+async def websocket_endpoint(websocket: WebSocket):
+    """
+    WebSocket endpoint to handle real-time chatroom communication.
+    Manages user connections, registration, and message broadcasting.
+
+    Args:
+        websocket (WebSocket): The WebSocket connection for the client.
+    """
+
+    # Establish the WebSocket connection and add it to the active connections
     await manager.connect(websocket)
+
     try:
-        # First message from client should be the username
+        # First message received from the client should be the username
         username = await websocket.receive_text()
+
+        # Register the user with the provided username
         await manager.register_user(websocket, username)
 
-        # Then continue receiving messages
+        # Keep listening for incoming messages from the client
         while True:
+            # Receive a message from the connected client
             message = await websocket.receive_text()
-            await manager.broadcast(f"{manager.users[websocket]}: {message}")
+
+            # Broadcast the received message to all other connected clients
+            await manager.broadcast(message, manager.users[websocket])
+
+    # Handle the case when the WebSocket connection is closed by the client
     except WebSocketDisconnect:
+        # Clean up and remove the WebSocket connection from active users and connections
         manager.disconnect(websocket)

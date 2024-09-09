@@ -1,9 +1,11 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from datetime import datetime, timedelta
 
 from src.domain.language_data import LanguageData
+from src.domain.user import User
 from src.services import db
 from src.services.language_manager import update_tags_in_db, start_scheduler
+from src.services.security import require_role
 
 router = APIRouter()
 
@@ -39,7 +41,7 @@ async def get_tags():
 
 
 @router.get('/', operation_id='get_tags_preview')
-async def get_language_tags_preview():
+async def get_language_tags_preview(current_user: User = Depends(require_role('admin'))):
     """
     Fetches a preview of all language tags from the database.
 
