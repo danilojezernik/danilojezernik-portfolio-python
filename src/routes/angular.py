@@ -85,10 +85,10 @@ async def get_limited_angular(limit: int = 4) -> list[Angular]:
     cursor = db.process.angular.find().limit(limit)
 
     # Create a list of Angular objects by unpacking data from each document retrieved
-    Angular_limited_list = [Angular(**document) for document in cursor]
+    angular_limited_list = [Angular(**document) for document in cursor]
 
     # Return the list of Angular objects
-    return Angular_limited_list
+    return angular_limited_list
 
 
 """

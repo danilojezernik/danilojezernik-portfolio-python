@@ -21,3 +21,5 @@ pdfkit
 openai~=1.44.0
 pip~=24.0
 distro~=1.9.0
+APScheduler~=3.10.4
+attrs~=24.2.0

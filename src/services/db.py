@@ -49,7 +49,6 @@ def drop():
     process.mongodb.drop()
 
     # Drop language_data collection
-    process.language_data.drop()
     pass
 
 
@@ -59,9 +58,7 @@ def drop_user():
 
 
 def seed():
-    process.language_data.insert_many(language_data)
     process.blog.insert_many(blog)
-    process.message_reg.insert_many(message_reg)
     process.sent_email_data.insert_many(sent_email_data)
     process.links.insert_many(links)
     process.experiences.insert_many(experiences)
