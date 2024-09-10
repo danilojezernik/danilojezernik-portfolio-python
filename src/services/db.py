@@ -6,11 +6,9 @@ from src import env
 # Technologies
 from src.database.angular import angular
 from src.database.javascript import javascript
-from src.database.language_data import language_data
 from src.database.mongodb import mongodb
 from src.database.python import python
 from src.database.typescript import typescript
-from src.database.users_messages import message_reg
 from src.database.vue import vue
 from src.database.sent_email_data import sent_email_data
 from src.database.blog import blog
@@ -28,6 +26,12 @@ client = MongoClient(env.DB_MAIN)
 process = client[env.DB_PROCESS]
 
 def drop():
+    process.dev_api_angular.drop()
+    process.dev_api_vue.drop()
+    process.dev_api_typescript.drop()
+    process.dev_api_python.drop()
+    process.dev_api_javascript.drop()
+    process.dev_api_mongodb.drop()
     process.blog.drop()
     process.sent_email_data.drop()
     process.message_reg.drop()
