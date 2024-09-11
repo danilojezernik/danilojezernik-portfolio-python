@@ -1,4 +1,3 @@
-import requests
 from pymongo import MongoClient
 
 from src import env
@@ -53,6 +52,7 @@ def drop():
     process.mongodb.drop()
 
     # Drop language_data collection
+    process.language_data.drop()
     pass
 
 
