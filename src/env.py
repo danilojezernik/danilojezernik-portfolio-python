@@ -20,6 +20,7 @@ EMAIL = str(os.getenv('EMAIL'))
 PASSWORD = str(os.getenv('PASSWORD'))
 
 OPENAI_API_KEY = str(os.getenv('OPENAI_API_KEY'))
+STACK_URL = str(os.getenv('STACK_URL'))
 
 # GitHub
 GITHUB = str(os.getenv('GITHUB'))
