@@ -44,7 +44,6 @@ app.add_middleware(
 
 app.include_router(index.router, prefix='/index', tags=['Index'])
 app.include_router(blog.router, prefix='/blog', tags=['Blog'])
-app.include_router(send_sms.router, prefix='/sms', tags=['SMS'])
 app.include_router(dev_to_api.router, prefix='/dev', tags=['Dev'])
 app.include_router(media.router, prefix='/media', tags=['Media'])
 app.include_router(screenshot.router, prefix='/screenshot', tags=['Media'])
