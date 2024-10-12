@@ -26,7 +26,7 @@ from src.domain.vue import Vue
 # Imported routes
 from src.routes import index, blog, login, user, experiences, links, register, contact, projects, newsletter, \
     subscriber, comments, github, book, media, angular, vue, typescript, javascript, mongodb, python, language, chatgpt, \
-    chat, dev_to_api, send_sms, screenshot
+    chat, dev_to_api, screenshot
 from src.services import db
 from src.tags_metadata import tags_metadata
 from src.utils.domain_to_txt import write_fields_to_txt
