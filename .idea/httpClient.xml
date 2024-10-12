@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="HttpClientEndpointsTabState">
+    <option name="requestToText" value="&lt;CachedHttpClientTabRequests&gt;&#10;  &lt;entry key=&quot;630a7ac77103440573dd1d7005609a2deebb9c0f&quot; value=&quot;###&amp;#10;GET http://localhost:8000/language/programming-languages&quot; /&gt;&#10;  &lt;entry key=&quot;4bab7dd4bcce89d90bd78a90c738ece5a9da58c4&quot; value=&quot;###&amp;#10;GET http://localhost:8000/vue/limited/&quot; /&gt;&#10;&lt;/CachedHttpClientTabRequests&gt;" />
+  </component>
+</project>

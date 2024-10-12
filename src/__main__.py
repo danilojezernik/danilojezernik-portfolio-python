@@ -26,7 +26,7 @@ from src.domain.vue import Vue
 # Imported routes
 from src.routes import index, blog, login, user, experiences, links, register, contact, projects, newsletter, \
     subscriber, comments, github, book, media, angular, vue, typescript, javascript, mongodb, python, language, chatgpt, \
-    chat, dev_to_api
+    chat, dev_to_api, send_sms, screenshot
 from src.services import db
 from src.tags_metadata import tags_metadata
 from src.utils.domain_to_txt import write_fields_to_txt
@@ -44,8 +44,10 @@ app.add_middleware(
 
 app.include_router(index.router, prefix='/index', tags=['Index'])
 app.include_router(blog.router, prefix='/blog', tags=['Blog'])
+app.include_router(send_sms.router, prefix='/sms', tags=['SMS'])
 app.include_router(dev_to_api.router, prefix='/dev', tags=['Dev'])
 app.include_router(media.router, prefix='/media', tags=['Media'])
+app.include_router(screenshot.router, prefix='/screenshot', tags=['Media'])
 app.include_router(github.router, prefix='/github', tags=['Github'])
 app.include_router(book.router, prefix='/book', tags=['Book'])
 

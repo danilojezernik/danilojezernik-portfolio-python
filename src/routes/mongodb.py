@@ -21,7 +21,7 @@ from src.services.security import get_current_user, require_role
 
 # Define the root media directory and the subdirectory for media files
 mongodb_root_directory = 'media'  # The root directory where all media files are stored
-mongodb_media_directory = os.path.join(mongodb_root_directory, 'mongodb_media')  # Subdirectory for specific media files
+media_directory = os.path.join(mongodb_root_directory, 'mongodb_media')  # Subdirectory for specific media files
 
 router = APIRouter()
 
@@ -246,19 +246,19 @@ async def get_mongodb_image(filename: str):
     :param filename: The name of the file to be retrieved.
     :return: The file if found; otherwise, raises a 404 error.
     """
-    file_path = os.path.join(mongodb_media_directory, filename)
+    file_path = os.path.join(media_directory, filename)
 
     # Check if the file exists
     if not os.path.exists(file_path):
         # Raise a 404 error if the file is not found
-        raise HTTPException(status_code=404, detail='Image not found!')
+        return {"message": f"Image '{filename}' not found in the directory."}
 
     try:
         # Return the file as a response
         return FileResponse(file_path)
     except Exception as e:
         # Raise an HTTP 500 error if there was an issue serving the file
-        raise HTTPException(status_code=500, detail=f'Error serving file: {str(e)}')
+        return {"message": f"Error serving file: {str(e)}"}
 
 
 # PRIVATE
@@ -274,18 +274,17 @@ async def upload_mongodb_file(file: UploadFile = File(...), current_user: User =
     :return: A success message indicating the file was uploaded.
     """
     try:
-        upload_directory = mongodb_media_directory
-        os.makedirs(upload_directory, exist_ok=True)
+        os.makedirs(media_directory, exist_ok=True)
         contents = await file.read()
         file_name = file.filename if file.filename else 'uploaded_file'
-        file_path = os.path.join(upload_directory, file_name)
+        file_path = os.path.join(media_directory, file_name)
         with open(file_path, 'wb') as f:
             f.write(contents)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'There was an error uploading the file: {str(e)}')
     finally:
         await file.close()
-    return {"message": f"Successfully uploaded {file_name} to {upload_directory}"}
+    return {"message": f"Successfully uploaded {file_name} to {media_directory}"}
 
 
 # List all media files
@@ -296,10 +295,15 @@ async def list_mongodb_images(current_user: User = Depends(require_role('admin')
 
     :return: A list of filenames in the upload directory.
     """
-    upload_directory = mongodb_media_directory
-    if not os.path.exists(upload_directory):
-        raise HTTPException(status_code=404, detail='Upload directory not found!')
-    image_names = [f for f in os.listdir(upload_directory) if os.path.isfile(os.path.join(upload_directory, f))]
+    if not os.path.exists(media_directory):
+        return {"images": [], "message": "No images found. Directory does not exist."}
+
+    image_names = [f for f in os.listdir(media_directory) if os.path.isfile(os.path.join(media_directory, f))]
+    # If no images are found, return an empty list with a message
+    if not image_names:
+        return {"images": [], "message": "No images found in the directory."}
+
+    # Return the list of filenames
     return {"images": image_names}
 
 
@@ -313,12 +317,11 @@ async def delete_mongodb_image(filename: str, current_user: User = Depends(requi
     :param filename: The name of the file to be deleted.
     :return: A success message if the file is deleted; otherwise, raises a 404 error.
     """
-    upload_directory = mongodb_media_directory
-    file_path = os.path.join(upload_directory, filename)
+    file_path = os.path.join(media_directory, filename)
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="Image not found")
     try:
         os.remove(file_path)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"There was an error deleting the file: {str(e)}")
-    return {"message": f"Successfully deleted {filename} from {upload_directory}"}
+    return {"message": f"Successfully deleted {filename} from {media_directory}"}

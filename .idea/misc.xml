@@ -6,7 +6,4 @@
   <component name="ProjectRootManager" version="2" languageLevel="JDK_22" default="true" project-jdk-name="Python 3.12 (venv)" project-jdk-type="Python SDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
-  <component name="PyPackaging">
-    <option name="earlyReleasesAsUpgrades" value="true" />
-  </component>
 </project>

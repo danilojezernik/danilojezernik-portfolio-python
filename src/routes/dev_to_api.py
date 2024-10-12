@@ -194,6 +194,99 @@ async def vue_dev():
     return extracted_articles
 
 
+@router.get('/nuxt', operation_id='nuxt_dev_news')
+async def nuxt_dev():
+    url = f'https://dev.to/api/articles?tag=nuxt'
+
+    # Handle potential errors with the external HTTP request
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url)
+            response.raise_for_status()  # Raise an exception for HTTP errors (4xx, 5xx)
+    except (httpx.HTTPStatusError, httpx.RequestError) as http_err:
+        # If there's an error in making the request, fall back to the database
+        try:
+            saved_articles = list(db.process.dev_api_vue.find({}))
+            if saved_articles:
+                return saved_articles
+            else:
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Failed to fetch articles from Dev.to and no data in the database: {str(http_err)}"
+                )
+        except PyMongoError as db_err:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Error making request to Dev.to and failed to retrieve data from the database: {str(db_err)}"
+            )
+
+    # Try to parse the response JSON
+    try:
+        articles = response.json()
+    except ValueError:
+        raise HTTPException(status_code=500, detail="Invalid response format from Dev.to")
+
+    # If no articles are returned from the API, fetch data from the database
+    if not articles:
+        try:
+            saved_articles = list(db.process.dev_api_vue.find({}))
+            if saved_articles:
+                return saved_articles
+            else:
+                raise HTTPException(status_code=404, detail="No articles available in the database")
+        except PyMongoError as db_err:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to retrieve articles from the database: {str(db_err)}"
+            )
+
+    # If articles are returned from the API, clear the database and insert new ones
+    try:
+        db.process.dev_api_vue.delete_many({})
+    except PyMongoError as db_err:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to clear old articles from the database: {str(db_err)}"
+        )
+
+    # Extract the fields you want to save to the database
+    extracted_articles = []
+    for article in articles:
+        try:
+            extracted = Article(
+                type_of=article['type_of'],
+                title=article['title'],
+                description=article['description'],
+                url=article['url'],
+                cover_image=article['cover_image'],
+                published_at=article['published_at'],
+                tag_list=article['tag_list'],
+                user=User(
+                    name=article['user']['name'],
+                    profile_image=article['user']['profile_image'],
+                    website_url=article['user'].get('website_url')
+                )
+            )
+            extracted_articles.append(extracted.dict(by_alias=True))  # Convert Pydantic model to dictionary
+        except KeyError as key_err:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Missing expected field in article data: {str(key_err)}"
+            )
+
+    # Insert new articles into the database
+    try:
+        db.process.dev_api_vue.insert_many(extracted_articles)
+    except PyMongoError as db_err:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to save articles to the database: {str(db_err)}"
+        )
+
+    # Return the saved articles
+    return extracted_articles
+
+
 @router.get('/typescript', operation_id='typescript_dev_news')
 async def typescript_dev():
     url = f'https://dev.to/api/articles?tag=typescript'
