@@ -8,7 +8,7 @@ from src.language_groups.languages_of_interests import LANGUAGES_OF_INTEREST, FR
     VERSION_CONTROL_AND_COLLABORATION, OPERATING_SYSTEMS_AND_PLATFORMS, TOOLS_AND_IDES
 from src.services import db
 from src.services.language_manager import update_tags_in_db, start_scheduler
-from src.services.security import require_role
+from src.services.security import get_current_user
 
 router = APIRouter()
 
@@ -45,7 +45,7 @@ async def get_tags():
 
 # This route is for fetching all the tags, without any update logic
 @router.get('/', operation_id='get_tags_preview')
-async def get_language_tags_preview(current_user: User = Depends(require_role('admin'))):
+async def get_language_tags_preview(current_user: User = Depends(get_current_user)):
     """
     Fetches a preview of all language tags from the database.
 

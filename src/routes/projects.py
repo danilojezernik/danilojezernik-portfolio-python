@@ -14,7 +14,7 @@ from src.domain.projects import Projects
 from src.domain.user import User
 from src.services import db
 
-from src.services.security import get_current_user, require_role
+from src.services.security import get_current_user
 
 # Define the root media directory and the subdirectory for media files
 projects_root_directory = 'media'  # The root directory where all media files are stored
@@ -76,7 +76,7 @@ THIS ROUTES ARE PRIVATE
 
 # Get all projects private
 @router.get('/admin/', operation_id='get_all_projects_private')
-async def get_all_projects_private(current_user: User = Depends(require_role('admin'))):
+async def get_all_projects_private(current_user: User = Depends(get_current_user)):
     """
     This route handles the retrieval of all the blogs from the database
 
@@ -95,7 +95,7 @@ async def get_all_projects_private(current_user: User = Depends(require_role('ad
 
 # Get project by ID
 @router.get('/admin/{_id}', operation_id='get_projects_by_id_private')
-async def get_projects_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))):
+async def get_projects_by_id_private(_id: str, current_user: User = Depends(get_current_user)):
     """
     This route handles the retrieval of one project by its ID from the database
 
@@ -119,7 +119,7 @@ async def get_projects_by_id_private(_id: str, current_user: User = Depends(requ
 # Add new project
 @router.post('/', operation_id='add_new_project_private')
 async def add_new_project_private(project: Projects,
-                                  current_user: User = Depends(require_role('admin'))) -> Projects | None:
+                                  current_user: User = Depends(get_current_user)) -> Projects | None:
     """
     Handles the addition of a new project to the database.
 
@@ -151,7 +151,7 @@ async def add_new_project_private(project: Projects,
 # Edit project by ID
 @router.put('/{_id}', operation_id='edit_project_by_id_private')
 async def edit_project_by_id_private(_id: str, project: Projects,
-                                     current_user: User = Depends(require_role('admin'))) -> Projects | None:
+                                     current_user: User = Depends(get_current_user)) -> Projects | None:
     """
     Handles the editing of a project by its ID in the database.
 
@@ -237,7 +237,7 @@ async def get_project_image(filename: str):
 
 # Upload a media file
 @router.post("/media/")
-async def upload_project_file(file: UploadFile = File(...), current_user: User = Depends(require_role('admin'))):
+async def upload_project_file(file: UploadFile = File(...), current_user: User = Depends(get_current_user)):
     """
     Upload a media file to the server.
 
@@ -262,7 +262,7 @@ async def upload_project_file(file: UploadFile = File(...), current_user: User =
 
 # List all media files
 @router.get('/images/')
-async def list_project_images(current_user: User = Depends(require_role('admin'))):
+async def list_project_images(current_user: User = Depends(get_current_user)):
     """
     List all media files in the upload directory.
 
@@ -282,7 +282,7 @@ async def list_project_images(current_user: User = Depends(require_role('admin')
 
 # Delete a media file by filename
 @router.delete("/media/{filename}")
-async def delete_project_image(filename: str, current_user: User = Depends(require_role('admin'))):
+async def delete_project_image(filename: str, current_user: User = Depends(get_current_user)):
     """
     Delete a media file from the upload directory.
 

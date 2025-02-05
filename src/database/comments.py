@@ -1,6 +1,5 @@
 import datetime
 
-from src.domain.comments import Comment
 
 comments = [
     Comment(

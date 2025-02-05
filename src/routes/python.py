@@ -17,7 +17,7 @@ from fastapi.responses import FileResponse
 from src.domain.python import Python
 from src.domain.user import User
 from src.services import db
-from src.services.security import get_current_user, require_role
+from src.services.security import get_current_user
 
 # Define the root media directory and the subdirectory for media files
 python_root_directory = 'media'  # The root directory where all media files are stored
@@ -100,7 +100,7 @@ User/Admin has to login!
 
 # This route gets all the python from the database
 @router.get('/admin/', operation_id='get_all_python_private')
-async def get_all_python_private(current_user: User = Depends(require_role('admin'))) -> list[Python]:
+async def get_all_python_private(current_user: User = Depends(get_current_user)) -> list[Python]:
     """
     This route handles the retrieval of all the python from the database
 
@@ -119,7 +119,7 @@ async def get_all_python_private(current_user: User = Depends(require_role('admi
 
 # This route get one Python by its ID
 @router.get('/admin/{_id}', operation_id='get_python_by_id_private')
-async def get_python_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))) -> Python:
+async def get_python_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> Python:
     """
     This route handles the retrieval of one Python by its ID from the database
 
@@ -141,7 +141,7 @@ async def get_python_by_id_private(_id: str, current_user: User = Depends(requir
 
 # This route adds a new Python
 @router.post('/', operation_id='add_new_python_private')
-async def add_new_python(python: Python, current_user: User = Depends(require_role('admin'))) -> Python | None:
+async def add_new_python(python: Python, current_user: User = Depends(get_current_user)) -> Python | None:
     """
     Handles the addition of a new Python to the database.
 
@@ -171,7 +171,7 @@ async def add_new_python(python: Python, current_user: User = Depends(require_ro
 # This route is to edit a Python by its ID
 @router.put('/{_id}', operation_id='edit_python_by_id_private')
 async def edit_python_by_id_private(_id: str, python: Python,
-                                    current_user: User = Depends(require_role('admin'))) -> Python | None:
+                                    current_user: User = Depends(get_current_user)) -> Python | None:
     """
     Handles the editing of a Python by its ID in the database.
 
@@ -206,7 +206,7 @@ async def edit_python_by_id_private(_id: str, python: Python,
 
 # Delete a Python by its ID from the database
 @router.delete('/{_id}', operation_id='delete_python_by_id_private')
-async def delete_python_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))):
+async def delete_python_by_id_private(_id: str, current_user: User = Depends(get_current_user)):
     """
     Handles the deletion of a Python by its ID from the database.
 
@@ -266,7 +266,7 @@ async def get_python_image(filename: str):
 
 # Upload a media file
 @router.post("/media/")
-async def upload_python_file(file: UploadFile = File(...), current_user: User = Depends(require_role('admin'))):
+async def upload_python_file(file: UploadFile = File(...), current_user: User = Depends(get_current_user)):
     """
     Upload a media file to the server.
 
@@ -290,7 +290,7 @@ async def upload_python_file(file: UploadFile = File(...), current_user: User = 
 
 # List all media files
 @router.get('/images/')
-async def list_python_images(current_user: User = Depends(require_role('admin'))):
+async def list_python_images(current_user: User = Depends(get_current_user)):
     """
     List all media files in the upload directory.
 
@@ -310,7 +310,7 @@ async def list_python_images(current_user: User = Depends(require_role('admin'))
 
 # Delete a media file by filename
 @router.delete("/media/{filename}")
-async def delete_python_image(filename: str, current_user: User = Depends(require_role('admin'))):
+async def delete_python_image(filename: str, current_user: User = Depends(get_current_user)):
     """
     Delete a media file from the upload directory.
 

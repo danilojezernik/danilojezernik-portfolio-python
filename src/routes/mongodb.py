@@ -17,7 +17,7 @@ from fastapi.responses import FileResponse
 from src.domain.mongodb import MongoDb
 from src.domain.user import User
 from src.services import db
-from src.services.security import get_current_user, require_role
+from src.services.security import get_current_user
 
 # Define the root media directory and the subdirectory for media files
 mongodb_root_directory = 'media'  # The root directory where all media files are stored
@@ -100,7 +100,7 @@ User/Admin has to login!
 
 # This route gets all the mongodb from the database
 @router.get('/admin/', operation_id='get_all_mongodb_private')
-async def get_all_mongodb_private(current_user: User = Depends(require_role('admin'))) -> list[MongoDb]:
+async def get_all_mongodb_private(current_user: User = Depends(get_current_user)) -> list[MongoDb]:
     """
     This route handles the retrieval of all the mongodb from the database
 
@@ -119,7 +119,7 @@ async def get_all_mongodb_private(current_user: User = Depends(require_role('adm
 
 # This route get one MongoDb by its ID
 @router.get('/admin/{_id}', operation_id='get_mongodb_by_id_private')
-async def get_mongodb_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))) -> MongoDb:
+async def get_mongodb_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> MongoDb:
     """
     This route handles the retrieval of one MongoDb by its ID from the database
 
@@ -141,7 +141,7 @@ async def get_mongodb_by_id_private(_id: str, current_user: User = Depends(requi
 
 # This route adds a new MongoDb
 @router.post('/', operation_id='add_new_mongodb_private')
-async def add_new_mongodb(mongodb: MongoDb, current_user: User = Depends(require_role('admin'))) -> MongoDb | None:
+async def add_new_mongodb(mongodb: MongoDb, current_user: User = Depends(get_current_user)) -> MongoDb | None:
     """
     Handles the addition of a new MongoDb to the database.
 
@@ -171,7 +171,7 @@ async def add_new_mongodb(mongodb: MongoDb, current_user: User = Depends(require
 # This route is to edit a MongoDb by its ID
 @router.put('/{_id}', operation_id='edit_mongodb_by_id_private')
 async def edit_mongodb_by_id_private(_id: str, mongodb: MongoDb,
-                                     current_user: User = Depends(require_role('admin'))) -> MongoDb | None:
+                                     current_user: User = Depends(get_current_user)) -> MongoDb | None:
     """
     Handles the editing of a MongoDb by its ID in the database.
 
@@ -206,7 +206,7 @@ async def edit_mongodb_by_id_private(_id: str, mongodb: MongoDb,
 
 # Delete a MongoDb by its ID from the database
 @router.delete('/{_id}', operation_id='delete_mongodb_by_id_private')
-async def delete_mongodb_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))):
+async def delete_mongodb_by_id_private(_id: str, current_user: User = Depends(get_current_user)):
     """
     Handles the deletion of a MongoDb by its ID from the database.
 
@@ -265,7 +265,7 @@ async def get_mongodb_image(filename: str):
 
 # Upload a media file
 @router.post("/media/")
-async def upload_mongodb_file(file: UploadFile = File(...), current_user: User = Depends(require_role('admin'))):
+async def upload_mongodb_file(file: UploadFile = File(...), current_user: User = Depends(get_current_user)):
     """
     Upload a media file to the server.
 
@@ -289,7 +289,7 @@ async def upload_mongodb_file(file: UploadFile = File(...), current_user: User =
 
 # List all media files
 @router.get('/images/')
-async def list_mongodb_images(current_user: User = Depends(require_role('admin'))):
+async def list_mongodb_images(current_user: User = Depends(get_current_user)):
     """
     List all media files in the upload directory.
 
@@ -309,7 +309,7 @@ async def list_mongodb_images(current_user: User = Depends(require_role('admin')
 
 # Delete a media file by filename
 @router.delete("/media/{filename}")
-async def delete_mongodb_image(filename: str, current_user: User = Depends(require_role('admin'))):
+async def delete_mongodb_image(filename: str, current_user: User = Depends(get_current_user)):
     """
     Delete a media file from the upload directory.
 

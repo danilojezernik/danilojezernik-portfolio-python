@@ -26,7 +26,7 @@ router = APIRouter()
 
 # GET ALL SUBSCRIBERS
 @router.get("/", operation_id="get_all_subscribers")
-async def get_all_subscribers(current_user: User = Depends(require_role('admin'))) -> list[Subscriber]:
+async def get_all_subscribers(current_user: User = Depends(get_current_user)) -> list[Subscriber]:
     """
     This route handles the retrieval of all subscribers from the database.
 
@@ -41,7 +41,7 @@ async def get_all_subscribers(current_user: User = Depends(require_role('admin')
 
 # GET SUBSCRIBER BY ID
 @router.get("/{_id}", operation_id="get_subscriber_by_id")
-async def get_subscriber_id(_id: str, current_user: User = Depends(require_role('admin'))):
+async def get_subscriber_id(_id: str, current_user: User = Depends(get_current_user)):
     """
     This route handles the retrieval of a subscriber by its ID from the database.
 
@@ -63,7 +63,7 @@ async def get_subscriber_id(_id: str, current_user: User = Depends(require_role(
 
 # ADD SUBSCRIBER
 @router.post("/", operation_id="add_subscriber")
-async def post_subscriber(subscriber: Subscriber, current_user: User = Depends(require_role('admin'))) -> Subscriber | None:
+async def post_subscriber(subscriber: Subscriber, current_user: User = Depends(get_current_user)) -> Subscriber | None:
     """
     This route adds a new subscriber to the database.
 
@@ -91,7 +91,7 @@ async def post_subscriber(subscriber: Subscriber, current_user: User = Depends(r
 # EDIT SUBSCRIBER BY ID
 @router.put("/{_id}")
 async def edit_subscriber(_id: str, subscriber: Subscriber,
-                          current_user: User = Depends(require_role('admin'))) -> Subscriber | None:
+                          current_user: User = Depends(get_current_user)) -> Subscriber | None:
     """
     This route edits an existing subscriber by its ID in the database.
 
@@ -128,7 +128,7 @@ async def edit_subscriber(_id: str, subscriber: Subscriber,
 
 # DELETE SUBSCRIBER BY ID
 @router.delete("/{_id}", operation_id="delete_subscriber")
-async def delete_subscriber(_id: str, current_user: User = Depends(require_role('admin'))):
+async def delete_subscriber(_id: str, current_user: User = Depends(get_current_user)):
     """
     Route to delete a blog by its ID from the database.
 

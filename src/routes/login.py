@@ -5,20 +5,16 @@ Routes Overview:
 
 from datetime import timedelta
 from typing import Annotated
-from cryptography.fernet import Fernet  # Import for encryption
-import json
 
 from fastapi import Depends, HTTPException, status, APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 
-from src import env
 from src.domain.token import Token
 from src.services.security import authenticate_user, create_access_token
 
 # Create a new APIRouter instance for this module
 router = APIRouter()
 
-role_cipher = Fernet(env.ROLE_ENCRYPTION_KEY)
 
 # Route for user authentication and obtaining an access token
 @router.post("/", response_model=Token)
@@ -36,7 +32,6 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
 
     # Authenticate the user using the provided username and password
     user = authenticate_user(form_data.username, form_data.password)
-
     if not user:
         # Raise an exception if the authentication fails
         raise HTTPException(
@@ -48,13 +43,9 @@ async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm,
     # Set the expiration time for the access token to 30 minutes
     access_token_expires = timedelta(minutes=30)
 
-    # Encrypt the user's role before adding it to the token
-    encrypted_role = role_cipher.encrypt(json.dumps(user.role).encode()).decode()
-
-    print(f'encrypted_role login: f{encrypted_role}')
     # Create an access token for the authenticated user
     access_token = create_access_token(
-        data={"sub": user.username, "role": encrypted_role}, expires_delta=access_token_expires
+        data={"sub": user.username}, expires_delta=access_token_expires
     )
 
     # Return the access token and token type

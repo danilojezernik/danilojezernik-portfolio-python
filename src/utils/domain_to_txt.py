@@ -45,7 +45,6 @@ def write_fields_to_txt(models):
     with open('output.txt', 'w') as f:
         f.write('Use domains in models for frontend:\n\n')
         for model in models:
-            f.write(f'/* tslint:disable */ \n/* eslint-disable */ \n\n')
             model_name = model.__name__  # Get the name of the model class
             f.write(f'export interface {model_name} {{\n')  # Write the model name as a TypeScript interface
             for field_name, field_info in model.__fields__.items():

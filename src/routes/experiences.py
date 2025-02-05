@@ -15,7 +15,7 @@ from src.domain.experiences import Experiences
 from src.domain.user import User
 from src.services import db
 
-from src.services.security import get_current_user, require_role
+from src.services.security import get_current_user
 
 router = APIRouter()
 
@@ -71,7 +71,7 @@ THIS ROUTES ARE PRIVATE
 
 # Get all the experiences from database
 @router.get('/admin/', operation_id='get_all_experiences_private')
-async def get_all_experiences_private(current_user: User = Depends(require_role('admin'))) -> list[Experiences]:
+async def get_all_experiences_private(current_user: User = Depends(get_current_user)) -> list[Experiences]:
     """
     This route handles the retrieval of all the experiences from the database
 
@@ -90,7 +90,7 @@ async def get_all_experiences_private(current_user: User = Depends(require_role(
 
 # Get experiences by its ID
 @router.get('/admin/{_id}', operation_id='get_experiences_by_id_private')
-async def get_experiences_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))):
+async def get_experiences_by_id_private(_id: str, current_user: User = Depends(get_current_user)):
     """
     This route handles the retrieval of one experiences by its ID from the database
 
@@ -113,7 +113,7 @@ async def get_experiences_by_id_private(_id: str, current_user: User = Depends(r
 # This route adds a new experiences
 @router.post('/', operation_id='add_new_experiences_private')
 async def add_new_experiences_private(experiences: Experiences,
-                                      current_user: User = Depends(require_role('admin'))) -> Experiences | None:
+                                      current_user: User = Depends(get_current_user)) -> Experiences | None:
     """
     Handles the addition of a new experiences to the database.
 
@@ -145,7 +145,7 @@ async def add_new_experiences_private(experiences: Experiences,
 # Edit experiences by its ID
 @router.put('/{_id}', operation_id='edit_experiences_by_id_private')
 async def edit_experiences_by_id_private(_id: str, experiences: Experiences,
-                                         current_user: User = Depends(require_role('admin'))):
+                                         current_user: User = Depends(get_current_user)):
     """
     Handles the editing of experiences by its ID in the database.
 
@@ -180,7 +180,7 @@ async def edit_experiences_by_id_private(_id: str, experiences: Experiences,
 
 # Delete experiences by ID
 @router.delete("/{_id}", operation_id='delete_experiences_by_id_private')
-async def delete_experiences_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))):
+async def delete_experiences_by_id_private(_id: str, current_user: User = Depends(get_current_user)):
     """
     Handles the deletion of experiences by its ID from the database.
 

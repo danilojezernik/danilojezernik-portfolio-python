@@ -1,8 +1,5 @@
 Use domains in models for frontend:
 
-/* tslint:disable */ 
-/* eslint-disable */ 
-
 export interface Blog {
  '_id'?: string;
   title: string;
@@ -13,9 +10,6 @@ export interface Blog {
   image: string;
   datum_vnosa: string;
 }
-
-/* tslint:disable */ 
-/* eslint-disable */ 
 
 export interface Experiences {
  '_id'?: string;
@@ -31,20 +25,6 @@ export interface Experiences {
   datum_vnosa: string;
 }
 
-/* tslint:disable */ 
-/* eslint-disable */ 
-
-export interface Comment {
- '_id'?: string;
-  blog_id: string;
-  content: string;
-  author: string;
-  datum_vnosa: string;
-}
-
-/* tslint:disable */ 
-/* eslint-disable */ 
-
 export interface Contact {
  '_id'?: string;
   full_name: string;
@@ -53,9 +33,6 @@ export interface Contact {
   datum_vnosa: string;
 }
 
-/* tslint:disable */ 
-/* eslint-disable */ 
-
 export interface Links {
  '_id'?: string;
   title: string;
@@ -63,18 +40,12 @@ export interface Links {
   datum_vnosa: string;
 }
 
-/* tslint:disable */ 
-/* eslint-disable */ 
-
 export interface Newsletter {
  '_id'?: string;
   title: string;
   content: string;
   datum_vnosa: string;
 }
-
-/* tslint:disable */ 
-/* eslint-disable */ 
 
 export interface Projects {
  '_id'?: string;
@@ -88,46 +59,6 @@ export interface Projects {
   datum_vnosa: string;
 }
 
-/* tslint:disable */ 
-/* eslint-disable */ 
-
-export interface Subscriber {
- '_id'?: string;
-  name: string;
-  surname: string;
-  email: string;
-  confirmed: boolean;
-  datum_vnosa: string;
-}
-
-/* tslint:disable */ 
-/* eslint-disable */ 
-
-export interface User {
- '_id'?: string;
-  username: string;
-  email: string;
-  full_name: string;
-  profession: string;
-  technology: string;
-  description: string;
-  hashed_password: string;
-  facebook: string;
-  instagram: string;
-  youtube: string;
-  twitter: string;
-  github: string;
-  www: string;
-  role: string;
-  confirmed: boolean;
-  registered: boolean;
-  blog_notification: boolean;
-  datum_vnosa: string;
-}
-
-/* tslint:disable */ 
-/* eslint-disable */ 
-
 export interface Book {
  '_id'?: string;
   naslov: string;
@@ -140,9 +71,6 @@ export interface Book {
   datum_vnosa: string;
 }
 
-/* tslint:disable */ 
-/* eslint-disable */ 
-
 export interface Angular {
  '_id'?: string;
   question: string;
@@ -150,9 +78,6 @@ export interface Angular {
   image: string;
   datum_vnosa: string;
 }
-
-/* tslint:disable */ 
-/* eslint-disable */ 
 
 export interface Vue {
  '_id'?: string;
@@ -162,9 +87,6 @@ export interface Vue {
   datum_vnosa: string;
 }
 
-/* tslint:disable */ 
-/* eslint-disable */ 
-
 export interface JavaScript {
  '_id'?: string;
   question: string;
@@ -172,9 +94,6 @@ export interface JavaScript {
   image: string;
   datum_vnosa: string;
 }
-
-/* tslint:disable */ 
-/* eslint-disable */ 
 
 export interface TypeScript {
  '_id'?: string;
@@ -184,9 +103,6 @@ export interface TypeScript {
   datum_vnosa: string;
 }
 
-/* tslint:disable */ 
-/* eslint-disable */ 
-
 export interface Python {
  '_id'?: string;
   question: string;
@@ -194,9 +110,6 @@ export interface Python {
   image: string;
   datum_vnosa: string;
 }
-
-/* tslint:disable */ 
-/* eslint-disable */ 
 
 export interface MongoDb {
  '_id'?: string;

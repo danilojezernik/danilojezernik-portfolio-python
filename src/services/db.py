@@ -17,9 +17,7 @@ from src.database.experiences import experiences
 from src.database.links import links
 from src.database.newsletter import newsletter
 from src.database.projects import projects
-from src.database.subscriber import subscriber
 from src.database.user import user
-from src.database.comments import comments
 
 client = MongoClient(env.DB_MAIN)
 process = client[env.DB_PROCESS]
@@ -69,8 +67,6 @@ def seed():
     process.contact.insert_many(contact)
     process.projects.insert_many(projects)
     process.newsletter.insert_many(newsletter)
-    process.subscriber.insert_many(subscriber)
-    process.comments.insert_many(comments)
     process.book.insert_many(book)
 
     # Technologies

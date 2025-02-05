@@ -16,9 +16,8 @@ from fastapi.responses import FileResponse
 
 from src.domain.blog import Blog
 from src.domain.user import User
-from src.services import db, blog_notification
-from src.services.security import get_current_user, require_role
-from src.template import blog_notifications
+from src.services import db
+from src.services.security import get_current_user
 
 # Define the root media directory and the subdirectory for media files
 root_directory = 'media'  # The root directory where all media files are stored
@@ -101,7 +100,7 @@ User/Admin has to login!
 
 # This route gets all the blogs from the database
 @router.get('/admin/', operation_id='get_all_blogs_private')
-async def get_all_blogs_private(current_user: str = Depends(require_role('admin'))) -> list[Blog]:
+async def get_all_blogs_private(current_user: str = Depends(get_current_user)) -> list[Blog]:
     """
     This route handles the retrieval of all the blogs from the database
 
@@ -120,7 +119,7 @@ async def get_all_blogs_private(current_user: str = Depends(require_role('admin'
 
 # This route get one blog by its ID
 @router.get('/admin/{_id}', operation_id='get_blog_by_id_private')
-async def get_blog_by_id_private(_id: str,  current_user: User = Depends(require_role('admin'))) -> Blog:
+async def get_blog_by_id_private(_id: str,  current_user: User = Depends(get_current_user)) -> Blog:
     """
     This route handles the retrieval of one blog by its ID from the database
 
@@ -142,7 +141,7 @@ async def get_blog_by_id_private(_id: str,  current_user: User = Depends(require
 
 # This route adds a new blog
 @router.post('/', operation_id='add_new_blog_private')
-async def add_new_blog(blog: Blog, current_user: User = Depends(require_role('admin'))) -> Blog | None:
+async def add_new_blog(blog: Blog, current_user: User = Depends(get_current_user)) -> Blog | None:
     """
     Handles the addition of a new blog to the database.
 
@@ -161,16 +160,6 @@ async def add_new_blog(blog: Blog, current_user: User = Depends(require_role('ad
     if insert_result.acknowledged:
         # If insertion is successful, update the dictionary with the newly assigned _id
         blog_dict['_id'] = str(insert_result.inserted_id)
-
-        # Generate the body content for the blog notification email
-        body = blog_notifications.html(title=blog.title)
-
-        # Send notification to users that have blog_notification set to true
-        if not blog_notification.blog_notification(subject='Nov blog na strani DaniloJezernik.com', body=body):
-            # If email notification fails, return None to indicate failure
-            return None
-
-        # Return the newly added Blog object, using the updated dictionary
         return Blog(**blog_dict)
     else:
         # If the insertion was not acknowledged, return None to indicate failure
@@ -179,7 +168,7 @@ async def add_new_blog(blog: Blog, current_user: User = Depends(require_role('ad
 
 # This route is to edit a blog by its ID
 @router.put('/{_id}', operation_id='edit_blog_by_id_private')
-async def edit_blog_by_id_private(_id: str, blog: Blog,  current_user: User = Depends(require_role('admin'))) -> Blog | None:
+async def edit_blog_by_id_private(_id: str, blog: Blog,  current_user: User = Depends(get_current_user)) -> Blog | None:
     """
     Handles the editing of a blog by its ID in the database.
 
@@ -214,7 +203,7 @@ async def edit_blog_by_id_private(_id: str, blog: Blog,  current_user: User = De
 
 # Delete a blog by its ID from the database
 @router.delete('/{_id}', operation_id='delete_blog_by_id_private')
-async def delete_blog_by_id_private(_id: str,  current_user: User = Depends(require_role('admin'))):
+async def delete_blog_by_id_private(_id: str,  current_user: User = Depends(get_current_user)):
     """
     Handles the deletion of a blog by its ID from the database.
 
@@ -245,7 +234,7 @@ Media Routes:
 
 # Upload a media file
 @router.post("/media/")
-async def upload_blog_file(file: UploadFile = File(...),  current_user: User = Depends(require_role('admin'))):
+async def upload_blog_file(file: UploadFile = File(...),  current_user: User = Depends(get_current_user)):
     """
     Upload a media file to the server.
 
@@ -293,7 +282,7 @@ async def get_blog_image(filename: str):
 
 # List all media files
 @router.get('/images/')
-async def list_blog_images(current_user: User = Depends(require_role('admin'))):
+async def list_blog_images(current_user: User = Depends(get_current_user)):
     """
     List all media files in the upload directory.
 
@@ -313,7 +302,7 @@ async def list_blog_images(current_user: User = Depends(require_role('admin'))):
 
 # Delete a media file by filename
 @router.delete("/media/{filename}")
-async def delete_blog_image(filename: str,  current_user: User = Depends(require_role('admin'))):
+async def delete_blog_image(filename: str,  current_user: User = Depends(get_current_user)):
     """
     Delete a media file from the upload directory.
 

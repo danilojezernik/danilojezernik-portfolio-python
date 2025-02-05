@@ -17,7 +17,7 @@ from fastapi.responses import FileResponse
 from src.domain.javascript import JavaScript
 from src.domain.user import User
 from src.services import db
-from src.services.security import get_current_user, require_role
+from src.services.security import get_current_user
 
 # Define the root media directory and the subdirectory for media files
 javascript_root_directory = 'media'  # The root directory where all media files are stored
@@ -100,7 +100,7 @@ User/Admin has to login!
 
 # This route gets all the javascript from the database
 @router.get('/admin/', operation_id='get_all_javascript_private')
-async def get_all_javascript_private(current_user: User = Depends(require_role('admin'))) -> list[JavaScript]:
+async def get_all_javascript_private(current_user: User = Depends(get_current_user)) -> list[JavaScript]:
     """
     This route handles the retrieval of all the javascript from the database
 
@@ -119,7 +119,7 @@ async def get_all_javascript_private(current_user: User = Depends(require_role('
 
 # This route get one JavaScript by its ID
 @router.get('/admin/{_id}', operation_id='get_javascript_by_id_private')
-async def get_javascript_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))) -> JavaScript:
+async def get_javascript_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> JavaScript:
     """
     This route handles the retrieval of one JavaScript by its ID from the database
 
@@ -142,7 +142,7 @@ async def get_javascript_by_id_private(_id: str, current_user: User = Depends(re
 # This route adds a new JavaScript
 @router.post('/', operation_id='add_new_javascript_private')
 async def add_new_javascript(javascript: JavaScript,
-                             current_user: User = Depends(require_role('admin'))) -> JavaScript | None:
+                             current_user: User = Depends(get_current_user)) -> JavaScript | None:
     """
     Handles the addition of a new JavaScript to the database.
 
@@ -172,7 +172,7 @@ async def add_new_javascript(javascript: JavaScript,
 # This route is to edit a JavaScript by its ID
 @router.put('/{_id}', operation_id='edit_javascript_by_id_private')
 async def edit_javascript_by_id_private(_id: str, javascript: JavaScript,
-                                        current_user: User = Depends(require_role('admin'))) -> JavaScript | None:
+                                        current_user: User = Depends(get_current_user)) -> JavaScript | None:
     """
     Handles the editing of a JavaScript by its ID in the database.
 
@@ -207,7 +207,7 @@ async def edit_javascript_by_id_private(_id: str, javascript: JavaScript,
 
 # Delete a JavaScript by its ID from the database
 @router.delete('/{_id}', operation_id='delete_javascript_by_id_private')
-async def delete_javascript_by_id_private(_id: str, current_user: User = Depends(require_role('admin'))):
+async def delete_javascript_by_id_private(_id: str, current_user: User = Depends(get_current_user)):
     """
     Handles the deletion of a JavaScript by its ID from the database.
 
@@ -267,7 +267,7 @@ async def get_javascript_image(filename: str):
 
 # Upload a media file
 @router.post("/media/")
-async def upload_javascript_file(file: UploadFile = File(...), current_user: User = Depends(require_role('admin'))):
+async def upload_javascript_file(file: UploadFile = File(...), current_user: User = Depends(get_current_user)):
     """
     Upload a media file to the server.
 
@@ -291,7 +291,7 @@ async def upload_javascript_file(file: UploadFile = File(...), current_user: Use
 
 # List all media files
 @router.get('/images/')
-async def list_javascript_images(current_user: User = Depends(require_role('admin'))):
+async def list_javascript_images(current_user: User = Depends(get_current_user)):
     """
     List all media files in the upload directory.
 
@@ -311,7 +311,7 @@ async def list_javascript_images(current_user: User = Depends(require_role('admi
 
 # Delete a media file by filename
 @router.delete("/media/{filename}")
-async def delete_javascript_image(filename: str, current_user: User = Depends(require_role('admin'))):
+async def delete_javascript_image(filename: str, current_user: User = Depends(get_current_user)):
     """
     Delete a media file from the upload directory.
 
