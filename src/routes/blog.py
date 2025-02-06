@@ -17,6 +17,7 @@ from fastapi.responses import FileResponse
 from src.domain.blog import Blog
 from src.domain.user import User
 from src.services import db
+from src.services.router_helpers import all_data
 from src.services.security import get_current_user
 
 # Define the root media directory and the subdirectory for media files
@@ -32,21 +33,14 @@ THIS ROUTES ARE PUBLIC
 
 # This route gets all the blogs from the database
 @router.get('/', operation_id='get_all_blogs_public')
-async def get_all_blogs_public() -> list[Blog]:
+async def get_all_blogs_public():
     """
-    This route handles the retrieval of all the blogs from the database
+    Retrieves all the blogs from the database.
 
-    :return: a list of Blog objects containing all the blogs in the database
+    Returns:
+        List[Blog]: A list of Blog objects containing all blogs in the database.
     """
-
-    # Retrieve all blogs from the database using the find method
-    cursor = db.process.blog.find()
-
-    # Create a list of Blog objects by unpacking data from each document retrieved
-    blog_list = [Blog(**document) for document in cursor]
-
-    # Return the list of Blog objects
-    return blog_list
+    return all_data('blog', Blog)
 
 
 # This route get one blog by its ID
