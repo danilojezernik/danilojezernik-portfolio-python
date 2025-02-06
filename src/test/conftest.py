@@ -10,6 +10,6 @@ def mongodb():
     assert client.admin.command('ping')['ok'] != 0.0, "Unable to connect to MongoDB."
     return client
 
-@pytest.fixture
+@pytest.fixture(scope='class')
 def book_data():
     return book

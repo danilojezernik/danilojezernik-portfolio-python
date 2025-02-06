@@ -18,6 +18,7 @@ ROLE_ENCRYPTION_KEY = str(os.getenv('ROLE_ENCRYPTION_KEY'))
 USERNAME = str(os.getenv('USERNAME'))
 EMAIL = str(os.getenv('EMAIL'))
 PASSWORD = str(os.getenv('PASSWORD'))
+PASSWORD_LOGIN = str(os.getenv('PASSWORD_LOGIN'))
 
 OPENAI_API_KEY = str(os.getenv('OPENAI_API_KEY'))
 STACK_URL = str(os.getenv('STACK_URL'))

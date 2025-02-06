@@ -5,6 +5,9 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+import subprocess
+import sys
+
 from src import env
 from src.domain.angular import Angular
 # Import domain for output.txt
@@ -67,6 +70,12 @@ app.include_router(login.router, prefix='/login', tags=['Login'])
 
 app.include_router(contact.router, prefix='/contact', tags=['Contact'])
 
+
+def run_tests():
+    """Run pytest and return True if all tests pass."""
+    result = subprocess.run(["pytest", "--html=test/html_report/report.html", "--self-contained-html"])
+    return result.returncode == 0  # 0 means success, non-zero means failure
+
 if __name__ == '__main__':
 
     # Confirm if you want to drop and seed database
@@ -97,4 +106,11 @@ if __name__ == '__main__':
     else:
         print('Document writing aborted')
 
-    uvicorn.run(app, host="127.0.0.1", port=env.PORT)
+    if run_tests():
+        print("✅ All tests passed! Starting FastAPI application...")
+        uvicorn.run(app, host="127.0.0.1", port=env.PORT)
+    else:
+        print("❌ Tests failed! Fix issues before running the application.")
+        sys.exit(1)
+
+
