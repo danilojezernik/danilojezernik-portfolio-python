@@ -14,7 +14,7 @@ import os
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
 
-from src.domain.javascript import JavaScript
+from src.domain.language import Language
 from src.domain.user import User
 from src.services import db
 from src.services.security import get_current_user
@@ -32,7 +32,7 @@ THIS ROUTES ARE PUBLIC
 
 # This route gets all the javascript from the database
 @router.get('/', operation_id='get_all_javascript_public')
-async def get_all_javascript_public() -> list[JavaScript]:
+async def get_all_javascript_public() -> list[Language]:
     """
     This route handles the retrieval of all the javascript from the database
 
@@ -43,7 +43,7 @@ async def get_all_javascript_public() -> list[JavaScript]:
     cursor = db.process.javascript.find()
 
     # Create a list of JavaScript objects by unpacking data from each document retrieved
-    javascript_list = [JavaScript(**document) for document in cursor]
+    javascript_list = [Language(**document) for document in cursor]
 
     # Return the list of JavaScript objects
     return javascript_list
@@ -68,12 +68,12 @@ async def get_javascript_by_id_public(_id: str):
     else:
 
         # If the javascript is found, convert the cursor data into a javascript object and return it
-        return JavaScript(**cursor)
+        return Language(**cursor)
 
 
 # This route gets a limited amount of javascript
 @router.get('/limited/', operation_id='get_limited_javascript')
-async def get_limited_javascript(limit: int = 4) -> list[JavaScript]:
+async def get_limited_javascript(limit: int = 4) -> list[Language]:
     """
     Handles the retrieval of a limited amount of javascript from the database.
 
@@ -85,7 +85,7 @@ async def get_limited_javascript(limit: int = 4) -> list[JavaScript]:
     cursor = db.process.javascript.find().limit(limit)
 
     # Create a list of JavaScript objects by unpacking data from each document retrieved
-    javascript_limited_list = [JavaScript(**document) for document in cursor]
+    javascript_limited_list = [Language(**document) for document in cursor]
 
     # Return the list of JavaScript objects
     return javascript_limited_list
@@ -100,7 +100,7 @@ User/Admin has to login!
 
 # This route gets all the javascript from the database
 @router.get('/admin/', operation_id='get_all_javascript_private')
-async def get_all_javascript_private(current_user: User = Depends(get_current_user)) -> list[JavaScript]:
+async def get_all_javascript_private(current_user: User = Depends(get_current_user)) -> list[Language]:
     """
     This route handles the retrieval of all the javascript from the database
 
@@ -111,7 +111,7 @@ async def get_all_javascript_private(current_user: User = Depends(get_current_us
     cursor = db.process.javascript.find()
 
     # Create a list of JavaScript objects by unpacking data from each document retrieved
-    javascript_list = [JavaScript(**document) for document in cursor]
+    javascript_list = [Language(**document) for document in cursor]
 
     # Return the list of JavaScript objects
     return javascript_list
@@ -119,7 +119,7 @@ async def get_all_javascript_private(current_user: User = Depends(get_current_us
 
 # This route get one JavaScript by its ID
 @router.get('/admin/{_id}', operation_id='get_javascript_by_id_private')
-async def get_javascript_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> JavaScript:
+async def get_javascript_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> Language:
     """
     This route handles the retrieval of one JavaScript by its ID from the database
 
@@ -136,13 +136,13 @@ async def get_javascript_by_id_private(_id: str, current_user: User = Depends(ge
         raise HTTPException(status_code=404, detail=f'JavaScript by ID: ({_id}) does not exist')
     else:
         # If the JavaScript is found, convert the cursor data into a JavaScript object and return it
-        return JavaScript(**cursor)
+        return Language(**cursor)
 
 
 # This route adds a new JavaScript
 @router.post('/', operation_id='add_new_javascript_private')
-async def add_new_javascript(javascript: JavaScript,
-                             current_user: User = Depends(get_current_user)) -> JavaScript | None:
+async def add_new_javascript(javascript: Language,
+                             current_user: User = Depends(get_current_user)) -> Language | None:
     """
     Handles the addition of a new JavaScript to the database.
 
@@ -163,7 +163,7 @@ async def add_new_javascript(javascript: JavaScript,
         javascript_dict['_id'] = str(insert_result.inserted_id)
 
         # Return the newly added JavaScript object, using the updated dictionary
-        return JavaScript(**javascript_dict)
+        return Language(**javascript_dict)
     else:
         # If the insertion was not acknowledged, return None to indicate failure
         return None
@@ -171,8 +171,8 @@ async def add_new_javascript(javascript: JavaScript,
 
 # This route is to edit a JavaScript by its ID
 @router.put('/{_id}', operation_id='edit_javascript_by_id_private')
-async def edit_javascript_by_id_private(_id: str, javascript: JavaScript,
-                                        current_user: User = Depends(get_current_user)) -> JavaScript | None:
+async def edit_javascript_by_id_private(_id: str, javascript: Language,
+                                        current_user: User = Depends(get_current_user)) -> Language | None:
     """
     Handles the editing of a JavaScript by its ID in the database.
 
@@ -199,7 +199,7 @@ async def edit_javascript_by_id_private(_id: str, javascript: JavaScript,
         # Check if the updated JavaScript exists
         if updated_document:
             updated_document['_id'] = str(updated_document['_id'])
-            return JavaScript(**updated_document)
+            return Language(**updated_document)
 
     # Return None if the JavaScript was not updated
     return None

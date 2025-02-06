@@ -14,7 +14,7 @@ import os
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
 
-from src.domain.typescript import TypeScript
+from src.domain.language import Language
 from src.domain.user import User
 from src.services import db
 from src.services.security import get_current_user
@@ -32,7 +32,7 @@ THIS ROUTES ARE PUBLIC
 
 # This route gets all the typescript from the database
 @router.get('/', operation_id='get_all_typescript_public')
-async def get_all_typescript_public() -> list[TypeScript]:
+async def get_all_typescript_public() -> list[Language]:
     """
     This route handles the retrieval of all the typescript from the database
 
@@ -43,7 +43,7 @@ async def get_all_typescript_public() -> list[TypeScript]:
     cursor = db.process.typescript.find()
 
     # Create a list of TypeScript objects by unpacking data from each document retrieved
-    typescript_list = [TypeScript(**document) for document in cursor]
+    typescript_list = [Language(**document) for document in cursor]
 
     # Return the list of TypeScript objects
     return typescript_list
@@ -68,12 +68,12 @@ async def get_typescript_by_id_public(_id: str):
     else:
 
         # If the typescript is found, convert the cursor data into a typescript object and return it
-        return TypeScript(**cursor)
+        return Language(**cursor)
 
 
 # This route gets a limited amount of typescript
 @router.get('/limited/', operation_id='get_limited_typescript')
-async def get_limited_typescript(limit: int = 4) -> list[TypeScript]:
+async def get_limited_typescript(limit: int = 4) -> list[Language]:
     """
     Handles the retrieval of a limited amount of typescript from the database.
 
@@ -85,7 +85,7 @@ async def get_limited_typescript(limit: int = 4) -> list[TypeScript]:
     cursor = db.process.typescript.find().limit(limit)
 
     # Create a list of TypeScript objects by unpacking data from each document retrieved
-    typescript_limited_list = [TypeScript(**document) for document in cursor]
+    typescript_limited_list = [Language(**document) for document in cursor]
 
     # Return the list of TypeScript objects
     return typescript_limited_list
@@ -100,7 +100,7 @@ User/Admin has to login!
 
 # This route gets all the typescript from the database
 @router.get('/admin/', operation_id='get_all_typescript_private')
-async def get_all_typescript_private(current_user: User = Depends(get_current_user)) -> list[TypeScript]:
+async def get_all_typescript_private(current_user: User = Depends(get_current_user)) -> list[Language]:
     """
     This route handles the retrieval of all the typescript from the database
 
@@ -111,7 +111,7 @@ async def get_all_typescript_private(current_user: User = Depends(get_current_us
     cursor = db.process.typescript.find()
 
     # Create a list of TypeScript objects by unpacking data from each document retrieved
-    typescript_list = [TypeScript(**document) for document in cursor]
+    typescript_list = [Language(**document) for document in cursor]
 
     # Return the list of TypeScript objects
     return typescript_list
@@ -119,7 +119,7 @@ async def get_all_typescript_private(current_user: User = Depends(get_current_us
 
 # This route get one TypeScript by its ID
 @router.get('/admin/{_id}', operation_id='get_typescript_by_id_private')
-async def get_typescript_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> TypeScript:
+async def get_typescript_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> Language:
     """
     This route handles the retrieval of one TypeScript by its ID from the database
 
@@ -136,13 +136,13 @@ async def get_typescript_by_id_private(_id: str, current_user: User = Depends(ge
         raise HTTPException(status_code=404, detail=f'TypeScript by ID: ({_id}) does not exist')
     else:
         # If the TypeScript is found, convert the cursor data into a TypeScript object and return it
-        return TypeScript(**cursor)
+        return Language(**cursor)
 
 
 # This route adds a new TypeScript
 @router.post('/', operation_id='add_new_typescript_private')
-async def add_new_typescript(typescript: TypeScript,
-                             current_user: User = Depends(get_current_user)) -> TypeScript | None:
+async def add_new_typescript(typescript: Language,
+                             current_user: User = Depends(get_current_user)) -> Language | None:
     """
     Handles the addition of a new TypeScript to the database.
 
@@ -163,7 +163,7 @@ async def add_new_typescript(typescript: TypeScript,
         typescript_dict['_id'] = str(insert_result.inserted_id)
 
         # Return the newly added TypeScript object, using the updated dictionary
-        return TypeScript(**typescript_dict)
+        return Language(**typescript_dict)
     else:
         # If the insertion was not acknowledged, return None to indicate failure
         return None
@@ -171,8 +171,8 @@ async def add_new_typescript(typescript: TypeScript,
 
 # This route is to edit a TypeScript by its ID
 @router.put('/{_id}', operation_id='edit_typescript_by_id_private')
-async def edit_typescript_by_id_private(_id: str, typescript: TypeScript,
-                                        current_user: User = Depends(get_current_user)) -> TypeScript | None:
+async def edit_typescript_by_id_private(_id: str, typescript: Language,
+                                        current_user: User = Depends(get_current_user)) -> Language | None:
     """
     Handles the editing of a TypeScript by its ID in the database.
 
@@ -199,7 +199,7 @@ async def edit_typescript_by_id_private(_id: str, typescript: TypeScript,
         # Check if the updated TypeScript exists
         if updated_document:
             updated_document['_id'] = str(updated_document['_id'])
-            return TypeScript(**updated_document)
+            return Language(**updated_document)
 
     # Return None if the TypeScript was not updated
     return None

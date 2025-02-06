@@ -15,7 +15,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
 
 from src.domain.user import User
-from src.domain.vue import Vue
+from src.domain.language import Language
 from src.services import db
 from src.services.security import get_current_user
 
@@ -32,7 +32,7 @@ THIS ROUTES ARE PUBLIC
 
 # This route gets all the typescript from the database
 @router.get('/', operation_id='get_all_vue_public')
-async def get_all_vue_public() -> list[Vue]:
+async def get_all_vue_public() -> list[Language]:
     """
     This route handles the retrieval of all the typescript from the database
 
@@ -43,7 +43,7 @@ async def get_all_vue_public() -> list[Vue]:
     cursor = db.process.vue.find()
 
     # Create a list of Vue objects by unpacking data from each document retrieved
-    vue_list = [Vue(**document) for document in cursor]
+    vue_list = [Language(**document) for document in cursor]
 
     # Return the list of Vue objects
     return vue_list
@@ -68,12 +68,12 @@ async def get_vue_by_id_public(_id: str):
     else:
 
         # If the typescript is found, convert the cursor data into a typescript object and return it
-        return Vue(**cursor)
+        return Language(**cursor)
 
 
 # This route gets a limited amount of typescript
 @router.get('/limited/', operation_id='get_limited_typescript')
-async def get_limited_typescript(limit: int = 4) -> list[Vue]:
+async def get_limited_typescript(limit: int = 4) -> list[Language]:
     """
     Handles the retrieval of a limited amount of typescript from the database.
 
@@ -85,7 +85,7 @@ async def get_limited_typescript(limit: int = 4) -> list[Vue]:
     cursor = db.process.vue.find().limit(limit)
 
     # Create a list of Vue objects by unpacking data from each document retrieved
-    typescript_limited_list = [Vue(**document) for document in cursor]
+    typescript_limited_list = [Language(**document) for document in cursor]
 
     # Return the list of Vue objects
     return typescript_limited_list
@@ -100,7 +100,7 @@ User/Admin has to login!
 
 # This route gets all the typescript from the database
 @router.get('/admin/', operation_id='get_all_vue_private')
-async def get_all_vue_private(current_user: User = Depends(get_current_user)) -> list[Vue]:
+async def get_all_vue_private(current_user: User = Depends(get_current_user)) -> list[Language]:
     """
     This route handles the retrieval of all the typescript from the database
 
@@ -111,7 +111,7 @@ async def get_all_vue_private(current_user: User = Depends(get_current_user)) ->
     cursor = db.process.vue.find()
 
     # Create a list of Vue objects by unpacking data from each document retrieved
-    vue_list = [Vue(**document) for document in cursor]
+    vue_list = [Language(**document) for document in cursor]
 
     # Return the list of Vue objects
     return vue_list
@@ -119,7 +119,7 @@ async def get_all_vue_private(current_user: User = Depends(get_current_user)) ->
 
 # This route get one Vue by its ID
 @router.get('/admin/{_id}', operation_id='get_vue_by_id_private')
-async def get_vue_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> Vue:
+async def get_vue_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> Language:
     """
     This route handles the retrieval of one Vue by its ID from the database
 
@@ -136,12 +136,12 @@ async def get_vue_by_id_private(_id: str, current_user: User = Depends(get_curre
         raise HTTPException(status_code=404, detail=f'Vue by ID: ({_id}) does not exist')
     else:
         # If the Vue is found, convert the cursor data into a Vue object and return it
-        return Vue(**cursor)
+        return Language(**cursor)
 
 
 # This route adds a new Vue
 @router.post('/', operation_id='add_new_vue_private')
-async def add_new_typescript(typescript: Vue, current_user: User = Depends(get_current_user)) -> Vue | None:
+async def add_new_typescript(typescript: Language, current_user: User = Depends(get_current_user)) -> Language | None:
     """
     Handles the addition of a new Vue to the database.
 
@@ -162,7 +162,7 @@ async def add_new_typescript(typescript: Vue, current_user: User = Depends(get_c
         typescript_dict['_id'] = str(insert_result.inserted_id)
 
         # Return the newly added Vue object, using the updated dictionary
-        return Vue(**typescript_dict)
+        return Language(**typescript_dict)
     else:
         # If the insertion was not acknowledged, return None to indicate failure
         return None
@@ -170,8 +170,8 @@ async def add_new_typescript(typescript: Vue, current_user: User = Depends(get_c
 
 # This route is to edit a Vue by its ID
 @router.put('/{_id}', operation_id='edit_vue_by_id_private')
-async def edit_vue_by_id_private(_id: str, typescript: Vue,
-                                 current_user: User = Depends(get_current_user)) -> Vue | None:
+async def edit_vue_by_id_private(_id: str, typescript: Language,
+                                 current_user: User = Depends(get_current_user)) -> Language | None:
     """
     Handles the editing of a Vue by its ID in the database.
 
@@ -198,7 +198,7 @@ async def edit_vue_by_id_private(_id: str, typescript: Vue,
         # Check if the updated Vue exists
         if updated_document:
             updated_document['_id'] = str(updated_document['_id'])
-            return Vue(**updated_document)
+            return Language(**updated_document)
 
     # Return None if the Vue was not updated
     return None

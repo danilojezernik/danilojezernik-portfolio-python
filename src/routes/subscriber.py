@@ -18,8 +18,7 @@ from src import env
 from src.domain.subscriber import Subscriber
 from src.domain.user import User
 from src.services import db, security, emails
-from src.services.security import get_current_user, require_role
-from src.template import confirmation_newsletter_email
+from src.services.security import get_current_user
 
 router = APIRouter()
 

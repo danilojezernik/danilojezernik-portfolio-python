@@ -9,20 +9,15 @@ import subprocess
 import sys
 
 from src import env
-from src.domain.angular import Angular
+from src.domain.language import Language
 # Import domain for output.txt
 from src.domain.blog import Blog
 from src.domain.book import Book
 from src.domain.contact import Contact
 from src.domain.experiences import Experiences
-from src.domain.javascript import JavaScript
 from src.domain.links import Links
-from src.domain.mongodb import MongoDb
 from src.domain.newsletter import Newsletter
 from src.domain.projects import Projects
-from src.domain.python import Python
-from src.domain.typescript import TypeScript
-from src.domain.vue import Vue
 # Imported routes
 from src.routes import index, blog, login, experiences, links, contact, projects, github, book, angular, vue, \
     typescript, javascript, mongodb, python, language, dev_to_api, user
@@ -100,8 +95,7 @@ if __name__ == '__main__':
     if yes_doc == 'y':
         print('Writing fields to output.txt...')
         write_fields_to_txt(
-            [Blog, Experiences, Contact, Links, Newsletter, Projects, Book, Angular, Vue,
-             JavaScript, TypeScript, Python, MongoDb])
+            [Blog, Experiences, Contact, Links, Newsletter, Projects, Book, Language])
         print('Done! Fields have been written to output.txt')
     else:
         print('Document writing aborted')

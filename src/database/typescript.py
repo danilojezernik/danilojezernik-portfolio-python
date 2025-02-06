@@ -1,24 +1,24 @@
 import datetime
 
-from src.domain.typescript import TypeScript
+from src.domain.language import Language
 
 typescript = [
-    TypeScript(
+    Language(
         question='TypeScript questions 1',
         answer='TypeScript je framework, ki ga dela Google in je zelo priljubljen.',
-        image='typescript.jpg',
+        language='typescript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True),
-    TypeScript(
+    Language(
         question='TypeScript questions 2',
         answer='TypeScript je framework, ki ga dela Google in je zelo priljubljen.',
-        image='typescript.jpg',
+        language='typescript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True),
-    TypeScript(
+    Language(
         question='TypeScript questions 3',
         answer='TypeScript je framework, ki ga dela Google in je zelo priljubljen.',
-        image='typescript.jpg',
+        language='typescript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True)
 ]

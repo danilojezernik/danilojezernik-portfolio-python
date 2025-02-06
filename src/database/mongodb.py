@@ -1,24 +1,24 @@
 import datetime
 
-from src.domain.mongodb import MongoDb
+from src.domain.language import Language
 
 mongodb = [
-    MongoDb(
+    Language(
         question='MongoDb questions 1',
         answer='MongoDb je framework, ki ga dela Google in je zelo priljubljen.',
-        image='mongodb.jpg',
+        language='typescript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True),
-    MongoDb(
+    Language(
         question='MongoDb questions 2',
         answer='MongoDb je framework, ki ga dela Google in je zelo priljubljen.',
-        image='mongodb.jpg',
+        language='typescript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True),
-    MongoDb(
+    Language(
         question='MongoDb questions 3',
         answer='MongoDb je framework, ki ga dela Google in je zelo priljubljen.',
-        image='mongodb.jpg',
+        language='typescript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True)
 ]

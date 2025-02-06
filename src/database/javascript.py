@@ -1,24 +1,24 @@
 import datetime
 
-from src.domain.javascript import JavaScript
+from src.domain.language import Language
 
 javascript = [
-    JavaScript(
+    Language(
         question='JavaScript questions 1',
         answer='JavaScript je framework, ki ga dela Google in je zelo priljubljen.',
-        image='javascript.jpg',
+        language='javascript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True),
-    JavaScript(
+    Language(
         question='JavaScript questions 2',
         answer='JavaScript je framework, ki ga dela Google in je zelo priljubljen.',
-        image='javascript.jpg',
+        language='javascript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True),
-    JavaScript(
+    Language(
         question='JavaScript questions 3',
         answer='JavaScript je framework, ki ga dela Google in je zelo priljubljen.',
-        image='javascript.jpg',
+        language='javascript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True)
 ]

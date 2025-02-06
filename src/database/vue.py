@@ -1,24 +1,24 @@
 import datetime
 
-from src.domain.vue import Vue
+from src.domain.language import Language
 
 vue = [
-    Vue(
+    Language(
         question='Vue questions 1',
         answer='Vue je framework, ki ga dela Google in je zelo priljubljen.',
-        image='vue1.jpg',
+        language='typescript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True),
-    Vue(
+    Language(
         question='Vue questions 2',
         answer='Vue je framework, ki ga dela Google in je zelo priljubljen.',
-        image='vue1.jpg',
+        language='typescript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True),
-    Vue(
+    Language(
         question='Vue questions 3',
         answer='Vue je framework, ki ga dela Google in je zelo priljubljen.',
-        image='vue1.jpg',
+        language='typescript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True)
 ]

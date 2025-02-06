@@ -1,24 +1,24 @@
 import datetime
 
-from src.domain.angular import Angular
+from src.domain.language import Language
 
 angular = [
-    Angular(
+    Language(
         question='Angular questions 1',
         answer='Angular je framework, ki ga dela Google in je zelo priljubljen.',
-        image='angular1.jpg',
+        language='typescript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True),
-    Angular(
+    Language(
         question='Angular questions 2',
         answer='Angular je framework, ki ga dela Google in je zelo priljubljen.',
-        image='angular1.jpg',
+        language='typescript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True),
-    Angular(
+    Language(
         question='Angular questions 3',
         answer='Angular je framework, ki ga dela Google in je zelo priljubljen.',
-        image='angular1.jpg',
+        language='typescript',
         datum_vnosa=datetime.datetime.now(),
     ).dict(by_alias=True)
 ]

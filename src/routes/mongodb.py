@@ -14,7 +14,7 @@ import os
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
 
-from src.domain.mongodb import MongoDb
+from src.domain.language import Language
 from src.domain.user import User
 from src.services import db
 from src.services.security import get_current_user
@@ -32,7 +32,7 @@ THIS ROUTES ARE PUBLIC
 
 # This route gets all the mongodb from the database
 @router.get('/', operation_id='get_all_mongodb_public')
-async def get_all_mongodb_public() -> list[MongoDb]:
+async def get_all_mongodb_public() -> list[Language]:
     """
     This route handles the retrieval of all the mongodb from the database
 
@@ -43,7 +43,7 @@ async def get_all_mongodb_public() -> list[MongoDb]:
     cursor = db.process.mongodb.find()
 
     # Create a list of MongoDb objects by unpacking data from each document retrieved
-    mongodb_list = [MongoDb(**document) for document in cursor]
+    mongodb_list = [Language(**document) for document in cursor]
 
     # Return the list of MongoDb objects
     return mongodb_list
@@ -68,12 +68,12 @@ async def get_mongodb_by_id_public(_id: str):
     else:
 
         # If the mongodb is found, convert the cursor data into a mongodb object and return it
-        return MongoDb(**cursor)
+        return Language(**cursor)
 
 
 # This route gets a limited amount of mongodb
 @router.get('/limited/', operation_id='get_limited_mongodb')
-async def get_limited_mongodb(limit: int = 4) -> list[MongoDb]:
+async def get_limited_mongodb(limit: int = 4) -> list[Language]:
     """
     Handles the retrieval of a limited amount of mongodb from the database.
 
@@ -85,7 +85,7 @@ async def get_limited_mongodb(limit: int = 4) -> list[MongoDb]:
     cursor = db.process.mongodb.find().limit(limit)
 
     # Create a list of MongoDb objects by unpacking data from each document retrieved
-    mongodb_limited_list = [MongoDb(**document) for document in cursor]
+    mongodb_limited_list = [Language(**document) for document in cursor]
 
     # Return the list of MongoDb objects
     return mongodb_limited_list
@@ -100,7 +100,7 @@ User/Admin has to login!
 
 # This route gets all the mongodb from the database
 @router.get('/admin/', operation_id='get_all_mongodb_private')
-async def get_all_mongodb_private(current_user: User = Depends(get_current_user)) -> list[MongoDb]:
+async def get_all_mongodb_private(current_user: User = Depends(get_current_user)) -> list[Language]:
     """
     This route handles the retrieval of all the mongodb from the database
 
@@ -111,7 +111,7 @@ async def get_all_mongodb_private(current_user: User = Depends(get_current_user)
     cursor = db.process.mongodb.find()
 
     # Create a list of MongoDb objects by unpacking data from each document retrieved
-    mongodb_list = [MongoDb(**document) for document in cursor]
+    mongodb_list = [Language(**document) for document in cursor]
 
     # Return the list of MongoDb objects
     return mongodb_list
@@ -119,7 +119,7 @@ async def get_all_mongodb_private(current_user: User = Depends(get_current_user)
 
 # This route get one MongoDb by its ID
 @router.get('/admin/{_id}', operation_id='get_mongodb_by_id_private')
-async def get_mongodb_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> MongoDb:
+async def get_mongodb_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> Language:
     """
     This route handles the retrieval of one MongoDb by its ID from the database
 
@@ -136,12 +136,12 @@ async def get_mongodb_by_id_private(_id: str, current_user: User = Depends(get_c
         raise HTTPException(status_code=404, detail=f'MongoDb by ID: ({_id}) does not exist')
     else:
         # If the MongoDb is found, convert the cursor data into a MongoDb object and return it
-        return MongoDb(**cursor)
+        return Language(**cursor)
 
 
 # This route adds a new MongoDb
 @router.post('/', operation_id='add_new_mongodb_private')
-async def add_new_mongodb(mongodb: MongoDb, current_user: User = Depends(get_current_user)) -> MongoDb | None:
+async def add_new_mongodb(mongodb: Language, current_user: User = Depends(get_current_user)) -> Language | None:
     """
     Handles the addition of a new MongoDb to the database.
 
@@ -162,7 +162,7 @@ async def add_new_mongodb(mongodb: MongoDb, current_user: User = Depends(get_cur
         mongodb_dict['_id'] = str(insert_result.inserted_id)
 
         # Return the newly added MongoDb object, using the updated dictionary
-        return MongoDb(**mongodb_dict)
+        return Language(**mongodb_dict)
     else:
         # If the insertion was not acknowledged, return None to indicate failure
         return None
@@ -170,8 +170,8 @@ async def add_new_mongodb(mongodb: MongoDb, current_user: User = Depends(get_cur
 
 # This route is to edit a MongoDb by its ID
 @router.put('/{_id}', operation_id='edit_mongodb_by_id_private')
-async def edit_mongodb_by_id_private(_id: str, mongodb: MongoDb,
-                                     current_user: User = Depends(get_current_user)) -> MongoDb | None:
+async def edit_mongodb_by_id_private(_id: str, mongodb: Language,
+                                     current_user: User = Depends(get_current_user)) -> Language | None:
     """
     Handles the editing of a MongoDb by its ID in the database.
 
@@ -198,7 +198,7 @@ async def edit_mongodb_by_id_private(_id: str, mongodb: MongoDb,
         # Check if the updated MongoDb exists
         if updated_document:
             updated_document['_id'] = str(updated_document['_id'])
-            return MongoDb(**updated_document)
+            return Language(**updated_document)
 
     # Return None if the MongoDb was not updated
     return None

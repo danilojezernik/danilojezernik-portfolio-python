@@ -14,7 +14,7 @@ import os
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
 
-from src.domain.python import Python
+from src.domain.language import Language
 from src.domain.user import User
 from src.services import db
 from src.services.security import get_current_user
@@ -32,7 +32,7 @@ THIS ROUTES ARE PUBLIC
 
 # This route gets all the python from the database
 @router.get('/', operation_id='get_all_python_public')
-async def get_all_python_public() -> list[Python]:
+async def get_all_python_public() -> list[Language]:
     """
     This route handles the retrieval of all the python from the database
 
@@ -43,7 +43,7 @@ async def get_all_python_public() -> list[Python]:
     cursor = db.process.python.find()
 
     # Create a list of Python objects by unpacking data from each document retrieved
-    python_list = [Python(**document) for document in cursor]
+    python_list = [Language(**document) for document in cursor]
 
     # Return the list of Python objects
     return python_list
@@ -68,12 +68,12 @@ async def get_python_by_id_public(_id: str):
     else:
 
         # If the python is found, convert the cursor data into a python object and return it
-        return Python(**cursor)
+        return Language(**cursor)
 
 
 # This route gets a limited amount of python
 @router.get('/limited/', operation_id='get_limited_python')
-async def get_limited_python(limit: int = 4) -> list[Python]:
+async def get_limited_python(limit: int = 4) -> list[Language]:
     """
     Handles the retrieval of a limited amount of python from the database.
 
@@ -85,7 +85,7 @@ async def get_limited_python(limit: int = 4) -> list[Python]:
     cursor = db.process.python.find().limit(limit)
 
     # Create a list of Python objects by unpacking data from each document retrieved
-    python_limited_list = [Python(**document) for document in cursor]
+    python_limited_list = [Language(**document) for document in cursor]
 
     # Return the list of Python objects
     return python_limited_list
@@ -100,7 +100,7 @@ User/Admin has to login!
 
 # This route gets all the python from the database
 @router.get('/admin/', operation_id='get_all_python_private')
-async def get_all_python_private(current_user: User = Depends(get_current_user)) -> list[Python]:
+async def get_all_python_private(current_user: User = Depends(get_current_user)) -> list[Language]:
     """
     This route handles the retrieval of all the python from the database
 
@@ -111,7 +111,7 @@ async def get_all_python_private(current_user: User = Depends(get_current_user))
     cursor = db.process.python.find()
 
     # Create a list of Python objects by unpacking data from each document retrieved
-    python_list = [Python(**document) for document in cursor]
+    python_list = [Language(**document) for document in cursor]
 
     # Return the list of Python objects
     return python_list
@@ -119,7 +119,7 @@ async def get_all_python_private(current_user: User = Depends(get_current_user))
 
 # This route get one Python by its ID
 @router.get('/admin/{_id}', operation_id='get_python_by_id_private')
-async def get_python_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> Python:
+async def get_python_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> Language:
     """
     This route handles the retrieval of one Python by its ID from the database
 
@@ -136,12 +136,12 @@ async def get_python_by_id_private(_id: str, current_user: User = Depends(get_cu
         raise HTTPException(status_code=404, detail=f'Python by ID: ({_id}) does not exist')
     else:
         # If the Python is found, convert the cursor data into a Python object and return it
-        return Python(**cursor)
+        return Language(**cursor)
 
 
 # This route adds a new Python
 @router.post('/', operation_id='add_new_python_private')
-async def add_new_python(python: Python, current_user: User = Depends(get_current_user)) -> Python | None:
+async def add_new_python(python: Language, current_user: User = Depends(get_current_user)) -> Language | None:
     """
     Handles the addition of a new Python to the database.
 
@@ -162,7 +162,7 @@ async def add_new_python(python: Python, current_user: User = Depends(get_curren
         python_dict['_id'] = str(insert_result.inserted_id)
 
         # Return the newly added Python object, using the updated dictionary
-        return Python(**python_dict)
+        return Language(**python_dict)
     else:
         # If the insertion was not acknowledged, return None to indicate failure
         return None
@@ -170,8 +170,8 @@ async def add_new_python(python: Python, current_user: User = Depends(get_curren
 
 # This route is to edit a Python by its ID
 @router.put('/{_id}', operation_id='edit_python_by_id_private')
-async def edit_python_by_id_private(_id: str, python: Python,
-                                    current_user: User = Depends(get_current_user)) -> Python | None:
+async def edit_python_by_id_private(_id: str, python: Language,
+                                    current_user: User = Depends(get_current_user)) -> Language | None:
     """
     Handles the editing of a Python by its ID in the database.
 
@@ -198,7 +198,7 @@ async def edit_python_by_id_private(_id: str, python: Python,
         # Check if the updated Python exists
         if updated_document:
             updated_document['_id'] = str(updated_document['_id'])
-            return Python(**updated_document)
+            return Language(**updated_document)
 
     # Return None if the Python was not updated
     return None

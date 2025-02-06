@@ -1,20 +1,20 @@
 """
 Routes:
 1. GET all angular - Retrieve all angular from the database.
-2. GET Angular by ID - Retrieve a specific Angular by its ID.
+2. GET Language by ID - Retrieve a specific Language by its ID.
 3. GET limited angular - Retrieve a limited number of angular.
 4. GET all angular (private) - Retrieve all angular for authenticated users.
-5. GET Angular by ID (private) - Retrieve a specific Angular by its ID for authenticated users.
-6. ADD a new Angular - Add a new Angular to the database.
-7. EDIT a Angular by ID - Edit an existing Angular by its ID.
-8. DELETE a Angular by ID - Delete a Angular by its ID.
+5. GET Language by ID (private) - Retrieve a specific Language by its ID for authenticated users.
+6. ADD a new Language - Add a new Language to the database.
+7. EDIT a Language by ID - Edit an existing Language by its ID.
+8. DELETE a Language by ID - Delete a Language by its ID.
 """
 import os
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
 
-from src.domain.angular import Angular
+from src.domain.language import Language
 from src.domain.user import User
 from src.services import db
 from src.services.security import get_current_user
@@ -32,24 +32,24 @@ THIS ROUTES ARE PUBLIC
 
 # This route gets all the angular from the database
 @router.get('/', operation_id='get_all_angular_public')
-async def get_all_angular_public() -> list[Angular]:
+async def get_all_angular_public() -> list[Language]:
     """
     This route handles the retrieval of all the angular from the database
 
-    :return: a list of Angular objects containing all the angular in the database
+    :return: a list of Language objects containing all the angular in the database
     """
 
     # Retrieve all angular from the database using the find method
     cursor = db.process.angular.find()
 
-    # Create a list of Angular objects by unpacking data from each document retrieved
-    angular_list = [Angular(**document) for document in cursor]
+    # Create a list of Language objects by unpacking data from each document retrieved
+    angular_list = [Language(**document) for document in cursor]
 
-    # Return the list of Angular objects
+    # Return the list of Language objects
     return angular_list
 
 
-# This route get one Angular by its ID
+# This route get one Language by its ID
 @router.get('/{_id}', operation_id='get_angular_by_id_public')
 async def get_angular_by_id_public(_id: str):
     """
@@ -68,12 +68,12 @@ async def get_angular_by_id_public(_id: str):
     else:
 
         # If the angular is found, convert the cursor data into a angular object and return it
-        return Angular(**cursor)
+        return Language(**cursor)
 
 
 # This route gets a limited amount of angular
 @router.get('/limited/', operation_id='get_limited_angular')
-async def get_limited_angular(limit: int = 4) -> list[Angular]:
+async def get_limited_angular(limit: int = 4) -> list[Language]:
     """
     Handles the retrieval of a limited amount of angular from the database.
 
@@ -84,10 +84,10 @@ async def get_limited_angular(limit: int = 4) -> list[Angular]:
     # Retrieve a limited number of angular from the database using the limit method
     cursor = db.process.angular.find().limit(limit)
 
-    # Create a list of Angular objects by unpacking data from each document retrieved
-    angular_limited_list = [Angular(**document) for document in cursor]
+    # Create a list of Language objects by unpacking data from each document retrieved
+    angular_limited_list = [Language(**document) for document in cursor]
 
-    # Return the list of Angular objects
+    # Return the list of Language objects
     return angular_limited_list
 
 
@@ -100,60 +100,60 @@ User/Admin has to login!
 
 # This route gets all the angular from the database
 @router.get('/admin/', operation_id='get_all_angular_private')
-async def get_all_angular_private(current_user: User = Depends(get_current_user)) -> list[Angular]:
+async def get_all_angular_private(current_user: User = Depends(get_current_user)) -> list[Language]:
     """
     This route handles the retrieval of all the angular from the database
 
-    :return: a list of Angular objects
+    :return: a list of Language objects
     """
 
     # Retrieve all angular from the database using the find method
     cursor = db.process.angular.find()
 
-    # Create a list of Angular objects by unpacking data from each document retrieved
-    angular_list = [Angular(**document) for document in cursor]
+    # Create a list of Language objects by unpacking data from each document retrieved
+    angular_list = [Language(**document) for document in cursor]
 
-    # Return the list of Angular objects
+    # Return the list of Language objects
     return angular_list
 
 
-# This route get one Angular by its ID
+# This route get one Language by its ID
 @router.get('/admin/{_id}', operation_id='get_angular_by_id_private')
-async def get_angular_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> Angular:
+async def get_angular_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> Language:
     """
-    This route handles the retrieval of one Angular by its ID from the database
+    This route handles the retrieval of one Language by its ID from the database
 
     :param current_user: Current user that is registered
-    :param _id: The ID of the Angular to be retrieved
-    :return: If the Angular is found, returns the Angular data; otherwise, returns a 404 error
+    :param _id: The ID of the Language to be retrieved
+    :return: If the Language is found, returns the Language data; otherwise, returns a 404 error
     """
 
-    # Attempt to find a Angular in the database based on the provided ID
+    # Attempt to find a Language in the database based on the provided ID
     cursor = db.process.angular.find_one({'_id': _id})
 
-    # If no Angular is found, return a 404 error with a relevant detail message
+    # If no Language is found, return a 404 error with a relevant detail message
     if cursor is None:
-        raise HTTPException(status_code=404, detail=f'Angular by ID: ({_id}) does not exist')
+        raise HTTPException(status_code=404, detail=f'Language by ID: ({_id}) does not exist')
     else:
-        # If the Angular is found, convert the cursor data into a Angular object and return it
-        return Angular(**cursor)
+        # If the Language is found, convert the cursor data into a Language object and return it
+        return Language(**cursor)
 
 
-# This route adds a new Angular
+# This route adds a new Language
 @router.post('/', operation_id='add_new_angular_private')
-async def add_new_Angular(angular: Angular, current_user: User = Depends(get_current_user)) -> Angular | None:
+async def add_new_Language(angular: Language, current_user: User = Depends(get_current_user)) -> Language | None:
     """
-    Handles the addition of a new Angular to the database.
+    Handles the addition of a new Language to the database.
 
-    :param angular: The Angular object representing the new Angular to be added.
+    :param angular: The Language object representing the new Language to be added.
     :param current_user: The current user, obtained from the authentication system.
-    :return: If the addition is successful, returns the newly added Angular object; otherwise, returns None.
+    :return: If the addition is successful, returns the newly added Language object; otherwise, returns None.
     """
 
-    # Convert the Angular object to a dictionary for database insertion
+    # Convert the Language object to a dictionary for database insertion
     angular_dict = angular.dict(by_alias=True)
 
-    # Insert the Angular data into the database
+    # Insert the Language data into the database
     insert_result = db.process.angular.insert_one(angular_dict)
 
     # Check if the insertion was acknowledged by the database
@@ -161,68 +161,68 @@ async def add_new_Angular(angular: Angular, current_user: User = Depends(get_cur
         # If insertion is successful, update the dictionary with the newly assigned _id
         angular_dict['_id'] = str(insert_result.inserted_id)
 
-        # Return the newly added Angular object, using the updated dictionary
-        return Angular(**angular_dict)
+        # Return the newly added Language object, using the updated dictionary
+        return Language(**angular_dict)
     else:
         # If the insertion was not acknowledged, return None to indicate failure
         return None
 
 
-# This route is to edit a Angular by its ID
+# This route is to edit a Language by its ID
 @router.put('/{_id}', operation_id='edit_angular_by_id_private')
-async def edit_angular_by_id_private(_id: str, angular: Angular, current_user: User = Depends(get_current_user)) -> Angular | None:
+async def edit_angular_by_id_private(_id: str, angular: Language, current_user: User = Depends(get_current_user)) -> Language | None:
     """
-    Handles the editing of a Angular by its ID in the database.
+    Handles the editing of a Language by its ID in the database.
 
-    :param _id: The ID of the Angular to be edited.
-    :param angular: The updated Angular object with the new data.
+    :param _id: The ID of the Language to be edited.
+    :param angular: The updated Language object with the new data.
     :param current_user: The current user, obtained from the authentication system.
-    :return: If the Angular is successfully edited, returns the updated Angular object; otherwise, returns None.
+    :return: If the Language is successfully edited, returns the updated Language object; otherwise, returns None.
     """
 
-    # Convert the Angular object to a dictionary
+    # Convert the Language object to a dictionary
     angular_dict = angular.dict(by_alias=True)
 
-    # Delete the '_id' field from the Angular dictionary to avoid updating the ID
+    # Delete the '_id' field from the Language dictionary to avoid updating the ID
     del angular_dict['_id']
 
-    # Update the Angular in the database using the update_one method
+    # Update the Language in the database using the update_one method
     cursor = db.process.angular.update_one({'_id': _id}, {'$set': angular_dict})
 
-    # Check if the Angular was successfully updated
+    # Check if the Language was successfully updated
     if cursor.modified_count > 0:
-        # Retrieve the updated Angular from the database
+        # Retrieve the updated Language from the database
         updated_document = db.process.angular.find_one({'_id': _id})
 
-        # Check if the updated Angular exists
+        # Check if the updated Language exists
         if updated_document:
             updated_document['_id'] = str(updated_document['_id'])
-            return Angular(**updated_document)
+            return Language(**updated_document)
 
-    # Return None if the Angular was not updated
+    # Return None if the Language was not updated
     return None
 
 
-# Delete a Angular by its ID from the database
+# Delete a Language by its ID from the database
 @router.delete('/{_id}', operation_id='delete_angular_by_id_private')
 async def delete_angular_by_id_private(_id: str, current_user: User = Depends(get_current_user)):
     """
-    Handles the deletion of a Angular by its ID from the database.
+    Handles the deletion of a Language by its ID from the database.
 
-    :param _id: The ID of the Angular to be deleted.
+    :param _id: The ID of the Language to be deleted.
     :param current_user: The current user, obtained from the authentication system.
-    :return: If the Angular is successfully deleted, returns a message; otherwise, raises a 404 error.
+    :return: If the Language is successfully deleted, returns a message; otherwise, raises a 404 error.
     """
 
-    # Attempt to delete the Angular from the database using the delete_one method
+    # Attempt to delete the Language from the database using the delete_one method
     delete_result = db.process.angular.delete_one({'_id': _id})
 
-    # Check if the Angular was successfully deleted
+    # Check if the Language was successfully deleted
     if delete_result.deleted_count > 0:
-        return {'message': 'Angular deleted successfully!'}
+        return {'message': 'Language deleted successfully!'}
     else:
-        # If the Angular was not found, raise a 404 error
-        raise HTTPException(status_code=404, detail=f'Angular by ID: ({_id}) not found!')
+        # If the Language was not found, raise a 404 error
+        raise HTTPException(status_code=404, detail=f'Language by ID: ({_id}) not found!')
 
 
 

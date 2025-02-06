@@ -1,16 +1,11 @@
 from fastapi.testclient import TestClient
 
-from src.domain.angular import Angular
+from src.domain.language import Language
 from src.domain.blog import Blog
 from src.domain.book import Book
 from src.domain.experiences import Experiences
-from src.domain.javascript import JavaScript
 from src.domain.links import Links
-from src.domain.mongodb import MongoDb
 from src.domain.projects import Projects
-from src.domain.python import Python
-from src.domain.typescript import TypeScript
-from src.domain.vue import Vue
 from src import env
 
 from src.test.utils.helpers import check_status_response_for, check_health, check_status_response_by_id_for, \
@@ -72,56 +67,56 @@ def test_route_experiences_by_id(mongodb):
 
 # MongoDB
 def test_route_mongodb(mongodb):
-    check_status_response_for('mongodb', MongoDb)
+    check_status_response_for('mongodb', Language)
 
 
 def test_route_mongodb_by_id(mongodb):
-    check_status_response_by_id_for('mongodb', MongoDb)
+    check_status_response_by_id_for('mongodb', Language)
 
 
 # Python
 def test_route_python(mongodb):
-    check_status_response_for('python', Python)
+    check_status_response_for('python', Language)
 
 
 def test_route_python_by_id(mongodb):
-    check_status_response_by_id_for('python', Python)
+    check_status_response_by_id_for('python', Language)
 
 
 # TypeScript
 def test_route_typescript(mongodb):
-    check_status_response_for('typescript', TypeScript)
+    check_status_response_for('typescript', Language)
 
 
 def test_route_typescript_by_id(mongodb):
-    check_status_response_by_id_for('typescript', TypeScript)
+    check_status_response_by_id_for('typescript', Language)
 
 
 # JavaScript
 def test_route_javascript(mongodb):
-    check_status_response_for('javascript', JavaScript)
+    check_status_response_for('javascript', Language)
 
 
 def test_route_javascript_by_id(mongodb):
-    check_status_response_by_id_for('javascript', JavaScript)
+    check_status_response_by_id_for('javascript', Language)
 
 
 # Vue
 def test_route_vue(mongodb):
-    check_status_response_for('vue', Vue)
+    check_status_response_for('vue', Language)
 
 
 def test_route_vue_by_id(mongodb):
-    check_status_response_by_id_for('vue', Vue)
+    check_status_response_by_id_for('vue', Language)
 
 
 # Angular
 def test_route_angular(mongodb):
-    check_status_response_for('angular', Angular)
+    check_status_response_for('angular', Language)
 
 
 def test_route_angular_by_id(mongodb):
-    check_status_response_by_id_for('angular', Angular)
+    check_status_response_by_id_for('angular', Language)
 
 
 def test_login_success(monkeypatch):
