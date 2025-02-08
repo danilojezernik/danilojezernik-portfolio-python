@@ -71,51 +71,11 @@ export interface Book {
   datum_vnosa: string;
 }
 
-export interface Angular {
+export interface Language {
  '_id'?: string;
   question: string;
   answer: string;
-  image: string;
-  datum_vnosa: string;
-}
-
-export interface Vue {
- '_id'?: string;
-  question: string;
-  answer: string;
-  image: string;
-  datum_vnosa: string;
-}
-
-export interface JavaScript {
- '_id'?: string;
-  question: string;
-  answer: string;
-  image: string;
-  datum_vnosa: string;
-}
-
-export interface TypeScript {
- '_id'?: string;
-  question: string;
-  answer: string;
-  image: string;
-  datum_vnosa: string;
-}
-
-export interface Python {
- '_id'?: string;
-  question: string;
-  answer: string;
-  image: string;
-  datum_vnosa: string;
-}
-
-export interface MongoDb {
- '_id'?: string;
-  question: string;
-  answer: string;
-  image: string;
+  language: string;
   datum_vnosa: string;
 }
 

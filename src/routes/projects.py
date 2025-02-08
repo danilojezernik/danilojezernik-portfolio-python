@@ -1,190 +1,83 @@
 """
-Routes Overview:
-1. GET / - Retrieve all projects from the database.
-2. GET /{_id} - Retrieve a specific project by its ID from the database.
-3. DELETE /{_id} - Delete a specific project by its ID from the database.
-4. POST / - Add a new project to the database.
-5. PUT /{_id} - Edit an existing project by its ID in the database.
-"""
-from fastapi import APIRouter, Depends, HTTPException
+Projects Routes:
 
+Public Routes:
+1. GET all projects - Retrieve all projects from the database.
+2. GET project by ID - Retrieve a specific project by its ID from the database.
+
+Private Routes (Require authentication):
+3. GET all projects (private) - Retrieve all projects for authenticated users.
+4. GET project by ID (private) - Retrieve a specific project by its ID for authenticated users.
+5. ADD a new project - Add a new project to the database.
+6. EDIT a project by ID - Edit an existing project by its ID in the database.
+7. DELETE a project by ID - Delete a project by its ID from the database.
+"""
+
+from fastapi import APIRouter, Depends
 from src.domain.projects import Projects
 from src.domain.user import User
-from src.services import db
-
 from src.services.security import get_current_user
+from src.utils.router_helpers import all_data, data_by_id, add_data, edit_data, delete_data
 
 router = APIRouter()
 
-"""
-THIS ROUTES ARE PUBLIC
-"""
 
+# Public Routes
 
-# Get all projects public
 @router.get('/', operation_id='get_all_projects_public')
-async def get_all_projects_public():
+async def get_all_projects_public() -> list[Projects]:
     """
-    This route handles the retrieval of all the projects from the database
-
-    :return: a list of Projects objects containing all the projects in the database
+    Retrieve all projects from the database.
     """
-
-    # Retrieve all projects from the database using the find method
-    cursor = db.process.projects.find()
-
-    # Create a list of Projects objects by unpacking data from each document retrieved
-    projects_lists = [Projects(**document) for document in cursor]
-
-    # Return the list of Blog objects
-    return projects_lists
+    return all_data('projects', Projects)
 
 
-# Get project by ID
 @router.get('/{_id}', operation_id='get_projects_by_id_public')
 async def get_projects_by_id_public(_id: str) -> Projects:
     """
-    This route handles the retrieval of one project by its ID from the database
-
-    :param _id: The ID of the project to be retrieved
-    :return: If the project is found, returns the project data; otherwise, returns a 404 error
+    Retrieve a specific project by its ID from the database.
     """
-
-    # Attempt to find a project in the database based on the provided ID
-    cursor = db.process.projects.find_one({'_id': _id})
-
-    # If no project is found, return a 404 error with a relevant detail message
-    if cursor is None:
-        raise HTTPException(status_code=404, detail=f'Project by ID: ({_id}) not found!')
-    else:
-
-        # If the project is found, convert the cursor data into a Projects object and return it
-        return Projects(**cursor)
+    return data_by_id('projects', Projects, _id)
 
 
-"""
-THIS ROUTES ARE PRIVATE
-"""
+# Private Routes (Require authentication)
 
-
-# Get all projects private
 @router.get('/admin/', operation_id='get_all_projects_private')
-async def get_all_projects_private(current_user: User = Depends(get_current_user)):
+async def get_all_projects_private(current_user: User = Depends(get_current_user)) -> list[Projects]:
     """
-    This route handles the retrieval of all the blogs from the database
-
-    :return: a list of Blog objects containing all the blogs in the database
+    Retrieve all projects from the database for authenticated users.
     """
-
-    # Retrieve all projects from the database using the find method
-    cursor = db.process.projects.find()
-
-    # Create a list of Projects objects by unpacking data from each document retrieved
-    projects_lists = [Projects(**document) for document in cursor]
-
-    # Return the list of Blog objects
-    return projects_lists
+    return all_data('projects', Projects)
 
 
-# Get project by ID
 @router.get('/admin/{_id}', operation_id='get_projects_by_id_private')
-async def get_projects_by_id_private(_id: str, current_user: User = Depends(get_current_user)):
+async def get_projects_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> Projects:
     """
-    This route handles the retrieval of one project by its ID from the database
-
-    :param current_user: Current user that is registered
-    :param _id: The ID of the project to be retrieved
-    :return: If the project is found, returns the project data; otherwise, returns a 404 error
+    Retrieve a specific project by its ID for authenticated users.
     """
-
-    # Attempt to find a project in the database based on the provided ID
-    cursor = db.process.projects.find_one({'_id': _id})
-
-    # If no project is found, return a 404 error with a relevant detail message
-    if cursor is None:
-        raise HTTPException(status_code=404, detail=f'Project by ID: ({_id}) not found!')
-    else:
-
-        # If the project is found, convert the cursor data into a Projects object and return it
-        return Projects(**cursor)
+    return data_by_id('projects', Projects, _id)
 
 
-# Add new project
 @router.post('/', operation_id='add_new_project_private')
-async def add_new_project_private(project: Projects,
-                                  current_user: User = Depends(get_current_user)) -> Projects | None:
+async def add_new_project_private(project: Projects, current_user: User = Depends(get_current_user)) -> Projects | None:
     """
-    Handles the addition of a new project to the database.
-
-    :param project: The Projects object representing the new project to be added.
-    :param current_user: The current user, obtained from the authentication system.
-    :return: If the addition is successful, returns the newly added Projects object; otherwise, returns None.
+    Add a new project to the database for authenticated users.
     """
-
-    # Convert the Projects object to a dictionary
-    project_dict = project.dict(by_alias=True)
-
-    # Insert the project data into the database
-    insert_result = db.process.projects.insert_one(project_dict)
-
-    # Check if the insertion was acknowledged by the database
-    if insert_result.acknowledged:
-
-        # Update the dictionary with the newly assigned _id
-        project_dict['_id'] = str(insert_result.inserted_id)
-
-        # Return the newly added Projects object
-        return Projects(**project_dict)
-    else:
-
-        # If the insertion was not acknowledged, return None
-        return None
+    return add_data('projects', project, Projects)
 
 
-# Edit project by ID
 @router.put('/{_id}', operation_id='edit_project_by_id_private')
 async def edit_project_by_id_private(_id: str, project: Projects,
                                      current_user: User = Depends(get_current_user)) -> Projects | None:
     """
-    Handles the editing of a project by its ID in the database.
-
-    :param _id: The ID of the project to be edited.
-    :param project: The updated Projects object with the new data.
-    :param current_user: The current user, obtained from the authentication system.
-    :return: If the project is successfully edited, returns the updated Projects object; otherwise, returns None.
+    Edit an existing project by its ID in the database for authenticated users.
     """
-
-    # Convert the Projects object to a dictionary
-    project_dict = project.dict(by_alias=True)
-
-    # Delete the '_id' field from the project dictionary to avoid updating the ID
-    del project_dict['_id']
-
-    # Update the project in the database using the update_one method
-    cursor = db.process.projects.update_one({'_id': _id}, {'$set': project_dict})
-
-    # Check if the project was successfully updated
-    if cursor.modified_count > 0:
-        # Retrieve the updated project from the database
-        updated_document = db.process.projects.find_one({'_id': _id})
-
-        # Check if the updated project exists
-        if updated_document:
-            updated_document['_id'] = str(updated_document['_id'])
-            return Projects(**updated_document)
-
-    else:
-
-        # Return None if the project was not updated
-        return None
+    return edit_data(_id, 'projects', project, Projects)
 
 
-# Delete project by ID
 @router.delete('/{_id}', operation_id='delete_project_by_id_private')
-async def delete_project_by_id_private(_id: str):
-    delete_result = db.process.projects.delete_one({'_id': _id})
-
-    if delete_result.deleted_count > 0:
-        return {'message': 'Project deleted successfully'}
-    else:
-        raise HTTPException(status_code=404, detail=f'Project by ID: ({_id}) not found!')
+async def delete_project_by_id_private(_id: str, current_user: User = Depends(get_current_user)):
+    """
+    Delete a project by its ID from the database for authenticated users.
+    """
+    return delete_data(_id, 'projects')
