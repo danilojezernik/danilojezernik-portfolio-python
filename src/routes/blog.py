@@ -22,6 +22,7 @@ from src.services.security import get_current_user
 
 router = APIRouter()
 
+
 # Public Routes
 
 @router.get('/', operation_id='get_all_blogs_public')
@@ -31,6 +32,7 @@ async def get_all_blogs_public():
     """
     return all_data('blog', Blog)
 
+
 @router.get('/{_id}', operation_id='get_blog_by_id_public')
 async def get_blog_by_id_public(_id: str):
     """
@@ -38,12 +40,14 @@ async def get_blog_by_id_public(_id: str):
     """
     return data_by_id('blog', Blog, _id)
 
+
 @router.get('/limited/', operation_id='get_limited_blogs')
 async def get_limited_blogs(limit: int = 4) -> list[Blog]:
     """
     Retrieves a limited number of blogs from the database.
     """
     return limited_data('blog', Blog, limit)
+
 
 # Private Routes (Require authentication)
 
@@ -54,12 +58,14 @@ async def get_all_blogs_private(current_user: str = Depends(get_current_user)) -
     """
     return all_data('blog', Blog)
 
+
 @router.get('/admin/{_id}', operation_id='get_blog_by_id_private')
 async def get_blog_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> Blog:
     """
     Retrieves a specific blog by its ID for authenticated users.
     """
     return data_by_id('blog', Blog, _id)
+
 
 @router.post('/', operation_id='add_new_blog_private')
 async def add_new_blog(blog: Blog, current_user: User = Depends(get_current_user)) -> Blog | None:
@@ -68,12 +74,14 @@ async def add_new_blog(blog: Blog, current_user: User = Depends(get_current_user
     """
     return add_data('blog', blog, Blog)
 
+
 @router.put('/{_id}', operation_id='edit_blog_by_id_private')
 async def edit_blog_by_id_private(_id: str, blog: Blog, current_user: User = Depends(get_current_user)) -> Blog | None:
     """
     Edits an existing blog identified by its ID for authenticated users.
     """
     return edit_data(_id, 'blog', blog, Blog)
+
 
 @router.delete('/{_id}', operation_id='delete_blog_by_id_private')
 async def delete_blog_by_id_private(_id: str, current_user: User = Depends(get_current_user)):

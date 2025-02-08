@@ -1,17 +1,21 @@
 """
-Routes Overview:
-1. GET / - Retrieve all links from the database.
-2. GET /admin/ - Retrieve all links from the database (private).
-3. POST / - Add a new link to the database (private).
-4. GET /{_id} - Retrieve a link by its ID (private).
-5. PUT /{_id} - Edit a link by its ID (private).
-6. DELETE /{_id} - Delete a link by its ID (private).
+Links Routes:
+
+Public Routes:
+1. GET all links - Retrieve all links from the database.
+2. GET link by ID - Retrieve a specific link by its ID.
+
+Private Routes (Require authentication):
+3. GET all links (private) - Retrieve all links for authenticated users.
+4. ADD a new link - Add a new link to the database.
+5. GET link by ID (private) - Retrieve a specific link by its ID for authenticated users.
+6. EDIT link by ID (private) - Edit an existing link by its ID for authenticated users.
+7. DELETE link by ID (private) - Delete a link from the database by its ID for authenticated users.
 """
 
 from fastapi import APIRouter, Depends
 from src.domain.links import Links
 from src.domain.user import User
-from src.services import db
 from src.services.security import get_current_user
 from src.utils.router_helpers import all_data, data_by_id, add_data, edit_data, delete_data
 
