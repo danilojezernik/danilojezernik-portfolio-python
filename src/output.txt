@@ -7,7 +7,6 @@ export interface Blog {
   podnaslov: string;
   vsebina: string;
   author: string;
-  image: string;
   datum_vnosa: string;
 }
 
@@ -37,13 +36,6 @@ export interface Links {
  '_id'?: string;
   title: string;
   link: string;
-  datum_vnosa: string;
-}
-
-export interface Newsletter {
- '_id'?: string;
-  title: string;
-  content: string;
   datum_vnosa: string;
 }
 

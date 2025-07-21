@@ -15,6 +15,7 @@ from src.__main__ import app
 
 client = TestClient(app)
 
+
 # Test check
 def test_return_healthy_check(mongodb):
     check_health('healthy')
@@ -66,57 +67,117 @@ def test_route_experiences_by_id(mongodb):
 
 
 # MongoDB
-def test_route_mongodb(mongodb):
-    check_status_response_for('mongodb', Language)
+## QA
+def test_route_qa_mongodb(mongodb):
+    check_status_response_for('/qa/mongodb', Language)
 
 
-def test_route_mongodb_by_id(mongodb):
-    check_status_response_by_id_for('mongodb', Language)
+def test_route_qa_mongodb_by_id(mongodb):
+    check_status_response_by_id_for('/qa/mongodb', Language)
+
+
+## Article
+def test_route_article_mongodb(mongodb):
+    check_status_response_for('/article/mongodb', Language)
+
+
+def test_route_article_mongodb_by_id(mongodb):
+    check_status_response_by_id_for('/article/mongodb', Language)
 
 
 # Python
-def test_route_python(mongodb):
-    check_status_response_for('python', Language)
+## QA
+def test_route_qa_python(mongodb):
+    check_status_response_for('/qa/python', Language)
 
 
-def test_route_python_by_id(mongodb):
-    check_status_response_by_id_for('python', Language)
+def test_route_qa_python_by_id(mongodb):
+    check_status_response_by_id_for('/qa/python', Language)
+
+
+## Article
+def test_route_article_python(mongodb):
+    check_status_response_for('/article/python', Language)
+
+
+def test_route_article_python_by_id(mongodb):
+    check_status_response_by_id_for('/article/python', Language)
 
 
 # TypeScript
-def test_route_typescript(mongodb):
-    check_status_response_for('typescript', Language)
+## QA
+def test_route_qa_typescript(mongodb):
+    check_status_response_for('/qa/typescript', Language)
 
 
-def test_route_typescript_by_id(mongodb):
-    check_status_response_by_id_for('typescript', Language)
+def test_route_qa_typescript_by_id(mongodb):
+    check_status_response_by_id_for('/qa/typescript', Language)
+
+
+## Article
+def test_route_article_typescript(mongodb):
+    check_status_response_for('/article/typescript', Language)
+
+
+def test_route_article_typescript_by_id(mongodb):
+    check_status_response_by_id_for('/article/typescript', Language)
 
 
 # JavaScript
-def test_route_javascript(mongodb):
-    check_status_response_for('javascript', Language)
+## QA
+def test_route_qa_javascript(mongodb):
+    check_status_response_for('/qa/javascript', Language)
 
 
-def test_route_javascript_by_id(mongodb):
-    check_status_response_by_id_for('javascript', Language)
+def test_route_qa_javascript_by_id(mongodb):
+    check_status_response_by_id_for('/qa/javascript', Language)
+
+
+## Article
+def test_route_article_javascript(mongodb):
+    check_status_response_for('/article/javascript', Language)
+
+
+def test_route_article_javascript_by_id(mongodb):
+    check_status_response_by_id_for('/article/javascript', Language)
 
 
 # Vue
-def test_route_vue(mongodb):
-    check_status_response_for('vue', Language)
+## QA
+def test_route_qa_vue(mongodb):
+    check_status_response_for('/qa/vue', Language)
 
 
-def test_route_vue_by_id(mongodb):
-    check_status_response_by_id_for('vue', Language)
+def test_route_qa_vue_by_id(mongodb):
+    check_status_response_by_id_for('/qa/vue', Language)
+
+
+## Article
+def test_route_article_vue(mongodb):
+    check_status_response_for('/article/vue', Language)
+
+
+def test_route_article_vue_by_id(mongodb):
+    check_status_response_by_id_for('/article/vue', Language)
 
 
 # Angular
-def test_route_angular(mongodb):
-    check_status_response_for('angular', Language)
+## QA
+def test_route_qa_angular(mongodb):
+    check_status_response_for('/qa/angular', Language)
 
 
-def test_route_angular_by_id(mongodb):
-    check_status_response_by_id_for('angular', Language)
+def test_route_qa_angular_by_id(mongodb):
+    check_status_response_by_id_for('/qa/angular', Language)
+
+
+## Article
+def test_route_article_angular(mongodb):
+    check_status_response_for('/article/angular', Language)
+
+
+def test_route_article_angular_by_id(mongodb):
+    check_status_response_by_id_for('/article/angular', Language)
 
 
 def test_login_success(monkeypatch):

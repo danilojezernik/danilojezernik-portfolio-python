@@ -29,7 +29,7 @@ def check_status_response_for(route: str, model: Type[BaseModel]):
     Test an API route by comparing its response with the expected database data.
 
     - Sends a GET request to the specified route.
-    - Fetches corresponding data from MongoDB using the same route name as the collection name.
+    - Fetches corresponding data from MongoDB using the collection name extracted from the route.
     - Normalizes both the database and API response data using the provided Pydantic model.
     - Asserts that the API response matches the expected database data.
     - Ensures that the response status code is 200 (OK).
@@ -38,7 +38,10 @@ def check_status_response_for(route: str, model: Type[BaseModel]):
     :param model: The Pydantic model corresponding to the expected data structure.
     """
     response = client.get(route)
-    cursor = db.process[route].find()
+
+    # Extract collection name from route (e.g., '/qa/vue' -> 'vue')
+    collection_name = route.split('/')[-1]
+    cursor = db.process[collection_name].find()
 
     expected_data = normalize_data(cursor, model)
     response_data = normalize_data(response.json(), model)
@@ -68,8 +71,11 @@ def check_status_response_by_id_for(route: str, model: Type[BaseModel]):
     :param model: The Pydantic model corresponding to the expected data structure.
     """
 
+    # Extract collection name from route (e.g., '/qa/vue' -> 'vue')
+    collection_name = route.split('/')[-1]
+
     # Find the first document in the collection
-    first_document = db.process[route].find_one()
+    first_document = db.process[collection_name].find_one()
 
     if not first_document:
         print(f"No data found in collection for route: {route}")
@@ -81,7 +87,7 @@ def check_status_response_by_id_for(route: str, model: Type[BaseModel]):
     response = client.get(f"{route}/{document_id}")
 
     # Fetch the expected document using find_one
-    expected_data = model(**db.process[route].find_one({"_id": document_id})).dict(by_alias=True)
+    expected_data = model(**db.process[collection_name].find_one({"_id": document_id})).dict(by_alias=True)
     response_data = model(**response.json()).dict(by_alias=True)
 
     """

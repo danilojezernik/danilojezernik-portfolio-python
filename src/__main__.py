@@ -1,5 +1,4 @@
 # Fast API imports
-from sys import prefix
 
 import uvicorn
 from fastapi import FastAPI
@@ -16,11 +15,10 @@ from src.domain.book import Book
 from src.domain.contact import Contact
 from src.domain.experiences import Experiences
 from src.domain.links import Links
-from src.domain.newsletter import Newsletter
 from src.domain.projects import Projects
 # Imported routes
-from src.routes import index, blog, login, experiences, links, contact, projects, github, book, angular, vue, \
-    typescript, javascript, mongodb, python, language, dev_to_api, user
+from src.routes import index, blog, login, experiences, links, contact, projects, github, book, language, dev_to_api, user
+from src.routes.qa import typescript, python, angular, javascript, mongodb, vue
 from src.services import db
 from src.tags_metadata import tags_metadata
 from src.utils.domain_to_txt import write_fields_to_txt
@@ -48,13 +46,19 @@ app.include_router(github.router, prefix='/github', tags=['Github'])
 app.include_router(book.router, prefix='/book', tags=['Book'])
 
 # Technologies
-app.include_router(angular.router, prefix='/angular', tags=['Angular'])
+app.include_router(angular.router, prefix='/qa/angular', tags=['Angular'])
+app.include_router(angular.router, prefix='/article/angular', tags=['Angular'])
+app.include_router(vue.router, prefix='/qa/vue', tags=['Vue'])
+app.include_router(vue.router, prefix='/article/vue', tags=['Vue'])
+app.include_router(javascript.router, prefix='/qa/javascript', tags=['JavaScript'])
+app.include_router(javascript.router, prefix='/article/javascript', tags=['JavaScript'])
+app.include_router(typescript.router, prefix='/qa/typescript', tags=['TypeScript'])
+app.include_router(typescript.router, prefix='/article/typescript', tags=['TypeScript'])
+app.include_router(python.router, prefix='/qa/python', tags=['Python'])
+app.include_router(python.router, prefix='/article/python', tags=['Python'])
+app.include_router(mongodb.router, prefix='/qa/mongodb', tags=['MongoDB'])
+app.include_router(mongodb.router, prefix='/article/mongodb', tags=['MongoDB'])
 app.include_router(language.router, prefix='/language')
-app.include_router(vue.router, prefix='/vue', tags=['Vue'])
-app.include_router(javascript.router, prefix='/javascript', tags=['JavaScript'])
-app.include_router(typescript.router, prefix='/typescript', tags=['TypeScript'])
-app.include_router(python.router, prefix='/python', tags=['Python'])
-app.include_router(mongodb.router, prefix='/mongodb', tags=['MongoDB'])
 
 app.include_router(experiences.router, prefix='/experiences', tags=['Experiences'])
 app.include_router(links.router, prefix='/links', tags=['Links'])
@@ -95,7 +99,7 @@ if __name__ == '__main__':
     if yes_doc == 'y':
         print('Writing fields to output.txt...')
         write_fields_to_txt(
-            [Blog, Experiences, Contact, Links, Newsletter, Projects, Book, Language])
+            [Blog, Experiences, Contact, Links, Projects, Book, Language])
         print('Done! Fields have been written to output.txt')
     else:
         print('Document writing aborted')
