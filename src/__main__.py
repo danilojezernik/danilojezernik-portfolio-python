@@ -9,6 +9,7 @@ import sys
 
 from src import env
 from src.domain.language import Language
+
 # Import domain for output.txt
 from src.domain.blog import Blog
 from src.domain.book import Book
@@ -17,11 +18,10 @@ from src.domain.experiences import Experiences
 from src.domain.links import Links
 from src.domain.projects import Projects
 from src.domain.article import Article
-# Imported routes
-from src.routes import index, blog, login, experiences, links, contact, projects, github, book, language, dev_to_api, user
-from src.routes.qa import typescript as qa_typescript, python as qa_python, angular as qa_angular, javascript as qa_javascript, mongodb as qa_mongodb, vue as qa_vue
-from src.routes.article import typescript as article_typescript, python as article_python, angular as article_angular, javascript as article_javascript, mongodb as article_mongodb, vue as article_vue
+
+
 from src.services import db
+from src.services.routers import routers
 from src.tags_metadata import tags_metadata
 from src.utils.domain_to_txt import write_fields_to_txt
 
@@ -41,37 +41,9 @@ app.add_middleware(
 def health_check():
     return {'status': 'healthy'}
 
-app.include_router(index.router, prefix='/index', tags=['Index'])
-app.include_router(blog.router, prefix='/blog', tags=['Blog'])
-app.include_router(dev_to_api.router, prefix='/dev', tags=['Dev'])
-app.include_router(github.router, prefix='/github', tags=['Github'])
-app.include_router(book.router, prefix='/book', tags=['Book'])
-
-# Technologies - QA
-app.include_router(qa_angular.router, prefix='/qa/angular', tags=['Angular'])
-app.include_router(qa_vue.router, prefix='/qa/vue', tags=['Vue'])
-app.include_router(qa_javascript.router, prefix='/qa/javascript', tags=['JavaScript'])
-app.include_router(qa_typescript.router, prefix='/qa/typescript', tags=['TypeScript'])
-app.include_router(qa_python.router, prefix='/qa/python', tags=['Python'])
-app.include_router(qa_mongodb.router, prefix='/qa/mongodb', tags=['MongoDB'])
-
-# Technologies - Articles
-app.include_router(article_angular.router, prefix='/article/angular', tags=['Angular'])
-app.include_router(article_vue.router, prefix='/article/vue', tags=['Vue'])
-app.include_router(article_javascript.router, prefix='/article/javascript', tags=['JavaScript'])
-app.include_router(article_typescript.router, prefix='/article/typescript', tags=['TypeScript'])
-app.include_router(article_python.router, prefix='/article/python', tags=['Python'])
-app.include_router(article_mongodb.router, prefix='/article/mongodb', tags=['MongoDB'])
-app.include_router(language.router, prefix='/language')
-
-app.include_router(experiences.router, prefix='/experiences', tags=['Experiences'])
-app.include_router(links.router, prefix='/links', tags=['Links'])
-app.include_router(projects.router, prefix='/projects', tags=['Projects'])
-
-app.include_router(user.router, prefix='/user', tags=['User'])
-app.include_router(login.router, prefix='/login', tags=['Login'])
-
-app.include_router(contact.router, prefix='/contact', tags=['Contact'])
+# Loop through and register all routers
+for router, prefix, tags in routers:
+    app.include_router(router, prefix=prefix, tags=tags)
 
 
 def run_tests():
