@@ -30,7 +30,7 @@ async def get_all_mongodb_public() -> list[Language]:
     """
     Retrieve all MongoDb records from the database.
     """
-    return all_data('mongodb', Language)
+    return all_data('mongodb_qa', Language)
 
 
 @router.get('/{_id}', operation_id='get_mongodb_by_id_public')
@@ -38,7 +38,7 @@ async def get_mongodb_by_id_public(_id: str):
     """
     Retrieve a specific MongoDb record by its ID from the database.
     """
-    return data_by_id('mongodb', Language, _id)
+    return data_by_id('mongodb_qa', Language, _id)
 
 
 @router.get('/limited/', operation_id='get_limited_mongodb')
@@ -46,7 +46,7 @@ async def get_limited_mongodb(limit: int = 4) -> list[Language]:
     """
     Retrieve a limited number of MongoDb records from the database.
     """
-    return limited_data('mongodb', Language, limit)
+    return limited_data('mongodb_qa', Language, limit)
 
 
 # Private Routes (Require authentication)
@@ -56,7 +56,7 @@ async def get_all_mongodb_private(current_user: User = Depends(get_current_user)
     """
     Retrieve all MongoDb records from the database for authenticated users.
     """
-    return all_data('mongodb', Language)
+    return all_data('mongodb_qa', Language)
 
 
 @router.get('/admin/{_id}', operation_id='get_mongodb_by_id_private')
@@ -64,7 +64,7 @@ async def get_mongodb_by_id_private(_id: str, current_user: User = Depends(get_c
     """
     Retrieve a specific MongoDb record by its ID for authenticated users.
     """
-    return data_by_id('mongodb', Language, _id)
+    return data_by_id('mongodb_qa', Language, _id)
 
 
 @router.post('/', operation_id='add_new_mongodb_private')
@@ -72,7 +72,7 @@ async def add_new_mongodb(mongodb: Language, current_user: User = Depends(get_cu
     """
     Add a new MongoDb record to the database for authenticated users.
     """
-    return add_data('mongodb', mongodb, Language)
+    return add_data('mongodb_qa', mongodb, Language)
 
 
 @router.put('/{_id}', operation_id='edit_mongodb_by_id_private')
@@ -81,7 +81,7 @@ async def edit_mongodb_by_id_private(_id: str, mongodb: Language,
     """
     Edit an existing MongoDb record by its ID for authenticated users.
     """
-    return edit_data(_id, 'mongodb', mongodb, Language)
+    return edit_data(_id, 'mongodb_qa', mongodb, Language)
 
 
 @router.delete('/{_id}', operation_id='delete_mongodb_by_id_private')
@@ -89,4 +89,4 @@ async def delete_mongodb_by_id_private(_id: str, current_user: User = Depends(ge
     """
     Delete a MongoDb record by its ID from the database for authenticated users.
     """
-    return delete_data(_id, 'mongodb')
+    return delete_data(_id, 'mongodb_qa')

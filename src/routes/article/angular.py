@@ -25,66 +25,66 @@ router = APIRouter()
 # Public Routes
 
 @router.get('/', operation_id='get_all_angular_public')
-async def get_all_angular_public() -> list[Article]:
+async def get_all_angular_public_article() -> list[Article]:
     """
     Retrieve all Angular records from the database.
     """
-    return all_data('angular', Article)
+    return all_data('angular_articles', Article)
 
 
 @router.get('/{_id}', operation_id='get_angular_by_id_public')
-async def get_angular_by_id_public(_id: str) -> Article:
+async def get_angular_by_id_public_article(_id: str) -> Article:
     """
     Retrieve a specific Angular record by its ID from the database.
     """
-    return data_by_id('angular', Article, _id)
+    return data_by_id('angular_articles', Article, _id)
 
 
 @router.get('/limited/', operation_id='get_limited_angular')
-async def get_limited_angular(limit: int = 4) -> list[Article]:
+async def get_limited_angular_article(limit: int = 4) -> list[Article]:
     """
     Retrieve a limited number of Angular records from the database.
     """
-    return limited_data('angular', Article, limit)
+    return limited_data('angular_articles', Article, limit)
 
 
 # Private Routes (Require authentication)
 
 @router.get('/admin/', operation_id='get_all_angular_private')
-async def get_all_angular_private(current_user: User = Depends(get_current_user)) -> list[Article]:
+async def get_all_angular_private_article(current_user: User = Depends(get_current_user)) -> list[Article]:
     """
     Retrieve all Angular records from the database for authenticated users.
     """
-    return all_data('angular', Article)
+    return all_data('angular_articles', Article)
 
 
 @router.get('/admin/{_id}', operation_id='get_angular_by_id_private')
-async def get_angular_by_id_private(_id: str, current_user: User = Depends(get_current_user)) -> Article:
+async def get_angular_by_id_private_article(_id: str, current_user: User = Depends(get_current_user)) -> Article:
     """
     Retrieve a specific Angular record by its ID for authenticated users.
     """
-    return data_by_id('angular', Article, _id)
+    return data_by_id('angular_articles', Article, _id)
 
 
 @router.post('/', operation_id='add_new_angular_private')
-async def add_new_angular_private(angular: Article, current_user: User = Depends(get_current_user)) -> Article | None:
+async def add_new_angular_private_article(angular: Article, current_user: User = Depends(get_current_user)) -> Article | None:
     """
     Add a new Angular record to the database for authenticated users.
     """
-    return add_data('angular', angular, Article)
+    return add_data('angular_articles', angular, Article)
 
 
 @router.put('/{_id}', operation_id='edit_angular_by_id_private')
-async def edit_angular_by_id_private(_id: str, angular: Article, current_user: User = Depends(get_current_user)) -> Article | None:
+async def edit_angular_by_id_private_article(_id: str, angular: Article, current_user: User = Depends(get_current_user)) -> Article | None:
     """
     Edit an existing Angular record by its ID in the database for authenticated users.
     """
-    return edit_data(_id, 'angular', angular, Article)
+    return edit_data(_id, 'angular_articles', angular, Article)
 
 
 @router.delete('/{_id}', operation_id='delete_angular_by_id_private')
-async def delete_angular_by_id_private(_id: str, current_user: User = Depends(get_current_user)):
+async def delete_angular_by_id_private_article(_id: str, current_user: User = Depends(get_current_user)):
     """
     Delete an Angular record by its ID from the database for authenticated users.
     """
-    return delete_data(_id, 'angular')
+    return delete_data(_id, 'angular_articles')

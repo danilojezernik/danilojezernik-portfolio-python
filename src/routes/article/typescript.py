@@ -29,7 +29,7 @@ async def get_all_typescript_public() -> list[Article]:
     """
     Retrieve all TypeScript records from the database.
     """
-    return all_data('typescript', Article)
+    return all_data('typescript_articles', Article)
 
 
 @router.get('/{_id}', operation_id='get_typescript_by_id_public')
@@ -37,7 +37,7 @@ async def get_typescript_by_id_public(_id: str) -> Article:
     """
     Retrieve a specific TypeScript record by its ID from the database.
     """
-    return data_by_id('typescript', Article, _id)
+    return data_by_id('typescript_articles', Article, _id)
 
 
 @router.get('/limited/', operation_id='get_limited_typescript')
@@ -45,7 +45,7 @@ async def get_limited_typescript(limit: int = 4) -> list[Article]:
     """
     Retrieve a limited number of TypeScript records from the database.
     """
-    return limited_data('typescript', Article, limit)
+    return limited_data('typescript_articles', Article, limit)
 
 
 # Private Routes (Require authentication)
@@ -55,7 +55,7 @@ async def get_all_typescript_private(current_user: User = Depends(get_current_us
     """
     Retrieve all TypeScript records from the database for authenticated users.
     """
-    return all_data('typescript', Article)
+    return all_data('typescript_articles', Article)
 
 
 @router.get('/admin/{_id}', operation_id='get_typescript_by_id_private')
@@ -63,7 +63,7 @@ async def get_typescript_by_id_private(_id: str, current_user: User = Depends(ge
     """
     Retrieve a specific TypeScript record by its ID for authenticated users.
     """
-    return data_by_id('typescript', Article, _id)
+    return data_by_id('typescript_articles', Article, _id)
 
 
 @router.post('/', operation_id='add_new_typescript_private')
@@ -71,7 +71,7 @@ async def add_new_typescript_private(typescript: Article, current_user: User = D
     """
     Add a new TypeScript record to the database for authenticated users.
     """
-    return add_data('typescript', typescript, Article)
+    return add_data('typescript_articles', typescript, Article)
 
 
 @router.put('/{_id}', operation_id='edit_typescript_by_id_private')
@@ -79,7 +79,7 @@ async def edit_typescript_by_id_private(_id: str, typescript: Article, current_u
     """
     Edit an existing TypeScript record by its ID in the database for authenticated users.
     """
-    return edit_data(_id, 'typescript', typescript, Article)
+    return edit_data(_id, 'typescript_articles', typescript, Article)
 
 
 @router.delete('/{_id}', operation_id='delete_typescript_by_id_private')
@@ -87,4 +87,4 @@ async def delete_typescript_by_id_private(_id: str, current_user: User = Depends
     """
     Delete a TypeScript record by its ID from the database for authenticated users.
     """
-    return delete_data(_id, 'typescript')
+    return delete_data(_id, 'typescript_articles')

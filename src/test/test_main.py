@@ -1,6 +1,7 @@
 from fastapi.testclient import TestClient
 
 from src.domain.language import Language
+from src.domain.article import Article
 from src.domain.blog import Blog
 from src.domain.book import Book
 from src.domain.experiences import Experiences
@@ -78,11 +79,11 @@ def test_route_qa_mongodb_by_id(mongodb):
 
 ## Article
 def test_route_article_mongodb(mongodb):
-    check_status_response_for('/article/mongodb', Language)
+    check_status_response_for('/article/mongodb', Article)
 
 
 def test_route_article_mongodb_by_id(mongodb):
-    check_status_response_by_id_for('/article/mongodb', Language)
+    check_status_response_by_id_for('/article/mongodb', Article)
 
 
 # Python
@@ -97,11 +98,11 @@ def test_route_qa_python_by_id(mongodb):
 
 ## Article
 def test_route_article_python(mongodb):
-    check_status_response_for('/article/python', Language)
+    check_status_response_for('/article/python', Article)
 
 
 def test_route_article_python_by_id(mongodb):
-    check_status_response_by_id_for('/article/python', Language)
+    check_status_response_by_id_for('/article/python', Article)
 
 
 # TypeScript
@@ -116,11 +117,11 @@ def test_route_qa_typescript_by_id(mongodb):
 
 ## Article
 def test_route_article_typescript(mongodb):
-    check_status_response_for('/article/typescript', Language)
+    check_status_response_for('/article/typescript', Article)
 
 
 def test_route_article_typescript_by_id(mongodb):
-    check_status_response_by_id_for('/article/typescript', Language)
+    check_status_response_by_id_for('/article/typescript', Article)
 
 
 # JavaScript
@@ -135,11 +136,11 @@ def test_route_qa_javascript_by_id(mongodb):
 
 ## Article
 def test_route_article_javascript(mongodb):
-    check_status_response_for('/article/javascript', Language)
+    check_status_response_for('/article/javascript', Article)
 
 
 def test_route_article_javascript_by_id(mongodb):
-    check_status_response_by_id_for('/article/javascript', Language)
+    check_status_response_by_id_for('/article/javascript', Article)
 
 
 # Vue
@@ -154,11 +155,11 @@ def test_route_qa_vue_by_id(mongodb):
 
 ## Article
 def test_route_article_vue(mongodb):
-    check_status_response_for('/article/vue', Language)
+    check_status_response_for('/article/vue', Article)
 
 
 def test_route_article_vue_by_id(mongodb):
-    check_status_response_by_id_for('/article/vue', Language)
+    check_status_response_by_id_for('/article/vue', Article)
 
 
 # Angular
@@ -173,11 +174,11 @@ def test_route_qa_angular_by_id(mongodb):
 
 ## Article
 def test_route_article_angular(mongodb):
-    check_status_response_for('/article/angular', Language)
+    check_status_response_for('/article/angular', Article)
 
 
 def test_route_article_angular_by_id(mongodb):
-    check_status_response_by_id_for('/article/angular', Language)
+    check_status_response_by_id_for('/article/angular', Article)
 
 
 def test_login_success(monkeypatch):

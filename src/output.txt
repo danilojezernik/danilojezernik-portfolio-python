@@ -71,3 +71,12 @@ export interface Language {
   datum_vnosa: string;
 }
 
+export interface Article {
+ '_id'?: string;
+  title: string;
+  subtitle: string;
+  content: string;
+  author: string;
+  datum_vnosa: string;
+}
+

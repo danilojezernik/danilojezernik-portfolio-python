@@ -39,8 +39,18 @@ def check_status_response_for(route: str, model: Type[BaseModel]):
     """
     response = client.get(route)
 
-    # Extract collection name from route (e.g., '/qa/vue' -> 'vue')
-    collection_name = route.split('/')[-1]
+    # Extract collection name from route with proper suffix
+    parts = route.split('/')
+    if len(parts) >= 3:
+        if parts[1] == 'qa':
+            collection_name = f"{parts[2]}_qa"
+        elif parts[1] == 'article':
+            collection_name = f"{parts[2]}_articles"
+        else:
+            collection_name = parts[-1]
+    else:
+        collection_name = parts[-1]
+
     cursor = db.process[collection_name].find()
 
     expected_data = normalize_data(cursor, model)
@@ -71,8 +81,17 @@ def check_status_response_by_id_for(route: str, model: Type[BaseModel]):
     :param model: The Pydantic model corresponding to the expected data structure.
     """
 
-    # Extract collection name from route (e.g., '/qa/vue' -> 'vue')
-    collection_name = route.split('/')[-1]
+    # Extract collection name from route with proper suffix
+    parts = route.split('/')
+    if len(parts) >= 3:
+        if parts[1] == 'qa':
+            collection_name = f"{parts[2]}_qa"
+        elif parts[1] == 'article':
+            collection_name = f"{parts[2]}_articles"
+        else:
+            collection_name = parts[-1]
+    else:
+        collection_name = parts[-1]
 
     # Find the first document in the collection
     first_document = db.process[collection_name].find_one()

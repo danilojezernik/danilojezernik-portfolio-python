@@ -52,20 +52,20 @@ def drop():
     process.book.drop()
 
     # Technologies
-    process.tech_angular.drop()
-    process.tech_vue.drop()
-    process.tech_typescript.drop()
-    process.tech_javascript.drop()
-    process.tech_python.drop()
-    process.tech_mongodb.drop()
+    process.angular_qa.drop()
+    process.vue_qa.drop()
+    process.typescript_qa.drop()
+    process.javascript_qa.drop()
+    process.python_qa.drop()
+    process.mongodb_qa.drop()
 
     # Articles
-    process.article_angular.drop()
-    process.article_vue.drop()
-    process.article_typescript.drop()
-    process.article_javascript.drop()
-    process.article_python.drop()
-    process.article_mongodb.drop()
+    process.articles.drop()
+    process.vue_articles.drop()
+    process.typescript_articles.drop()
+    process.javascript_articles.drop()
+    process.python_articles.drop()
+    process.mongodb_articles.drop()
 
     # Other
     process.language_data.drop()
@@ -88,23 +88,30 @@ def seed():
     process.book.insert_many(book)
 
     # Technologies
-    process.tech_angular.insert_many(angular_qa)
-    process.tech_vue.insert_many(vue_qa)
-    process.tech_typescript.insert_many(typescript_qa)
-    process.tech_javascript.insert_many(javascript_qa)
-    process.tech_python.insert_many(python_qa)
-    process.tech_mongodb.insert_many(mongodb_qa)
+    process.angular_qa.insert_many(angular_qa)
+    process.vue_qa.insert_many(vue_qa)
+    process.typescript_qa.insert_many(typescript_qa)
+    process.javascript_qa.insert_many(javascript_qa)
+    process.python_qa.insert_many(python_qa)
+    process.mongodb_qa.insert_many(mongodb_qa)
 
     # Articles
-    process.article_angular.insert_many(angular_articles)
-    process.article_vue.insert_many(vue_articles)
-    process.article_typescript.insert_many(typescript_articles)
-    process.article_javascript.insert_many(javascript_articles)
-    process.article_python.insert_many(python_articles)
-    process.article_mongodb.insert_many(mongodb_articles)
+    process.angular_articles.insert_many(angular_articles)
+    process.vue_articles.insert_many(vue_articles)
+    process.typescript_articles.insert_many(typescript_articles)
+    process.javascript_articles.insert_many(javascript_articles)
+    process.python_articles.insert_many(python_articles)
+    process.mongodb_articles.insert_many(mongodb_articles)
     pass
 
 
 def seed_user():
     process.user.insert_many(user)
     pass
+
+def drop_all_collections():
+    """
+    Drops all collections in the database instead of the whole DB.
+    """
+    for collection_name in process.list_collection_names():
+        process[collection_name].drop()

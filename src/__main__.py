@@ -16,9 +16,11 @@ from src.domain.contact import Contact
 from src.domain.experiences import Experiences
 from src.domain.links import Links
 from src.domain.projects import Projects
+from src.domain.article import Article
 # Imported routes
 from src.routes import index, blog, login, experiences, links, contact, projects, github, book, language, dev_to_api, user
-from src.routes.qa import typescript, python, angular, javascript, mongodb, vue
+from src.routes.qa import typescript as qa_typescript, python as qa_python, angular as qa_angular, javascript as qa_javascript, mongodb as qa_mongodb, vue as qa_vue
+from src.routes.article import typescript as article_typescript, python as article_python, angular as article_angular, javascript as article_javascript, mongodb as article_mongodb, vue as article_vue
 from src.services import db
 from src.tags_metadata import tags_metadata
 from src.utils.domain_to_txt import write_fields_to_txt
@@ -45,19 +47,21 @@ app.include_router(dev_to_api.router, prefix='/dev', tags=['Dev'])
 app.include_router(github.router, prefix='/github', tags=['Github'])
 app.include_router(book.router, prefix='/book', tags=['Book'])
 
-# Technologies
-app.include_router(angular.router, prefix='/qa/angular', tags=['Angular'])
-app.include_router(angular.router, prefix='/article/angular', tags=['Angular'])
-app.include_router(vue.router, prefix='/qa/vue', tags=['Vue'])
-app.include_router(vue.router, prefix='/article/vue', tags=['Vue'])
-app.include_router(javascript.router, prefix='/qa/javascript', tags=['JavaScript'])
-app.include_router(javascript.router, prefix='/article/javascript', tags=['JavaScript'])
-app.include_router(typescript.router, prefix='/qa/typescript', tags=['TypeScript'])
-app.include_router(typescript.router, prefix='/article/typescript', tags=['TypeScript'])
-app.include_router(python.router, prefix='/qa/python', tags=['Python'])
-app.include_router(python.router, prefix='/article/python', tags=['Python'])
-app.include_router(mongodb.router, prefix='/qa/mongodb', tags=['MongoDB'])
-app.include_router(mongodb.router, prefix='/article/mongodb', tags=['MongoDB'])
+# Technologies - QA
+app.include_router(qa_angular.router, prefix='/qa/angular', tags=['Angular'])
+app.include_router(qa_vue.router, prefix='/qa/vue', tags=['Vue'])
+app.include_router(qa_javascript.router, prefix='/qa/javascript', tags=['JavaScript'])
+app.include_router(qa_typescript.router, prefix='/qa/typescript', tags=['TypeScript'])
+app.include_router(qa_python.router, prefix='/qa/python', tags=['Python'])
+app.include_router(qa_mongodb.router, prefix='/qa/mongodb', tags=['MongoDB'])
+
+# Technologies - Articles
+app.include_router(article_angular.router, prefix='/article/angular', tags=['Angular'])
+app.include_router(article_vue.router, prefix='/article/vue', tags=['Vue'])
+app.include_router(article_javascript.router, prefix='/article/javascript', tags=['JavaScript'])
+app.include_router(article_typescript.router, prefix='/article/typescript', tags=['TypeScript'])
+app.include_router(article_python.router, prefix='/article/python', tags=['Python'])
+app.include_router(article_mongodb.router, prefix='/article/mongodb', tags=['MongoDB'])
 app.include_router(language.router, prefix='/language')
 
 app.include_router(experiences.router, prefix='/experiences', tags=['Experiences'])
@@ -77,7 +81,15 @@ def run_tests():
 
 if __name__ == '__main__':
 
-    # Confirm if you want to drop and seed database
+    yes = input('Type "y" if you want to drop the entire DATABASE: ').strip().lower()
+    if yes == 'y':
+        print('drop_all_collections() initialized')
+        db.drop_all_collections()
+        # optionally re-seed here
+    else:
+        print('Database drop and seed skipped')
+
+    # Confirm if you want to drop and seed a database
     yes = input('Type "y" if you want to run drop and seed: ').strip().lower()
     if yes == 'y':
         print('drop() and seed() initialized')
@@ -99,7 +111,7 @@ if __name__ == '__main__':
     if yes_doc == 'y':
         print('Writing fields to output.txt...')
         write_fields_to_txt(
-            [Blog, Experiences, Contact, Links, Projects, Book, Language])
+            [Blog, Experiences, Contact, Links, Projects, Book, Language, Article])
         print('Done! Fields have been written to output.txt')
     else:
         print('Document writing aborted')
@@ -110,5 +122,3 @@ if __name__ == '__main__':
     else:
         print("❌ Tests failed! Fix issues before running the application.")
         sys.exit(1)
-
-

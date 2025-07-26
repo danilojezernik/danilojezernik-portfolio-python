@@ -29,7 +29,7 @@ async def get_all_vue_public() -> list[Article]:
     """
     Retrieve all Vue records from the database.
     """
-    return all_data('vue', Article)
+    return all_data('vue_articles', Article)
 
 
 @router.get('/{_id}', operation_id='get_vue_by_id_public')
@@ -37,7 +37,7 @@ async def get_vue_by_id_public(_id: str) -> Article:
     """
     Retrieve a specific Vue record by its ID from the database.
     """
-    return data_by_id('vue', Article, _id)
+    return data_by_id('vue_articles', Article, _id)
 
 
 @router.get('/limited/', operation_id='get_limited_vue')
@@ -45,7 +45,7 @@ async def get_limited_vue(limit: int = 4) -> list[Article]:
     """
     Retrieve a limited number of Vue records from the database.
     """
-    return limited_data('vue', Article, limit)
+    return limited_data('vue_articles', Article, limit)
 
 
 # Private Routes (Require authentication)
@@ -55,7 +55,7 @@ async def get_all_vue_private(current_user: User = Depends(get_current_user)) ->
     """
     Retrieve all Vue records from the database for authenticated users.
     """
-    return all_data('vue', Article)
+    return all_data('vue_articles', Article)
 
 
 @router.get('/admin/{_id}', operation_id='get_vue_by_id_private')
@@ -63,7 +63,7 @@ async def get_vue_by_id_private(_id: str, current_user: User = Depends(get_curre
     """
     Retrieve a specific Vue record by its ID for authenticated users.
     """
-    return data_by_id('vue', Article, _id)
+    return data_by_id('vue_articles', Article, _id)
 
 
 @router.post('/', operation_id='add_new_vue_private')
@@ -71,7 +71,7 @@ async def add_new_vue_private(vue: Article, current_user: User = Depends(get_cur
     """
     Add a new Vue record to the database for authenticated users.
     """
-    return add_data('vue', vue, Article)
+    return add_data('vue_articles', vue, Article)
 
 
 @router.put('/{_id}', operation_id='edit_vue_by_id_private')
@@ -79,7 +79,7 @@ async def edit_vue_by_id_private(_id: str, vue: Article, current_user: User = De
     """
     Edit an existing Vue record by its ID in the database for authenticated users.
     """
-    return edit_data(_id, 'vue', vue, Article)
+    return edit_data(_id, 'vue_articles', vue, Article)
 
 
 @router.delete('/{_id}', operation_id='delete_vue_by_id_private')
@@ -87,4 +87,4 @@ async def delete_vue_by_id_private(_id: str, current_user: User = Depends(get_cu
     """
     Delete a Vue record by its ID from the database for authenticated users.
     """
-    return delete_data(_id, 'vue')
+    return delete_data(_id, 'vue_articles')

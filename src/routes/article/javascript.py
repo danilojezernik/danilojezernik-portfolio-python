@@ -30,7 +30,7 @@ async def get_all_javascript_public() -> list[Article]:
     """
     Retrieve all JavaScript records from the database.
     """
-    return all_data('javascript', Article)
+    return all_data('javascript_articles', Article)
 
 
 @router.get('/{_id}', operation_id='get_javascript_by_id_public')
@@ -38,7 +38,7 @@ async def get_javascript_by_id_public(_id: str):
     """
     Retrieve a specific JavaScript record by its ID from the database.
     """
-    return data_by_id('javascript', Article, _id)
+    return data_by_id('javascript_articles', Article, _id)
 
 
 @router.get('/limited/', operation_id='get_limited_javascript')
@@ -46,7 +46,7 @@ async def get_limited_javascript(limit: int = 4) -> list[Article]:
     """
     Retrieve a limited number of JavaScript records from the database.
     """
-    return limited_data('javascript', Article, limit)
+    return limited_data('javascript_articles', Article, limit)
 
 
 # Private Routes (Require authentication)
@@ -56,7 +56,7 @@ async def get_all_javascript_private(current_user: User = Depends(get_current_us
     """
     Retrieve all JavaScript records from the database for authenticated users.
     """
-    return all_data('javascript', Article)
+    return all_data('javascript_articles', Article)
 
 
 @router.get('/admin/{_id}', operation_id='get_javascript_by_id_private')
@@ -64,7 +64,7 @@ async def get_javascript_by_id_private(_id: str, current_user: User = Depends(ge
     """
     Retrieve a specific JavaScript record by its ID for authenticated users.
     """
-    return data_by_id('javascript', Article, _id)
+    return data_by_id('javascript_articles', Article, _id)
 
 
 @router.post('/', operation_id='add_new_javascript_private')
@@ -72,7 +72,7 @@ async def add_new_javascript(javascript: Article, current_user: User = Depends(g
     """
     Add a new JavaScript record to the database for authenticated users.
     """
-    return add_data('javascript', javascript, Article)
+    return add_data('javascript_articles', javascript, Article)
 
 
 @router.put('/{_id}', operation_id='edit_javascript_by_id_private')
@@ -81,7 +81,7 @@ async def edit_javascript_by_id_private(_id: str, javascript: Article,
     """
     Edit an existing JavaScript record by its ID for authenticated users.
     """
-    return edit_data(_id, 'javascript', javascript, Article)
+    return edit_data(_id, 'javascript_articles', javascript, Article)
 
 
 @router.delete('/{_id}', operation_id='delete_javascript_by_id_private')
@@ -89,4 +89,4 @@ async def delete_javascript_by_id_private(_id: str, current_user: User = Depends
     """
     Delete a JavaScript record by its ID from the database for authenticated users.
     """
-    return delete_data(_id, 'javascript')
+    return delete_data(_id, 'javascript_articles')
