@@ -9,6 +9,7 @@ from src.database.qa.mongodb import mongodb as mongodb_qa
 from src.database.qa.python import python as python_qa
 from src.database.qa.typescript import typescript as typescript_qa
 from src.database.qa.vue import vue as vue_qa
+from src.database.qa.cypress import cypress as cypress_qa
 
 # Articles
 from src.database.article.angular import angular as angular_articles
@@ -17,6 +18,7 @@ from src.database.article.mongodb import mongodb as mongodb_articles
 from src.database.article.python import python as python_articles
 from src.database.article.typescript import typescript as typescript_articles
 from src.database.article.vue import vue as vue_articles
+from src.database.article.cypress import cypress as cypress_articles
 
 from src.database.sent_email_data import sent_email_data
 from src.database.blog import blog
@@ -58,6 +60,7 @@ def drop():
     process.javascript_qa.drop()
     process.python_qa.drop()
     process.mongodb_qa.drop()
+    process.cypress_qa.drop()
 
     # Articles
     process.articles.drop()
@@ -66,6 +69,7 @@ def drop():
     process.javascript_articles.drop()
     process.python_articles.drop()
     process.mongodb_articles.drop()
+    process.cypress_articles.drop()
 
     # Other
     process.language_data.drop()
@@ -94,6 +98,7 @@ def seed():
     process.javascript_qa.insert_many(javascript_qa)
     process.python_qa.insert_many(python_qa)
     process.mongodb_qa.insert_many(mongodb_qa)
+    process.cypress_qa.insert_many(cypress_qa)
 
     # Articles
     process.angular_articles.insert_many(angular_articles)
@@ -102,6 +107,7 @@ def seed():
     process.javascript_articles.insert_many(javascript_articles)
     process.python_articles.insert_many(python_articles)
     process.mongodb_articles.insert_many(mongodb_articles)
+    process.cypress_articles.insert_many(cypress_articles)
     pass
 
 

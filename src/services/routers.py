@@ -14,7 +14,8 @@ from src.routes.qa import (
     angular as qa_angular,
     javascript as qa_javascript,
     mongodb as qa_mongodb,
-    vue as qa_vue
+    vue as qa_vue,
+    cypress as qa_cypress
 )
 
 # Article routes for different technologies
@@ -24,7 +25,8 @@ from src.routes.article import (
     angular as article_angular,
     javascript as article_javascript,
     mongodb as article_mongodb,
-    vue as article_vue
+    vue as article_vue,
+    cypress as article_cypress
 )
 
 # --------------------------------------------------------------------------
@@ -51,6 +53,7 @@ routers = [
     (qa_typescript.router, '/qa/typescript', ['TypeScript']),
     (qa_python.router, '/qa/python', ['Python']),
     (qa_mongodb.router, '/qa/mongodb', ['MongoDB']),
+    (qa_cypress.router, '/qa/cypress', ['Cypress']),
 
     # -------------------------
     # Technologies - Article routes (Articles per technology)
@@ -61,6 +64,7 @@ routers = [
     (article_typescript.router, '/article/typescript', ['TypeScript']),
     (article_python.router, '/article/python', ['Python']),
     (article_mongodb.router, '/article/mongodb', ['MongoDB']),
+    (article_cypress.router, '/article/cypress', ['Cypress']),
 
     # -------------------------
     # Language-related routes
