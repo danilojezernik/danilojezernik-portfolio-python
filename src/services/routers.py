@@ -19,6 +19,8 @@ from src.routes.qa import (
     django as qa_django,
     docker as qa_docker,
     nuxt as qa_nuxt,
+    pytest as qa_pytest,
+    tailwind as qa_tailwind,
 )
 
 # Article routes for different technologies
@@ -33,6 +35,8 @@ from src.routes.article import (
     django as article_django,
     docker as article_docker,
     nuxt as article_nuxt,
+    pytest as article_pytest,
+    tailwind as article_tailwind,
 )
 
 # --------------------------------------------------------------------------
@@ -63,6 +67,8 @@ routers = [
     (qa_django.router, '/qa/django', ['Django']),
     (qa_docker.router, '/qa/docker', ['Docker']),
     (qa_nuxt.router, '/qa/nuxt', ['Nuxt']),
+    (qa_pytest.router, '/qa/pytest', ['Pytest']),
+    (qa_tailwind.router, '/qa/tailwind', ['Tailwind']),
 
     # -------------------------
     # Technologies - Article routes (Articles per technology)
@@ -77,6 +83,8 @@ routers = [
     (article_django.router, '/article/django', ['Django']),
     (article_docker.router, '/article/docker', ['Docker']),
     (article_nuxt.router, '/article/nuxt', ['Nuxt']),
+    (article_pytest.router, '/article/pytest', ['Pytest']),
+    (article_tailwind.router, '/article/tailwind', ['Tailwind']),
 
     # -------------------------
     # Language-related routes

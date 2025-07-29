@@ -9,6 +9,8 @@ from src.database.qa.cypress import cypress as cypress_qa
 from src.database.qa.django import django as django_qa
 from src.database.qa.docker import docker as docker_qa
 from src.database.qa.nuxt import nuxt as nuxt_qa
+from src.database.qa.pytest import pytest as pytest_qa
+from src.database.qa.tailwind import tailwind as tailwind_qa
 
 # Articles
 from src.database.article.angular import angular as angular_articles
@@ -21,6 +23,8 @@ from src.database.article.cypress import cypress as cypress_articles
 from src.database.article.django import django as django_articles
 from src.database.article.docker import docker as docker_articles
 from src.database.article.nuxt import nuxt as nuxt_articles
+from src.database.article.pytest import pytest as pytest_articles
+from src.database.article.tailwind import tailwind as tailwind_articles
 
 from src.database.sent_email_data import sent_email_data
 from src.database.blog import blog
@@ -51,6 +55,8 @@ collections = {
     "django_qa": django_qa,
     "docker_qa": docker_qa,
     "nuxt_qa": nuxt_qa,
+    "pytest_qa": pytest_qa,
+    "tailwind_qa": tailwind_qa,
 
     # Articles
     "angular_articles": angular_articles,
@@ -63,4 +69,6 @@ collections = {
     "django_articles": django_articles,
     "docker_articles": docker_articles,
     "nuxt_articles": nuxt_articles,
+    "pytest_articles": pytest_articles,
+    "tailwind_articles": tailwind_articles,
 }
