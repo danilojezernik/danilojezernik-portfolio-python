@@ -18,6 +18,7 @@ from src.routes.qa import (
     cypress as qa_cypress,
     django as qa_django,
     docker as qa_docker,
+    nuxt as qa_nuxt,
 )
 
 # Article routes for different technologies
@@ -31,6 +32,7 @@ from src.routes.article import (
     cypress as article_cypress,
     django as article_django,
     docker as article_docker,
+    nuxt as article_nuxt,
 )
 
 # --------------------------------------------------------------------------
@@ -60,6 +62,7 @@ routers = [
     (qa_cypress.router, '/qa/cypress', ['Cypress']),
     (qa_django.router, '/qa/django', ['Django']),
     (qa_docker.router, '/qa/docker', ['Docker']),
+    (qa_nuxt.router, '/qa/nuxt', ['Nuxt']),
 
     # -------------------------
     # Technologies - Article routes (Articles per technology)
@@ -73,6 +76,7 @@ routers = [
     (article_cypress.router, '/article/cypress', ['Cypress']),
     (article_django.router, '/article/django', ['Django']),
     (article_docker.router, '/article/docker', ['Docker']),
+    (article_nuxt.router, '/article/nuxt', ['Nuxt']),
 
     # -------------------------
     # Language-related routes
