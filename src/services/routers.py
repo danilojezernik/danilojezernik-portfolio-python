@@ -17,6 +17,7 @@ from src.routes.qa import (
     vue as qa_vue,
     cypress as qa_cypress,
     django as qa_django,
+    docker as qa_docker,
 )
 
 # Article routes for different technologies
@@ -29,6 +30,7 @@ from src.routes.article import (
     vue as article_vue,
     cypress as article_cypress,
     django as article_django,
+    docker as article_docker,
 )
 
 # --------------------------------------------------------------------------
@@ -57,6 +59,7 @@ routers = [
     (qa_mongodb.router, '/qa/mongodb', ['MongoDB']),
     (qa_cypress.router, '/qa/cypress', ['Cypress']),
     (qa_django.router, '/qa/django', ['Django']),
+    (qa_docker.router, '/qa/docker', ['Docker']),
 
     # -------------------------
     # Technologies - Article routes (Articles per technology)
@@ -69,6 +72,7 @@ routers = [
     (article_mongodb.router, '/article/mongodb', ['MongoDB']),
     (article_cypress.router, '/article/cypress', ['Cypress']),
     (article_django.router, '/article/django', ['Django']),
+    (article_docker.router, '/article/docker', ['Docker']),
 
     # -------------------------
     # Language-related routes

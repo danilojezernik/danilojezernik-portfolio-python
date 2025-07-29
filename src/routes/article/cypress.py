@@ -2,12 +2,12 @@
 Cypress Routes:
 
 Public Routes:
-1. GET all angular - Retrieve all Cypress records from the database.
+1. GET all cypress - Retrieve all Cypress records from the database.
 2. GET Cypress by ID - Retrieve a specific Cypress record by its ID.
-3. GET limited angular - Retrieve a limited number of Cypress records.
+3. GET limited cypress - Retrieve a limited number of Cypress records.
 
 Private Routes (Require authentication):
-4. GET all angular (private) - Retrieve all Cypress records for authenticated users.
+4. GET all cypress (private) - Retrieve all Cypress records for authenticated users.
 5. GET Cypress by ID (private) - Retrieve a specific Cypress record by its ID for authenticated users.
 6. ADD a new Cypress - Add a new Cypress record to the database.
 7. EDIT an Cypress by ID - Edit an existing Cypress record by its ID.
@@ -67,19 +67,19 @@ async def get_cypress_by_id_private_article(_id: str, current_user: User = Depen
 
 
 @router.post('/', operation_id='add_new_cypress_private')
-async def add_new_cypress_private_article(angular: Article, current_user: User = Depends(get_current_user)) -> Article | None:
+async def add_new_cypress_private_article(cypress: Article, current_user: User = Depends(get_current_user)) -> Article | None:
     """
     Add a new Cypress record to the database for authenticated users.
     """
-    return add_data('cypress_articles', angular, Article)
+    return add_data('cypress_articles', cypress, Article)
 
 
 @router.put('/{_id}', operation_id='edit_cypress_by_id_private')
-async def edit_cypress_by_id_private_article(_id: str, angular: Article, current_user: User = Depends(get_current_user)) -> Article | None:
+async def edit_cypress_by_id_private_article(_id: str, cypress: Article, current_user: User = Depends(get_current_user)) -> Article | None:
     """
     Edit an existing Cypress record by its ID in the database for authenticated users.
     """
-    return edit_data(_id, 'cypress_articles', angular, Article)
+    return edit_data(_id, 'cypress_articles', cypress, Article)
 
 
 @router.delete('/{_id}', operation_id='delete_cypress_by_id_private')

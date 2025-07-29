@@ -2,12 +2,12 @@
 Django Routes:
 
 Public Routes:
-1. GET all angular - Retrieve all Django records from the database.
+1. GET all django - Retrieve all Django records from the database.
 2. GET Django by ID - Retrieve a specific Django record by its ID.
-3. GET limited angular - Retrieve a limited number of Django records.
+3. GET limited django - Retrieve a limited number of Django records.
 
 Private Routes (Require authentication):
-4. GET all angular (private) - Retrieve all Django records for authenticated users.
+4. GET all django (private) - Retrieve all Django records for authenticated users.
 5. GET Django by ID (private) - Retrieve a specific Django record by its ID for authenticated users.
 6. ADD a new Django - Add a new Django record to the database.
 7. EDIT an Django by ID - Edit an existing Django record by its ID.
@@ -67,19 +67,19 @@ async def get_django_by_id_private_qa(_id: str, current_user: User = Depends(get
 
 
 @router.post('/', operation_id='add_new_django_private')
-async def add_new_django_private_qa(angular: Language, current_user: User = Depends(get_current_user)) -> Language | None:
+async def add_new_django_private_qa(django: Language, current_user: User = Depends(get_current_user)) -> Language | None:
     """
     Add a new Django record to the database for authenticated users.
     """
-    return add_data('django_qa', angular, Language)
+    return add_data('django_qa', django, Language)
 
 
 @router.put('/{_id}', operation_id='edit_django_by_id_private')
-async def edit_django_by_id_private_qa(_id: str, angular: Language, current_user: User = Depends(get_current_user)) -> Language | None:
+async def edit_django_by_id_private_qa(_id: str, django: Language, current_user: User = Depends(get_current_user)) -> Language | None:
     """
     Edit an existing Django record by its ID in the database for authenticated users.
     """
-    return edit_data(_id, 'django_qa', angular, Language)
+    return edit_data(_id, 'django_qa', django, Language)
 
 
 @router.delete('/{_id}', operation_id='delete_django_by_id_private')

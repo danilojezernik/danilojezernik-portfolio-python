@@ -7,6 +7,7 @@ from src.database.qa.typescript import typescript as typescript_qa
 from src.database.qa.vue import vue as vue_qa
 from src.database.qa.cypress import cypress as cypress_qa
 from src.database.qa.django import django as django_qa
+from src.database.qa.docker import docker as docker_qa
 
 # Articles
 from src.database.article.angular import angular as angular_articles
@@ -17,6 +18,7 @@ from src.database.article.typescript import typescript as typescript_articles
 from src.database.article.vue import vue as vue_articles
 from src.database.article.cypress import cypress as cypress_articles
 from src.database.article.django import django as django_articles
+from src.database.article.docker import docker as docker_articles
 
 from src.database.sent_email_data import sent_email_data
 from src.database.blog import blog
@@ -45,6 +47,7 @@ collections = {
     "mongodb_qa": mongodb_qa,
     "cypress_qa": cypress_qa,
     "django_qa": django_qa,
+    "docker_qa": docker_qa,
 
     # Articles
     "angular_articles": angular_articles,
@@ -55,4 +58,5 @@ collections = {
     "mongodb_articles": mongodb_articles,
     "cypress_articles": cypress_articles,
     "django_articles": django_articles,
+    "docker_articles": docker_articles,
 }
