@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 import httpx
 from pymongo.errors import PyMongoError
 
-from src.domain.dev_api import Article, User
+from src.domain.dev_api import DevAritcle, User
 from src.services import db
 
 router = APIRouter()
@@ -67,7 +67,7 @@ async def angular_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -160,7 +160,7 @@ async def vue_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -253,7 +253,7 @@ async def nuxt_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -346,7 +346,7 @@ async def typescript_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -439,7 +439,7 @@ async def javascript_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -532,7 +532,7 @@ async def mongodb_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -625,7 +625,7 @@ async def python_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -718,7 +718,7 @@ async def css_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -811,7 +811,7 @@ async def frontend_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -904,7 +904,7 @@ async def backend_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -997,7 +997,7 @@ async def webdesign_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -1090,7 +1090,7 @@ async def ai_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -1183,7 +1183,7 @@ async def github_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -1276,7 +1276,7 @@ async def sql_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -1369,7 +1369,7 @@ async def cypress_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],
@@ -1462,7 +1462,7 @@ async def algorithms_dev():
     extracted_articles = []
     for article in articles:
         try:
-            extracted = Article(
+            extracted = DevAritcle(
                 type_of=article['type_of'],
                 title=article['title'],
                 description=article['description'],

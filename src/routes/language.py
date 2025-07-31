@@ -12,6 +12,7 @@ from src.services.security import get_current_user
 
 router = APIRouter()
 
+
 # This route fetches tags and updates them if they are older than 24 hours
 @router.get('/tags', operation_id='get_tags')
 async def get_tags():
@@ -70,6 +71,8 @@ async def startup_event():
     """
     # Start the background scheduler to trigger the update process every 24 hours
     start_scheduler()
+
+
 # Route to fetch tags that belong to the list of programming languages of interest
 @router.get('/programming-languages', operation_id='get_languages_of_interest')
 async def get_languages_of_interest():

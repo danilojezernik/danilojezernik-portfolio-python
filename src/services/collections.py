@@ -11,6 +11,8 @@ from src.database.qa.docker import docker as docker_qa
 from src.database.qa.nuxt import nuxt as nuxt_qa
 from src.database.qa.pytest import pytest as pytest_qa
 from src.database.qa.tailwind import tailwind as tailwind_qa
+from src.database.qa.sql import sql as sql_qa
+from src.database.qa.fastapi import fastapi as fastapi_qa
 
 # Articles
 from src.database.article.angular import angular as angular_articles
@@ -25,6 +27,8 @@ from src.database.article.docker import docker as docker_articles
 from src.database.article.nuxt import nuxt as nuxt_articles
 from src.database.article.pytest import pytest as pytest_articles
 from src.database.article.tailwind import tailwind as tailwind_articles
+from src.database.article.sql import sql as sql_articles
+from src.database.article.fastapi import fastapi as fastapi_articles
 
 from src.database.sent_email_data import sent_email_data
 from src.database.blog import blog
@@ -32,6 +36,7 @@ from src.database.book import book
 from src.database.contact import contact
 from src.database.experiences import experiences
 from src.database.links import links
+from src.database.language_data import language_data
 from src.database.projects import projects
 
 collections = {
@@ -43,6 +48,7 @@ collections = {
     "contact": contact,
     "projects": projects,
     "book": book,
+    "language_data": language_data,
 
     # Technologies - QA
     "angular_qa": angular_qa,
@@ -57,6 +63,8 @@ collections = {
     "nuxt_qa": nuxt_qa,
     "pytest_qa": pytest_qa,
     "tailwind_qa": tailwind_qa,
+    "sql_qa": sql_qa,
+    "fastapi_qa": fastapi_qa,
 
     # Articles
     "angular_articles": angular_articles,
@@ -71,4 +79,6 @@ collections = {
     "nuxt_articles": nuxt_articles,
     "pytest_articles": pytest_articles,
     "tailwind_articles": tailwind_articles,
+    "sql_articles": sql_articles,
+    "fastapi_articles": fastapi_articles,
 }

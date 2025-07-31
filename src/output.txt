@@ -80,3 +80,29 @@ export interface Article {
   datum_vnosa: string;
 }
 
+export interface DevAritcle {
+ '_id'?: string;
+  type_of: string;
+  title: string;
+  description: string;
+  url: string;
+  cover_image: string;
+  published_at: string;
+  tag_list: string;
+  user: src.domain.dev_api.User
+  last_updated: string;
+}
+
+export interface User {
+  name: string;
+  profile_image: string;
+  website_url: string;
+}
+
+export interface LanguageData {
+ '_id'?: string;
+  tag: string;
+  count: int
+  last_updated: string;
+}
+

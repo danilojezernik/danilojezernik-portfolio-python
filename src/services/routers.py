@@ -21,6 +21,8 @@ from src.routes.qa import (
     nuxt as qa_nuxt,
     pytest as qa_pytest,
     tailwind as qa_tailwind,
+    sql as qa_sql,
+    fastapi as qa_fastapi,
 )
 
 # Article routes for different technologies
@@ -37,6 +39,8 @@ from src.routes.article import (
     nuxt as article_nuxt,
     pytest as article_pytest,
     tailwind as article_tailwind,
+    sql as article_sql,
+    fastapi as article_fastapi,
 )
 
 # --------------------------------------------------------------------------
@@ -69,6 +73,8 @@ routers = [
     (qa_nuxt.router, '/qa/nuxt', ['Nuxt']),
     (qa_pytest.router, '/qa/pytest', ['Pytest']),
     (qa_tailwind.router, '/qa/tailwind', ['Tailwind']),
+    (qa_sql.router, '/qa/sql', ['SQL']),
+    (qa_fastapi.router, '/qa/fastapi', ['Fastapi']),
 
     # -------------------------
     # Technologies - Article routes (Articles per technology)
@@ -85,6 +91,8 @@ routers = [
     (article_nuxt.router, '/article/nuxt', ['Nuxt']),
     (article_pytest.router, '/article/pytest', ['Pytest']),
     (article_tailwind.router, '/article/tailwind', ['Tailwind']),
+    (article_sql.router, '/article/sql', ['SQL']),
+    (article_fastapi.router, '/article/fastapi', ['Fastapi']),
 
     # -------------------------
     # Language-related routes

@@ -14,9 +14,11 @@ from src.domain.blog import Blog
 from src.domain.book import Book
 from src.domain.contact import Contact
 from src.domain.experiences import Experiences
+from src.domain.language_data import LanguageData
 from src.domain.links import Links
 from src.domain.projects import Projects
 from src.domain.article import Article
+from src.domain.dev_api import DevAritcle, User
 
 
 from src.services import db
@@ -82,7 +84,7 @@ if __name__ == '__main__':
     if yes_doc == 'y':
         print('Writing fields to output.txt...')
         write_fields_to_txt(
-            [Blog, Experiences, Contact, Links, Projects, Book, Language, Article])
+            [Blog, Experiences, Contact, Links, Projects, Book, Language, Article, DevAritcle, User, LanguageData])
         print('Done! Fields have been written to output.txt')
     else:
         print('Document writing aborted')

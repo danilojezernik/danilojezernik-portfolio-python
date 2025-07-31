@@ -8,7 +8,7 @@ class User(BaseModel):
     profile_image: str
     website_url: Optional[str]  # This might be null, so it's optional
 
-class Article(BaseModel):
+class DevAritcle(BaseModel):
     id: Optional[str] = Field(alias='_id', default_factory=lambda: str(ObjectId()))
     type_of: str
     title: str
