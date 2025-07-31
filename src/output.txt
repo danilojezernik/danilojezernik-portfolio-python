@@ -102,7 +102,7 @@ export interface User {
 export interface LanguageData {
  '_id'?: string;
   tag: string;
-  count: int
+  count: number;
   last_updated: string;
 }
 

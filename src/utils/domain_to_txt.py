@@ -56,6 +56,8 @@ def write_fields_to_txt(models):
                 # Map field types to TypeScript types
                 if field_type is bool:
                     type_name = 'boolean;'
+                elif field_type is int:
+                    type_name = 'number;'
                 elif field_type is datetime.datetime:
                     type_name = 'string;'
                 elif field_type is str:
