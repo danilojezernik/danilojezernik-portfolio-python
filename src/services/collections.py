@@ -13,6 +13,7 @@ from src.database.qa.pytest import pytest as pytest_qa
 from src.database.qa.tailwind import tailwind as tailwind_qa
 from src.database.qa.sql import sql as sql_qa
 from src.database.qa.fastapi import fastapi as fastapi_qa
+from src.database.qa.playwright import playwright as playwright_qa
 
 # Articles
 from src.database.article.angular import angular as angular_articles
@@ -29,6 +30,7 @@ from src.database.article.pytest import pytest as pytest_articles
 from src.database.article.tailwind import tailwind as tailwind_articles
 from src.database.article.sql import sql as sql_articles
 from src.database.article.fastapi import fastapi as fastapi_articles
+from src.database.article.playwright import playwright as playwright_articles
 
 from src.database.sent_email_data import sent_email_data
 from src.database.blog import blog
@@ -65,6 +67,7 @@ collections = {
     "tailwind_qa": tailwind_qa,
     "sql_qa": sql_qa,
     "fastapi_qa": fastapi_qa,
+    "playwright_qa": playwright_qa,
 
     # Articles
     "angular_articles": angular_articles,
@@ -81,4 +84,5 @@ collections = {
     "tailwind_articles": tailwind_articles,
     "sql_articles": sql_articles,
     "fastapi_articles": fastapi_articles,
+    "playwright_articles": playwright_articles,
 }

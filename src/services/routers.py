@@ -23,6 +23,7 @@ from src.routes.qa import (
     tailwind as qa_tailwind,
     sql as qa_sql,
     fastapi as qa_fastapi,
+    playwright as qa_playwright,
 )
 
 # Article routes for different technologies
@@ -41,6 +42,7 @@ from src.routes.article import (
     tailwind as article_tailwind,
     sql as article_sql,
     fastapi as article_fastapi,
+    playwright as article_playwright,
 )
 
 # --------------------------------------------------------------------------
@@ -75,6 +77,7 @@ routers = [
     (qa_tailwind.router, '/qa/tailwind', ['Tailwind']),
     (qa_sql.router, '/qa/sql', ['SQL']),
     (qa_fastapi.router, '/qa/fastapi', ['Fastapi']),
+    (qa_playwright.router, '/qa/playwright', ['Playwright']),
 
     # -------------------------
     # Technologies - Article routes (Articles per technology)
@@ -93,6 +96,7 @@ routers = [
     (article_tailwind.router, '/article/tailwind', ['Tailwind']),
     (article_sql.router, '/article/sql', ['SQL']),
     (article_fastapi.router, '/article/fastapi', ['Fastapi']),
+    (article_playwright.router, '/article/playwright', ['Playwright']),
 
     # -------------------------
     # Language-related routes
