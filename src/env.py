@@ -35,10 +35,5 @@ DOMAIN_REGISTER = str(os.getenv('DOMAIN_REGISTER'))
 EMAIL_1 = str(os.getenv('EMAIL_1'))
 EMAIL_2 = str(os.getenv('EMAIL_2'))
 
-# TWILIO
-ACCOUNT_SID = str(os.getenv('ACCOUNT_SID'))
-AUTH_TOKEN = str(os.getenv('AUTH_TOKEN'))
-PHONE_NUMBER_TWILIO = str(os.getenv('PHONE_NUMBER_TWILIO'))
-PHONE_NUMBER_MY = str(os.getenv('PHONE_NUMBER_MY'))
 
 NGROK = str(os.getenv('NGROK'))
