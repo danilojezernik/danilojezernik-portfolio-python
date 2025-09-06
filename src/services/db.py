@@ -8,7 +8,14 @@ from src.services.collections import collections
 # ---------------------------------------------------------------------------
 # Database client setup
 # ---------------------------------------------------------------------------
-client = MongoClient(env.DB_MAIN)  # Connect to MongoDB instance
+# Use development MongoDB connection if in development mode, otherwise use production
+if env.ENV.lower() == 'development':
+    print(f"Using development MongoDB connection: {env.DB_DEV}")
+    client = MongoClient(env.DB_DEV)  # Connect to local MongoDB instance
+else:
+    print(f"Using production MongoDB connection")
+    client = MongoClient(env.DB_MAIN)  # Connect to production MongoDB instance
+
 process = client[env.DB_PROCESS]  # Select the database
 
 

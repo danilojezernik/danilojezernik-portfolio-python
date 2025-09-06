@@ -25,6 +25,12 @@ This is a FastAPI project with various domain models, routes, and services confi
     ```bash
     pip install -r requirements.txt
     ```
+
+4. Set up MongoDB (for local development):
+    ```bash
+    mongod --dbpath "C:\mongo\portfolio"
+    ```
+
 ## **API Endpoints**
 The project includes the following routes:
 

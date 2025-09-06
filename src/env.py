@@ -5,8 +5,12 @@ from dotenv import load_dotenv
 load_dotenv()
 PORT = int(os.getenv('PORT'))
 
+# Environment setting
+ENV = os.getenv('ENV', 'production')
+
 # MongoDB connections
 DB_MAIN = str(os.getenv('DB_MAIN'))
+DB_DEV = str(os.getenv('DB_DEV', 'mongodb://localhost:27017'))
 DB_PROCESS = str(os.getenv('DB_PROCESS'))
 
 # Fast API security
